@@ -1,6 +1,6 @@
 {
   "name": "com.iris.common",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "IRIS Common library",
   "description": "Elements shared between IRIS and the experience creation project",
   "unity": "2020.2",
@@ -14,5 +14,8 @@
     "url": ""
   },
   "hideInEditor": false,
-  "type": "library"
+  "type": "library",
+  "dependencies": {
+    "com.unity.visualeffectgraph": "10.3.2"
+  }
 }

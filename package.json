@@ -1,0 +1,18 @@
+{
+  "name": "com.iris.common",
+  "version": "0.0.1",
+  "displayName": "IRIS Common library",
+  "description": "Elements shared between IRIS and the experience creation project",
+  "unity": "2020.2",
+  "unityRelease": "4f1",
+  "keywords": [
+    "IRIS"
+  ],
+  "author": {
+    "name": "ulu",
+    "email": "ulu@iq12.com",
+    "url": ""
+  },
+  "hideInEditor": false,
+  "type": "library"
+}

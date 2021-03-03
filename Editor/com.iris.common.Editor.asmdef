@@ -1,0 +1,18 @@
+{
+    "name": "com.iris.common.Editor",
+    "rootNamespace": "com.iris.common",
+    "references": [
+        "GUID:fefd724ffc08b8e42b84b739722a3b30"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

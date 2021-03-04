@@ -28,8 +28,11 @@ namespace com.iris.common
 
 		public void Awake()
 		{
-			CreationDate = DateTime.Now.ToBinary();
-			LastUpdateDate = CreationDate;
+			if (CreationDate == 0)
+			{
+				CreationDate = DateTime.Now.ToBinary();
+				LastUpdateDate = CreationDate;
+			}
 
 		}
 

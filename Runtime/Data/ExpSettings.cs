@@ -17,7 +17,7 @@ namespace com.iris.common
 			Level5
 
 		}
-
+		public string uid = "UNIQUE_ID";
 		public string Title = "Titre de l'effet";
 		public string Instructions = "Instructions effet";
 		public string Author = "Your name here";

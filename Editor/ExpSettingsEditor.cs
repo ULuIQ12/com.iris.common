@@ -12,6 +12,7 @@ namespace com.iris.common
 	[CustomEditor(typeof(ExpSettings))]
 	public class ExpSettingsEditor : Editor
 	{
+		SerializedProperty UID;
 		SerializedProperty Title;
 		SerializedProperty Author;
 		SerializedProperty CreationDate;
@@ -24,6 +25,7 @@ namespace com.iris.common
 
 		void OnEnable()
 		{
+			UID = serializedObject.FindProperty("uid");
 			Title = serializedObject.FindProperty("Title");
 			Author = serializedObject.FindProperty("Author");
 			CreationDate = serializedObject.FindProperty("CreationDate");
@@ -41,6 +43,7 @@ namespace com.iris.common
 			serializedObject.Update();
 
 			EditorGUILayout.LabelField("General:");
+			EditorGUILayout.PropertyField(UID);
 			EditorGUILayout.PropertyField(Title);
 			EditorGUILayout.PropertyField(Author);
 			EditorGUILayout.Space();

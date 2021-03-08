@@ -7,7 +7,7 @@ using UnityEngine.VFX.Utility;
 
 namespace com.iris.common
 {
-	[AddComponentMenu("VFX/Property Binders/Audio Spectrum Binder")]
+	[AddComponentMenu("IRIS/VFX/Audio Spectrum Binder")]
 	[VFXBinder("IRIS/Audio Spectrum to AttributeMap")]
 	class VFXAudioSpectrumBinder : VFXBinderBase
 	{

@@ -2,7 +2,8 @@
     "name": "com.iris.common.Editor",
     "rootNamespace": "com.iris.common",
     "references": [
-        "GUID:fefd724ffc08b8e42b84b739722a3b30"
+        "GUID:fefd724ffc08b8e42b84b739722a3b30",
+        "GUID:d5e49cccd48cc2e4b90b7b45b74c1188"
     ],
     "includePlatforms": [
         "Editor"

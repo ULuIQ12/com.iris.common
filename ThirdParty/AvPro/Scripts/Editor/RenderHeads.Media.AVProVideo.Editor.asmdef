@@ -1,0 +1,19 @@
+{
+    "name": "RenderHeads.Media.AVProVideo.Editor",
+    "rootNamespace": "RenderHeads.Media.AVProVideo.Editor",
+    "references": [
+        "GUID:590662778d8a81c40b6ebd7c098c2834",
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,18 @@
+{
+    "name": "com.hodges.iosmusic.editor",
+    "rootNamespace": "com.hodges.iosmusic",
+    "references": [
+        "GUID:2b9b557b03fceb2439b5c3effb58dd6f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

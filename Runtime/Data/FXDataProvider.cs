@@ -47,7 +47,15 @@ namespace com.iris.common
 
 		public static float GetFloat(FLOAT_DATA_TYPE type )
 		{
-			return 0.0f;
+			switch(type)
+			{
+				case FLOAT_DATA_TYPE.AudioBeat:
+					return AudioProcessor.GetBeat();
+				case FLOAT_DATA_TYPE.AudioLevel:
+					return AudioProcessor.GetLevel();
+				default:
+					return 0.0f;
+			}
 		}
 
 		public static Vector2 GetV2( V2_DATA_TYPE type )
@@ -55,9 +63,20 @@ namespace com.iris.common
 			return Vector2.zero;
 		}
 
-		public static Texture2D GetMap( MAP_DATA_TYPE type )
+		public static Texture GetMap( MAP_DATA_TYPE type )
 		{
-			return new Texture2D(12,12);
+			switch(type)
+			{
+				case MAP_DATA_TYPE.ColorMap:
+					return CVInterface.GetColorMap();
+				case MAP_DATA_TYPE.DepthMap:
+					return CVInterface.GetDepthMap();
+				case MAP_DATA_TYPE.UserMap:
+					return CVInterface.GetUsersMap();
+				default:
+					return null;
+				
+			}
 		}
 
 		public static Color GetColor(COLOR_TYPE type)

@@ -25,7 +25,7 @@ namespace com.iris.common
 
 			ShowWarning = false;
 
-			Texture2D map = FXDataProvider.GetMap(TextureToBind);
+			Texture map = FXDataProvider.GetMap(TextureToBind);
 			TextureSize.x = map.width;
 			TextureSize.y = map.height;
 

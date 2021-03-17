@@ -1,0 +1,14 @@
+{
+    "name": "com.hodges.iosmusic",
+    "rootNamespace": "com.hodges.iosmusic",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

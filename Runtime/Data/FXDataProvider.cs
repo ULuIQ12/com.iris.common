@@ -78,11 +78,11 @@ namespace com.iris.common
 				case FLOAT_DATA_TYPE.AudioLevel:
 					return AudioProcessor.GetLevel();
 				case FLOAT_DATA_TYPE.HandsHorizontalSeparation:
-					return 0.0f;
+					return CVInterface.GetMetaFloat(FLOAT_DATA_TYPE.HandsHorizontalSeparation);
 				case FLOAT_DATA_TYPE.HandsVerticalSeparation:
-					return 0.0f;
+					return CVInterface.GetMetaFloat(FLOAT_DATA_TYPE.HandsVerticalSeparation);
 				case FLOAT_DATA_TYPE.HandsToPelvisFactor:
-					return 0.0f;
+					return CVInterface.GetMetaFloat(FLOAT_DATA_TYPE.HandsToPelvisFactor);
 				default:
 					return 0.0f;
 			}

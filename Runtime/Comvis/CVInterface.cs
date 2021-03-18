@@ -24,14 +24,40 @@ namespace com.iris.common
 			return Vector3.zero;
 		}
 
-		public static float GetMetaFloat( FXDataProvider.FLOAT_DATA_TYPE type, ulong userID = 0)
+		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, ulong userID = 0)
 		{
-			return 0.0f;
+			_Instance.UpdateUserMetaBoneData(userID);
+
+			switch (type)
+			{
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsHorizontalSeparation:
+					return _Instance.UsersMetaDatas[userID].HandsHorizontalSeparation;
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsToPelvisFactor:
+					return _Instance.UsersMetaDatas[userID].HandsToPelvisFactor;
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsVerticalSeparation:
+					return _Instance.UsersMetaDatas[userID].HandsVerticalSeparation;
+				case FXDataProvider.FLOAT_DATA_TYPE.AudioBeat:
+					return AudioProcessor.GetBeat();
+				case FXDataProvider.FLOAT_DATA_TYPE.AudioLevel:
+					return AudioProcessor.GetLevel();
+				default:
+					return 0.0f;
+
+			}
 		}
 
 		public static bool GetMetaBool( FXDataProvider.BOOL_DATA_TYPE type, ulong userID = 0 )
 		{
-			return false;
+			_Instance.UpdateUserMetaBoneData(userID);
+			switch( type)
+			{
+				case FXDataProvider.BOOL_DATA_TYPE.HandsAboveElbows:
+					return _Instance.UsersMetaDatas[userID].HandsAboveElbows;
+				default:
+					return false;
+
+			}
+			
 		}
 
 		public static Texture GetDepthMap()

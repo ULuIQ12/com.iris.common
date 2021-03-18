@@ -171,48 +171,27 @@ namespace com.iris.common
 			ManagerGO.name = "KinectManager";
 			KManager = ManagerGO.GetComponent<KinectManager>();
 
-			//Kinect2Interface k2 = ManagerGO.GetComponentInChildren<Kinect2Interface>();
-			//ARKitInterface ark = ManagerGO.GetComponentInChildren<ARKitInterface>();
-
 			if( Application.platform == RuntimePlatform.WindowsEditor )
 			{
-				/*
-				k2.gameObject.SetActive(true);
-				ark.gameObject.SetActive(false);
-
-				CurrentSensorInterface = k2;
-				*/
-
 				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
 				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
 			}	
 			else if( Application.platform == RuntimePlatform.WindowsPlayer)
 			{
-				/*
-				k2.gameObject.SetActive(true);
-				ark.gameObject.SetActive(false);
-
-				CurrentSensorInterface = k2;
-				*/
 				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
 				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
 			}
 			else if( Application.platform == RuntimePlatform.IPhonePlayer)
 			{
-				/*
-				k2.gameObject.SetActive(false);
-				ark.gameObject.SetActive(true);
-
-				CurrentSensorInterface = ark;
-				*/
 				GameObject igo = Instantiate(Resources.Load<GameObject>(ARKIT_INTERFACE_PREFAB), ManagerGO.transform);
 				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
 			}
 			else
 			{
-				Debug.Log("Platform2 = " + Application.platform);
-
+				Debug.LogWarning("What platform ?!? = " + Application.platform);
 			}
+
+			KManager.StartDepthSensors();
 		}
 
 		private void UpdateUserMetaBoneData( ulong user )

@@ -1,14 +1,22 @@
 {
     "name": "com.rfilkov",
     "rootNamespace": "",
-    "references": [
-        "Unity.XR.ARKit"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "UnityARKitWrapper.dll",
+        "LZ4Sharp.dll",
+        "Microsoft.Azure.Kinect.Sensor.dll",
+        "ICSharpCode.NRefactory.dll",
+        "Intel.RealSense.dll",
+        "Kinect2UnityWrapper.dll",
+        "nunit.framework.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll",
+        "UnityEditor.iOS_I2Loc.Xcode.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

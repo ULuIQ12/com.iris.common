@@ -24,10 +24,12 @@ namespace com.iris.common
 			return Vector3.zero;
 		}
 
-		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, ulong userID = 0)
+		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, int userIndex = 0)
 		{
 			if (_Instance == null)
 				return 0.0f;
+
+			ulong userID = _Instance.KManager.GetUserIdByIndex(userIndex);
 
 			_Instance.UpdateUserMetaBoneData(userID);
 
@@ -207,10 +209,15 @@ namespace com.iris.common
 
 			if(KManager != null && KManager.IsInitialized() && KManager.GetUsersCount() > 0 )
 			{
-				if (Time.time - UsersMetaDatas[user].lastUpdateTime < 1 / Application.targetFrameRate)
+				
+				if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
 					return;
 
+
 				Vector3 HandRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandRight);
+
+				Debug.Log("HandRightPosition= " + HandRightPosition);
+
 				Vector3 HandLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandLeft);
 
 				Vector3 ElbowRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.ElbowRight);
@@ -227,7 +234,7 @@ namespace com.iris.common
 				float distHandTopLeft = HandLeftPosition.y - PelvisPosition.y;
 
 				UsersMetaDatas[user].HandsToPelvisFactor = distHandTopRight + distHandTopLeft;
-
+				
 				if (ElbowLeftPosition.y < HandLeftPosition.y && ElbowRightPosition.y < HandRightPosition.y)
 				{
 					UsersMetaDatas[user].HandsAboveElbows = true;

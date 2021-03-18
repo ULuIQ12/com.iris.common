@@ -26,6 +26,9 @@ namespace com.iris.common
 
 		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, ulong userID = 0)
 		{
+			if (_Instance == null)
+				return 0.0f;
+
 			_Instance.UpdateUserMetaBoneData(userID);
 
 			switch (type)
@@ -48,6 +51,9 @@ namespace com.iris.common
 
 		public static bool GetMetaBool( FXDataProvider.BOOL_DATA_TYPE type, ulong userID = 0 )
 		{
+			if (_Instance == null)
+				return false;
+
 			_Instance.UpdateUserMetaBoneData(userID);
 			switch( type)
 			{

@@ -16,6 +16,7 @@
   "hideInEditor": false,
   "type": "library",
   "dependencies": {
-    "com.unity.visualeffectgraph": "10.3.2"
+    "com.unity.visualeffectgraph": "10.3.2",
+    "com.unity.shadergraph": "10.3.2"
   }
 }

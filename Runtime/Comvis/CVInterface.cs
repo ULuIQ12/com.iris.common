@@ -200,7 +200,7 @@ namespace com.iris.common
 
 		private void UpdateUserMetaBoneData( ulong user )
 		{
-			if( UsersMetaDatas[user] == null)
+			if( !UsersMetaDatas.ContainsKey(user))
 			{
 				UsersMetaDatas[user] = new UserBonesMetaData();
 			}

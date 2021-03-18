@@ -49,24 +49,24 @@ MonoBehaviour:
   syncMultiCamFrames: 0
   getDepthFrames: 2
   getColorFrames: 2
-  getInfraredFrames: 2
+  getInfraredFrames: 0
   getPoseFrames: 0
   getBodyFrames: 3
-  syncDepthAndColor: 0
-  syncBodyAndDepth: 0
+  syncDepthAndColor: 1
+  syncBodyAndDepth: 1
   minUserDistance: 0
   maxUserDistance: 10
   maxLeftRightDistance: 0
   maxTrackedUsers: 0
   showAllowedUsersOnly: 0
-  userDetectionOrder: 0
+  userDetectionOrder: 2
   ignoreInferredJoints: 0
   ignoreZCoordinates: 0
   boneOrientationConstraints: 1
-  playerCalibrationPose: 4
+  playerCalibrationPose: 0
   userManager: {fileID: 0}
   gestureManager: {fileID: 0}
-  displayImages: 01000000020000000300000001010000
+  displayImages: 010000000200000001010000
   displayImageWidthPercent: 0.2
   statusInfoText: {fileID: 0}
   consoleLogMessages: 1
@@ -122,8 +122,8 @@ MonoBehaviour:
   deviceStreamingMode: 1
   deviceIndex: 0
   recordingFile: 
-  minDistance: 0
-  maxDistance: 10
+  minDistance: 0.5
+  maxDistance: 5
   pointCloudResolution: 0
   pointCloudVertexTexture: {fileID: 8400000, guid: 608bf8ab043330e4da511b8779b95650, type: 2}
   pointCloudColorTexture: {fileID: 8400000, guid: 3a6bdde58125eda4cad5455d0108e94d, type: 2}
@@ -194,8 +194,8 @@ MonoBehaviour:
   deviceStreamingMode: 1
   deviceIndex: 0
   recordingFile: 
-  minDistance: 0
-  maxDistance: 10
+  minDistance: 0.5
+  maxDistance: 2
   pointCloudResolution: 0
   pointCloudVertexTexture: {fileID: 8400000, guid: 608bf8ab043330e4da511b8779b95650, type: 2}
   pointCloudColorTexture: {fileID: 8400000, guid: 3a6bdde58125eda4cad5455d0108e94d, type: 2}

@@ -1,7 +1,9 @@
 {
     "name": "com.rfilkov",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Unity.XR.ARKit"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,11 +1,11 @@
 {
     "name": "com.rfilkov.kinect",
-    "rootNamespace": "com.rfilkov.kinect",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
+    "overrideReferences": false,
     "precompiledReferences": [
         "UnityARKitWrapper.dll",
         "LZ4Sharp.dll",
@@ -17,7 +17,7 @@
         "System.Runtime.CompilerServices.Unsafe.dll",
         "UnityEditor.iOS_I2Loc.Xcode.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

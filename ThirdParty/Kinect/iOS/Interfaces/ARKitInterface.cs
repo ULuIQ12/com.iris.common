@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using com.rfilkov.arkit;
+using com.rfilkov.kinect;
 using Unity.Collections;
 using Unity.Jobs;
 

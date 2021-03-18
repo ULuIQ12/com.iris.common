@@ -1,8 +1,13 @@
 {
-    "name": "com.rfilkov",
-    "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [],
+    "name": "com.rfilkov.arkit",
+    "rootNamespace": "com.rfilkov",
+    "references": [
+        "GUID:d9fd5e3a4961cb74fbc411b32260dd0b"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "iOS"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

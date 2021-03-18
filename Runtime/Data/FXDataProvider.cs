@@ -69,7 +69,7 @@ namespace com.iris.common
 			}
 		}
 
-		public static float GetFloat(FLOAT_DATA_TYPE type )
+		public static float GetFloat(FLOAT_DATA_TYPE type , int userIndex = 0)
 		{
 			switch(type)
 			{
@@ -78,7 +78,7 @@ namespace com.iris.common
 				case FLOAT_DATA_TYPE.AudioLevel:
 					return AudioProcessor.GetLevel();
 				case FLOAT_DATA_TYPE.HandsHorizontalSeparation:
-					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsHorizontalSeparation);
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsHorizontalSeparation, userIndex);
 				case FLOAT_DATA_TYPE.HandsVerticalSeparation:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsVerticalSeparation);
 				case FLOAT_DATA_TYPE.HandsToPelvisFactor:

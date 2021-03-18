@@ -1,6 +1,6 @@
 {
-    "name": "com.rfilkov",
-    "rootNamespace": "",
+    "name": "com.rfilkov.kinect",
+    "rootNamespace": "com.rfilkov.kinect",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

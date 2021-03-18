@@ -1,4 +1,4 @@
-#if (UNITY_STANDALONE_WIN)
+
 using UnityEngine;
 using System.Collections;
 using Windows.Kinect;
@@ -1783,4 +1783,3 @@ namespace com.rfilkov.kinect
     }
 }
 
-#endif

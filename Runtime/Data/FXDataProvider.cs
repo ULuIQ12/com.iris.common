@@ -8,10 +8,20 @@ namespace com.iris.common
     {
 		public static FXDataProvider Instance;
 
+		public enum BOOL_DATA_TYPE
+		{
+			HandsAboveElbows
+		}
+
 		public enum FLOAT_DATA_TYPE
 		{
 			AudioLevel, 
-			AudioBeat
+			AudioBeat, 
+
+			HandsHorizontalSeparation, 
+			HandsVerticalSeparation,
+			HandsToPelvisFactor,
+
 		}
 
 		public enum MAP_DATA_TYPE
@@ -19,6 +29,8 @@ namespace com.iris.common
 			ColorMap,
 			DepthMap,
 			UserMap, 
+			ColorPointCloud, 
+			VertexPointCloud
 		}
 
 		public enum V2_DATA_TYPE
@@ -45,6 +57,18 @@ namespace com.iris.common
 				Destroy(gameObject);
         }
 
+		public static bool GetBool(BOOL_DATA_TYPE type)
+		{
+			switch(type)
+			{
+				case BOOL_DATA_TYPE.HandsAboveElbows:
+					//return FXDataProvider.GetBool(BOOL_DATA_TYPE.HandsAboveElbows);					
+					return false;
+				default:
+					return false;
+			}
+		}
+
 		public static float GetFloat(FLOAT_DATA_TYPE type )
 		{
 			switch(type)
@@ -53,6 +77,12 @@ namespace com.iris.common
 					return AudioProcessor.GetBeat();
 				case FLOAT_DATA_TYPE.AudioLevel:
 					return AudioProcessor.GetLevel();
+				case FLOAT_DATA_TYPE.HandsHorizontalSeparation:
+					return 0.0f;
+				case FLOAT_DATA_TYPE.HandsVerticalSeparation:
+					return 0.0f;
+				case FLOAT_DATA_TYPE.HandsToPelvisFactor:
+					return 0.0f;
 				default:
 					return 0.0f;
 			}
@@ -73,6 +103,10 @@ namespace com.iris.common
 					return CVInterface.GetDepthMap();
 				case MAP_DATA_TYPE.UserMap:
 					return CVInterface.GetUsersMap();
+				case MAP_DATA_TYPE.ColorPointCloud:
+					return CVInterface.GetColorPointCloud();
+				case MAP_DATA_TYPE.VertexPointCloud:
+					return CVInterface.GetVertexPointCloud();
 				default:
 					return null;
 				

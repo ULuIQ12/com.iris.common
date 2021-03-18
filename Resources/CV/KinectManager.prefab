@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6440097062231620139}
+  - {fileID: 3896497455541558908}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -124,8 +125,8 @@ MonoBehaviour:
   minDistance: 0
   maxDistance: 10
   pointCloudResolution: 0
-  pointCloudVertexTexture: {fileID: 0}
-  pointCloudColorTexture: {fileID: 0}
+  pointCloudVertexTexture: {fileID: 8400000, guid: 608bf8ab043330e4da511b8779b95650, type: 2}
+  pointCloudColorTexture: {fileID: 8400000, guid: 3a6bdde58125eda4cad5455d0108e94d, type: 2}
   pointCloudPlayerList: 
   frameSourceFlags: 0
   depth2colorCamMat:
@@ -147,3 +148,81 @@ MonoBehaviour:
     e33: 1
   sensorRotValueY: 0
   usersFaceBackwards: 0
+--- !u!1 &7934665244740699798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3896497455541558908}
+  - component: {fileID: 1412944856142668239}
+  m_Layer: 0
+  m_Name: ARkitInterface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3896497455541558908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7934665244740699798}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6440097061888147708}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1412944856142668239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7934665244740699798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63e0e5a5dc8a4f7aa5248fe8754af1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deviceStreamingMode: 1
+  deviceIndex: 0
+  recordingFile: 
+  minDistance: 0
+  maxDistance: 10
+  pointCloudResolution: 0
+  pointCloudVertexTexture: {fileID: 8400000, guid: 608bf8ab043330e4da511b8779b95650, type: 2}
+  pointCloudColorTexture: {fileID: 8400000, guid: 3a6bdde58125eda4cad5455d0108e94d, type: 2}
+  pointCloudPlayerList: 
+  frameSourceFlags: 0
+  depth2colorCamMat:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  sensorRotValueY: 0
+  fixedFrameRate: 1
+  updateCameraProjection: 1
+  depthMode: 1
+  minDepthConfidence: 0
+  bodySmoothing: 1
+  debugText: {fileID: 0}
+  detectFloorForPoseEstimation: 0

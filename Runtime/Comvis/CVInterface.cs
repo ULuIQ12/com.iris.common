@@ -215,9 +215,6 @@ namespace com.iris.common
 
 
 				Vector3 HandRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandRight);
-
-				Debug.Log("HandRightPosition= " + HandRightPosition);
-
 				Vector3 HandLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandLeft);
 
 				Vector3 ElbowRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.ElbowRight);

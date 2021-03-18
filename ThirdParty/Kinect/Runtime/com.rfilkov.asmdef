@@ -5,7 +5,7 @@
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
+    "overrideReferences": true,
     "precompiledReferences": [
         "UnityARKitWrapper.dll",
         "LZ4Sharp.dll",
@@ -17,7 +17,7 @@
         "System.Runtime.CompilerServices.Unsafe.dll",
         "UnityEditor.iOS_I2Loc.Xcode.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

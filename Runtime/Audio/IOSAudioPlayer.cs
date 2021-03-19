@@ -31,7 +31,7 @@ namespace com.iris.common
 		{
 			HasAudioClipStartedPlaying = false;
 			IsAudioClipPaused = false;
-			musicManager.nextSong();
+			musicManager.nextSong(); 
 		}
 
 		public void Previous()

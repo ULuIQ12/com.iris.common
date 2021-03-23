@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using com.rfilkov.kinect;
-using DentedPixel;
+//using DentedPixel;
+
 
 public class ManagerFlower : MonoBehaviour
 {

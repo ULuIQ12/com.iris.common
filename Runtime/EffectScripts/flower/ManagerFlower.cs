@@ -39,8 +39,9 @@ public class ManagerFlower : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Flower") )
-        {
+        //if (other.gameObject.CompareTag("Flower") )
+		if (true)
+			{
             //Destroy(other.gameObject);
             if(!ListFlower.Contains(other.gameObject)){
                 ListFlower.Add(other.gameObject);

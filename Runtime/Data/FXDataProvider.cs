@@ -24,6 +24,11 @@ namespace com.iris.common
 
 		}
 
+		public enum INT_DATA_TYPE
+		{
+			BoneCount
+		}
+
 		public enum MAP_DATA_TYPE
 		{
 			ColorMap,
@@ -87,6 +92,16 @@ namespace com.iris.common
 					return 0.0f;
 			}
 		}
+		public static int GetInt(INT_DATA_TYPE type, int userIndex =0)
+		{
+			switch(type)
+			{
+				case INT_DATA_TYPE.BoneCount:
+					return CVInterface.GetBoneCount();
+				default:
+					return 0;
+			}
+		}
 
 		public static Vector2 GetV2( V2_DATA_TYPE type )
 		{
@@ -111,6 +126,11 @@ namespace com.iris.common
 					return null;
 				
 			}
+		}
+
+		public static Texture GetAllBonesTexture()
+		{
+			return CVInterface.GetAllBonesTexture();
 		}
 
 		public static Color GetColor(COLOR_TYPE type)

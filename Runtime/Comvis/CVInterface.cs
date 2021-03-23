@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -125,7 +126,29 @@ namespace com.iris.common
 			return EmptyTexture;
 		}
 
-		
+		public static Texture GetAllBonesTexture()
+		{
+			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			{
+				_Instance.UpdateAllBonestexture();
+				return _Instance.AllBonesTexture;
+			}
+			if (EmptyTexture == null)
+				InitEmpty();
+			return EmptyTexture;
+		}
+
+		public static int GetBoneCount()
+		{
+			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			{
+				return _Instance.NbBones;
+			}
+			else return 0;
+		}
+
+
+
 
 		private static void InitEmpty()
 		{
@@ -139,6 +162,9 @@ namespace com.iris.common
 		private const string ARKIT_INTERFACE_PREFAB = "CV/ARkitInterface";
 		private GameObject ManagerGO;
 		private KinectManager KManager;
+
+		private Texture2D AllBonesTexture;
+		private int NbBones = 0;
 
 		private class UserBonesMetaData
 		{
@@ -170,9 +196,11 @@ namespace com.iris.common
 			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
 			ManagerGO.name = "KinectManager";
 			KManager = ManagerGO.GetComponent<KinectManager>();
+			Debug.Log("CVInterface: Init platform " + Application.platform);
 
 			if( Application.platform == RuntimePlatform.WindowsEditor )
 			{
+
 				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
 				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
 			}	
@@ -237,6 +265,69 @@ namespace com.iris.common
 
 				UsersMetaDatas[user].lastUpdateTime = Time.time;
 			}
+		}
+
+		private void UpdateAllBonestexture()
+		{
+			if( AllBonesTexture == null)
+			{
+				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
+				AllBonesTexture = new Texture2D(NbBones, 1, TextureFormat.RGBAFloat, false);
+			}
+
+			
+			//var joints = Enum.GetValues(typeof(IRISJoints.Joints));
+			var joints = Enum.GetValues(typeof(KinectInterop.JointType));
+			
+			ulong uid = KManager.GetUserIdByIndex(0);
+			
+			var data = new byte[NbBones * 4 * 4];
+
+
+			int i = 0;
+			foreach (KinectInterop.JointType j in joints)
+			{
+				if (j == KinectInterop.JointType.Count)
+					continue;
+
+				Vector3 p = KManager.GetJointPosition(uid, j);
+				Debug.Log(j + "/" + i);
+				float val;
+				byte[] biteval;
+
+				val = p.x;
+				biteval = BitConverter.GetBytes(val);
+				data[i+0] = biteval[0];
+				data[i+1] = biteval[1];
+				data[i+2] = biteval[2];
+				data[i+3] = biteval[3];
+
+				val = p.y;
+				biteval = BitConverter.GetBytes(val);
+				data[i + 4] = biteval[0];
+				data[i + 5] = biteval[1];
+				data[i + 6] = biteval[2];
+				data[i + 7] = biteval[3];
+
+				val = p.z;
+				biteval = BitConverter.GetBytes(val);
+				data[i + 8] = biteval[0];
+				data[i + 9] = biteval[1];
+				data[i + 10] = biteval[2];
+				data[i + 11] = biteval[3];
+
+				val = (p!=Vector3.zero)?1f:0f;
+				biteval = BitConverter.GetBytes(val);
+				data[i + 12] = biteval[0];
+				data[i + 13] = biteval[1];
+				data[i + 14] = biteval[2];
+				data[i + 15] = biteval[3];
+
+				i += 16 ;
+			}
+
+			AllBonesTexture.SetPixelData(data, 0);
+			AllBonesTexture.Apply();
 		}
 	}
 }

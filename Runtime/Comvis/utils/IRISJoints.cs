@@ -47,8 +47,6 @@ namespace com.iris.common
 			ThumbLeft = 29,
 			HandtipRight = 30,
 			ThumbRight = 31,
-
-			Count = 32
 		}
 
 		protected static readonly Dictionary<Joints, KinectInterop.JointType> IRISJointToKinectJoint = new Dictionary<Joints, KinectInterop.JointType>

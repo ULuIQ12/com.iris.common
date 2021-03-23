@@ -291,7 +291,7 @@ namespace com.iris.common
 					continue;
 
 				Vector3 p = KManager.GetJointPosition(uid, j);
-				Debug.Log(j + "/" + i);
+				
 				float val;
 				byte[] biteval;
 

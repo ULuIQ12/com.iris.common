@@ -45,13 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useMultiCamConfig: 0
   syncMultiCamFrames: 0
-  getDepthFrames: 0
+  getDepthFrames: 1
   getColorFrames: 0
   getInfraredFrames: 0
   getPoseFrames: 0
-  getBodyFrames: 0
+  getBodyFrames: 3
   syncDepthAndColor: 0
-  syncBodyAndDepth: 0
+  syncBodyAndDepth: 1
   minUserDistance: 0
   maxUserDistance: 10
   maxLeftRightDistance: 0

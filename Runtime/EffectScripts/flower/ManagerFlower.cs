@@ -70,9 +70,9 @@ public class ManagerFlower : MonoBehaviour
         LeanTween.scale( flower, endScale, 2f).setEase(LeanTweenType.easeInOutQuad);
 
         LeanTween.value( gameObject, 1f, 0f, 1f).setEase(LeanTweenType.easeInOutQuad).setDelay(1f).setOnUpdate( (float val)=>{
-            Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+            Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_BaseColor");
             currentColor.a = val;
-            flower.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+            flower.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
         });
         
 
@@ -97,9 +97,9 @@ public class ManagerFlower : MonoBehaviour
             LeanTween.scale( flower, endScale, 0.5f).setFrom(fromScale).setDelay(iDelay*0.2f).setEase(LeanTweenType.easeInOutQuad);
 
             LeanTween.value( gameObject, 0f, 1f, 0.5f).setEase(LeanTweenType.easeInOutQuad).setDelay(iDelay*0.2f).setOnUpdate( (float val)=>{
-                Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+                Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_BaseColor");
                 currentColor.a = val;
-                flower.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+                flower.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
             } );    
 
             iDelay ++;        

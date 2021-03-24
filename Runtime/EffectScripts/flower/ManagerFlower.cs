@@ -21,7 +21,7 @@ public class ManagerFlower : MonoBehaviour
     List<GameObject> ListFlower = new List<GameObject>();
     int numFlowerCueillies = 0;
 
-    void Start()
+    void OnEnable()
     {
         kinectManager = KinectManager.Instance;
 		totFlower = 25;// GameObject.FindGameObjectsWithTag("Flower").Length;
@@ -52,7 +52,7 @@ public class ManagerFlower : MonoBehaviour
 		}
     }
 
-	public void OnApplicationQuit()
+	public void OnDisable()
 	{
 		try
 		{

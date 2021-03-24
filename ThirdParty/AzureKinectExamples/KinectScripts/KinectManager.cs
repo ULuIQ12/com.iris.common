@@ -2885,8 +2885,8 @@ namespace com.rfilkov.kinect
             return userBodyMerger;
         }
 
-        // internal methods
-
+		// internal methods
+		public bool AutoStartSensors = false;
         void Awake()
         {
             // initializes the singleton instance of KinectManager
@@ -2935,7 +2935,8 @@ namespace com.rfilkov.kinect
             }
 
             // locate and start the available depth-sensors
-            StartDepthSensors();
+           if(AutoStartSensors)
+				StartDepthSensors();
         }
 
 

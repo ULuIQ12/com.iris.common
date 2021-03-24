@@ -106,7 +106,7 @@ namespace com.iris.common
 
 		public static Texture GetColorPointCloud()
 		{
-			if(KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if(KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
 			{
 				return _Instance.CurrentSensorInterface.pointCloudColorTexture;
 			}
@@ -117,7 +117,7 @@ namespace com.iris.common
 
 		public static Texture GetVertexPointCloud()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
 			{
 				return _Instance.CurrentSensorInterface.pointCloudVertexTexture;
 			}
@@ -211,8 +211,10 @@ namespace com.iris.common
 			}
 			else if( Application.platform == RuntimePlatform.IPhonePlayer)
 			{
+				
 				GameObject igo = Instantiate(Resources.Load<GameObject>(ARKIT_INTERFACE_PREFAB), ManagerGO.transform);
 				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
+				
 			}
 			else
 			{

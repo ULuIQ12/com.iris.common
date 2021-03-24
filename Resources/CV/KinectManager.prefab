@@ -49,7 +49,7 @@ MonoBehaviour:
   getColorFrames: 2
   getInfraredFrames: 0
   getPoseFrames: 0
-  getBodyFrames: 1
+  getBodyFrames: 3
   syncDepthAndColor: 0
   syncBodyAndDepth: 0
   minUserDistance: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   playerCalibrationPose: 0
   userManager: {fileID: 0}
   gestureManager: {fileID: 0}
-  displayImages: 01000000
+  displayImages: 0100000001010000
   displayImageWidthPercent: 0.2
   statusInfoText: {fileID: 0}
   consoleLogMessages: 1

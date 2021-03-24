@@ -7,6 +7,8 @@ using com.rfilkov.kinect;
 
 public class ManagerFlower : MonoBehaviour
 {
+	public Transform LeftHand;
+	public Transform RightHand;
     public int totFlower;
     public float defaultX = 0f;
     public float scaleX = 5f;
@@ -14,6 +16,7 @@ public class ManagerFlower : MonoBehaviour
     public float scaleY = 5f;    
     KinectManager kinectManager;
     KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
+	KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
     List<GameObject> ListFlower = new List<GameObject>();
     int numFlowerCueillies = 0;
 
@@ -33,10 +36,32 @@ public class ManagerFlower : MonoBehaviour
 
             ulong uid = kinectManager.GetUserIdByIndex(0);
             Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
-            transform.position = new Vector3(defaultX+HandPosition.x*scaleX, defaultY+HandPosition.y*scaleY, 0);
-        }
+			if( RightHand != null )
+				RightHand.position = new Vector3(defaultX+HandPosition.x*scaleX, defaultY+HandPosition.y*scaleY, 0);
+
+			HandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
+			if (LeftHand != null)
+				LeftHand.position = new Vector3(defaultX + HandPosition.x * scaleX, defaultY + HandPosition.y * scaleY, 0);
+
+		}
     }
 
+	public void OnHandCollide( GameObject go )
+	{
+		if (!ListFlower.Contains(go))
+		{
+			ListFlower.Add(go);
+			DisappearFlower(go);
+			numFlowerCueillies++;
+			Debug.Log("fleur cueillies N° " + numFlowerCueillies + " sur " + totFlower);
+			if (numFlowerCueillies >= totFlower)
+			{
+				Invoke("AppearFlowers", 3);
+			}
+		}
+	}
+
+	/*
     void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.CompareTag("Flower") )
@@ -53,7 +78,7 @@ public class ManagerFlower : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     void DisappearFlower(GameObject flower)
     {

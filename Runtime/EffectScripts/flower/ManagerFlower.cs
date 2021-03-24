@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using com.rfilkov.kinect;
+using com.iris.common;
 //using DentedPixel;
 
 
@@ -24,7 +25,12 @@ public class ManagerFlower : MonoBehaviour
     {
         kinectManager = KinectManager.Instance;
 		totFlower = 25;// GameObject.FindGameObjectsWithTag("Flower").Length;
-    }
+
+		HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
+		htLeft.OnHandCollide += OnHandCollide;
+		HandTrigger htRight = RightHand.gameObject.GetComponent<HandTrigger>();
+		htRight.OnHandCollide += OnHandCollide;
+	}
 
     void Update()
     {
@@ -45,6 +51,18 @@ public class ManagerFlower : MonoBehaviour
 
 		}
     }
+
+	public void OnApplicationQuit()
+	{
+		try
+		{
+			HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
+			htLeft.OnHandCollide -= OnHandCollide;
+			HandTrigger htRight = RightHand.gameObject.GetComponent<HandTrigger>();
+			htRight.OnHandCollide -= OnHandCollide;
+		}
+		catch (System.Exception e) { Debug.Log(e); };
+	}
 
 	public void OnHandCollide( GameObject go )
 	{

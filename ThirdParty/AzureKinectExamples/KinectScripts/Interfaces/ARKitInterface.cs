@@ -242,7 +242,7 @@ namespace com.rfilkov.kinect
             }
             else
             {
-                Debug.LogWarning("ARKitInterface needs at least iOS v13.0!"); 
+                Debug.LogWarning("ARKitInterface needs at least iOS v13.0!");
             }
 
             //if (alSensorInfo.Count == 0)

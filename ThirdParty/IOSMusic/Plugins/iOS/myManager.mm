@@ -96,7 +96,7 @@ BOOL isPad() {
     self.myPicker.modalPresentationCapturesStatusBarAppearance = YES;
     [self.myPicker setModalPresentationStyle:UIModalPresentationPopover];
     
-    if (isPad)
+    if (isPad || true)
     {
         //self.myPicker.modalPresentationStyle = UIModalPresentationFormSheet;
 		self.myPicker.modalPresentationStyle = UIModalPresentationFullScreen;

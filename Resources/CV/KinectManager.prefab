@@ -45,13 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useMultiCamConfig: 0
   syncMultiCamFrames: 0
-  getDepthFrames: 1
-  getColorFrames: 0
+  getDepthFrames: 0
+  getColorFrames: 2
   getInfraredFrames: 0
   getPoseFrames: 0
-  getBodyFrames: 3
+  getBodyFrames: 1
   syncDepthAndColor: 0
-  syncBodyAndDepth: 1
+  syncBodyAndDepth: 0
   minUserDistance: 0
   maxUserDistance: 10
   maxLeftRightDistance: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   playerCalibrationPose: 0
   userManager: {fileID: 0}
   gestureManager: {fileID: 0}
-  displayImages: 
+  displayImages: 01000000
   displayImageWidthPercent: 0.2
   statusInfoText: {fileID: 0}
   consoleLogMessages: 1

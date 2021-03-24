@@ -20,7 +20,7 @@ public class ManagerFlower : MonoBehaviour
     void Start()
     {
         kinectManager = KinectManager.Instance;
-        totFlower = GameObject.FindGameObjectsWithTag("Flower").Length;
+		totFlower = 25;// GameObject.FindGameObjectsWithTag("Flower").Length;
     }
 
     void Update()

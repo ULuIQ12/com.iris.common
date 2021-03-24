@@ -440,8 +440,8 @@ namespace com.rfilkov.kinect
                     if (m_avlBodyTracking)
                         sensorCaps |= KinectInterop.FrameSource.TypeBody;
 
-                    //Debug.Log("Available eDepth: " + m_avlEnvDepth + ", hDepth: " + m_avlHumanDepth + ", hStencil: " + m_avlHumanStencil + ", bTracking: " + m_avlBodyTracking +
-                    //    ", caps: " + m_configCaps.ToString("X") + ", req: " + m_requestedFeatures.ToString("X") + ", avl: " + m_configFeatures.ToString("X"));
+                    Debug.Log("Available eDepth: " + m_avlEnvDepth + ", hDepth: " + m_avlHumanDepth + ", hStencil: " + m_avlHumanStencil + ", bTracking: " + m_avlBodyTracking +
+                        ", caps: " + m_configCaps.ToString("X") + ", req: " + m_requestedFeatures.ToString("X") + ", avl: " + m_configFeatures.ToString("X"));
 
                     // start camera
                     NativeApi.UnityARKit_Camera_Start();
@@ -469,7 +469,7 @@ namespace com.rfilkov.kinect
                     if(fixedFrameRate && arFps > 0)
                     {
                         Application.targetFrameRate = arFps;
-                        //Debug.Log("ARKit-FPS: " + arFps);
+                        Debug.Log("ARKit-FPS: " + arFps);
                     }
                 }
             }

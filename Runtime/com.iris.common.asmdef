@@ -6,13 +6,13 @@
         "GUID:590662778d8a81c40b6ebd7c098c2834",
         "GUID:d5e49cccd48cc2e4b90b7b45b74c1188",
         "GUID:2b9b557b03fceb2439b5c3effb58dd6f",
-        "GUID:b1e8b26770b4d174a9f68245904b4984",
-        "GUID:26e832d260da3824080e44f31dc6dfe4"
+        "GUID:26e832d260da3824080e44f31dc6dfe4",
+        "GUID:b1e8b26770b4d174a9f68245904b4984"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
+    "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],

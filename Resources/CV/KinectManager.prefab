@@ -64,7 +64,7 @@ MonoBehaviour:
   playerCalibrationPose: 0
   userManager: {fileID: 0}
   gestureManager: {fileID: 0}
-  displayImages: 0100000001010000
+  displayImages: 
   displayImageWidthPercent: 0.2
   statusInfoText: {fileID: 0}
   consoleLogMessages: 1
@@ -74,3 +74,4 @@ MonoBehaviour:
   OnDepthSensorsStopped:
     m_PersistentCalls:
       m_Calls: []
+  AutoStartSensors: 0

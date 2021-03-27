@@ -51,6 +51,9 @@ namespace com.iris.common
 		const string DesktopPrefab = "AudioPlayer/DesktopAudioPlayer";
 
 		private IAudioPlayer Player;
+
+		public bool Initialized { get; private set; } = false;
+
 		private void InitPlayer()
 		{
 			if( Application.platform == RuntimePlatform.IPhonePlayer)
@@ -65,6 +68,8 @@ namespace com.iris.common
 				Player = go.GetComponent<DesktopAudioPlayer>();
 				go.name = "DesktopAudioPlayer";
 			}
+
+			Initialized = true;
 		}
     }
 }

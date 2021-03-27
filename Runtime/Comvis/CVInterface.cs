@@ -160,6 +160,9 @@ namespace com.iris.common
 		private const string KINECT_PREFAB = "CV/KinectManager";
 		private const string K2_INTERFACE_PREFAB = "CV/K2Interface";
 		private const string ARKIT_INTERFACE_PREFAB = "CV/ARkitInterface";
+
+		public bool Initialized { get; private set; } = false;
+
 		private GameObject ManagerGO;
 		private KinectManager KManager;
 
@@ -222,6 +225,8 @@ namespace com.iris.common
 			}
 
 			KManager.StartDepthSensors();
+			
+			Initialized = true;
 		}
 
 		private void UpdateUserMetaBoneData( ulong user )

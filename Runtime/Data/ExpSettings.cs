@@ -12,18 +12,23 @@ namespace com.iris.common
 		{
 			Level1,
 			Level2,
-			Level3,
-			Level4,
-			Level5
-
 		}
+
+		public enum AMPLITUDE
+		{
+			Small, 
+			Large
+		}
+
 		public string uid = "UNIQUE_ID";
 		public string Title = "Titre de l'effet";
 		public string Instructions = "Instructions effet";
 		public string Author = "Your name here";
 		public long CreationDate = 0;
 		public long LastUpdateDate = 0;
-		public MOTRICITY MotricityLevel = MOTRICITY.Level1;
+		public Texture2D ThumbnailTexture;
+		//public MOTRICITY MotricityLevel = MOTRICITY.Level1;
+		public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;
 
 
 		public void Awake()

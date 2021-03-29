@@ -17,8 +17,10 @@ namespace com.iris.common
 		SerializedProperty Author;
 		SerializedProperty CreationDate;
 		SerializedProperty LastUpdateDate;
-		SerializedProperty MotricityLevel;
+		//SerializedProperty MotricityLevel;
+		SerializedProperty AmplitudeLevel;
 		SerializedProperty Instructions;
+		SerializedProperty ThumbnailTexture;
 
 		string tempInstructions;
 		static CultureInfo culture = new CultureInfo("fr-fr");
@@ -30,8 +32,10 @@ namespace com.iris.common
 			Author = serializedObject.FindProperty("Author");
 			CreationDate = serializedObject.FindProperty("CreationDate");
 			LastUpdateDate = serializedObject.FindProperty("LastUpdateDate");
-			MotricityLevel = serializedObject.FindProperty("MotricityLevel");
+			//MotricityLevel = serializedObject.FindProperty("MotricityLevel");
+			AmplitudeLevel = serializedObject.FindProperty("AmplitudeLevel");
 			Instructions = serializedObject.FindProperty("Instructions");
+			ThumbnailTexture = serializedObject.FindProperty("ThumbnailTexture");
 
 
 		}
@@ -46,6 +50,8 @@ namespace com.iris.common
 			EditorGUILayout.PropertyField(UID);
 			EditorGUILayout.PropertyField(Title);
 			EditorGUILayout.PropertyField(Author);
+			EditorGUILayout.PropertyField(ThumbnailTexture);
+			
 			EditorGUILayout.Space();
 
 			var tempDate = DateTime.FromBinary(CreationDate.longValue);
@@ -60,7 +66,7 @@ namespace com.iris.common
 			Instructions.stringValue = EditorGUILayout.TextArea(Instructions.stringValue, style, GUILayout.Height(60));
 			EditorGUILayout.Separator();
 
-			EditorGUILayout.PropertyField(MotricityLevel);
+			EditorGUILayout.PropertyField(AmplitudeLevel);
 			serializedObject.ApplyModifiedProperties();
 		}
 	}

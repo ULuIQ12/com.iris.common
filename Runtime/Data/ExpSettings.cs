@@ -26,7 +26,7 @@ namespace com.iris.common
 		public string Author = "Your name here";
 		public long CreationDate = 0;
 		public long LastUpdateDate = 0;
-		public Texture2D ThumbnailTexture;
+		public Sprite ThumbnailTexture;
 		//public MOTRICITY MotricityLevel = MOTRICITY.Level1;
 		public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;
 

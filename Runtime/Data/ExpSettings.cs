@@ -27,6 +27,8 @@ namespace com.iris.common
 		public long CreationDate = 0;
 		public long LastUpdateDate = 0;
 		public Sprite ThumbnailTexture;
+		public bool UseSkeleton = true;
+		public bool UseDepth = false;
 		//public MOTRICITY MotricityLevel = MOTRICITY.Level1;
 		public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;
 

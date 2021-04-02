@@ -13,5 +13,6 @@ namespace com.iris.common
 		void LoadAudio();
 		void Next();
 		void Previous();
+		void LoadInternalAudio(string songDir);
     }
 }

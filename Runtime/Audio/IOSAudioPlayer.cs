@@ -27,6 +27,11 @@ namespace com.iris.common
 			musicManager.loadAudioClip(false);
 		}
 
+		public void LoadInternalAudio(string songPath)
+		{
+
+		}
+
 		public void Next()
 		{
 			HasAudioClipStartedPlaying = false;

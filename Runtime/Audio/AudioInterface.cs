@@ -17,6 +17,14 @@ namespace com.iris.common
 			Player.LoadAudio();
 		}
 
+		public void LoadInternalAudio(string songDir)
+		{
+			if (songDir != null)
+				Player.LoadInternalAudio(songDir);
+			else
+				LoadAudio();
+		}
+
 		public void Next()
 		{
 			Player.Next();

@@ -49,8 +49,8 @@ MonoBehaviour:
   minDistance: 0.5
   maxDistance: 5
   pointCloudResolution: 0
-  pointCloudVertexTexture: {fileID: 0}
-  pointCloudColorTexture: {fileID: 0}
+  pointCloudVertexTexture: {fileID: 8400000, guid: 3a6bdde58125eda4cad5455d0108e94d, type: 2}
+  pointCloudColorTexture: {fileID: 8400000, guid: 608bf8ab043330e4da511b8779b95650, type: 2}
   pointCloudPlayerList: 
   frameSourceFlags: 0
   depth2colorCamMat:
@@ -73,7 +73,7 @@ MonoBehaviour:
   sensorRotValueY: 0
   fixedFrameRate: 1
   updateCameraProjection: 0
-  depthMode: 1
+  depthMode: 2
   minDepthConfidence: 0
   bodySmoothing: 1
   debugText: {fileID: 0}

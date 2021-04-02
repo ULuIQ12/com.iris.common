@@ -460,10 +460,11 @@ namespace RenderHeads.Media.AVProVideo
 		public void OpenVideoFile(MediaPlaylist.MediaItem mediaItem)
  		{
 			bool isMediaAlreadyLoaded = false;
+			/*
 			if (NextPlayer.m_VideoPath == mediaItem.filePath && NextPlayer.m_VideoLocation == mediaItem.fileLocation)
 			{
 				isMediaAlreadyLoaded = true;
-			}
+			}*/
 
 			if (mediaItem.isOverrideTransition)
 			{
@@ -504,6 +505,14 @@ namespace RenderHeads.Media.AVProVideo
 				}
 			}
 		}
+
+		public void CloseVideoExt()
+		{
+			NextPlayer.CloseVideo();
+			CurrentPlayer.CloseVideo();
+			
+		}
+		
 
 		private bool IsTransitioning()
 		{

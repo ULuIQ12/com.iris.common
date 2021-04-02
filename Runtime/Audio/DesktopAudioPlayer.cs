@@ -82,6 +82,11 @@ namespace com.iris.common
 				throw new System.Exception("LoadAudio called before the player finished initializing !");
 		}
 
+		public void LoadInternalAudio(string songPath)
+		{
+			HandleFolderComplete(false, songPath, null);
+		}
+
 		public void Next()
 		{
 			Player.NextItem();
@@ -178,11 +183,15 @@ namespace com.iris.common
 			if( Player.Control != null )
 				Player.Control.Stop();
 
+			if (directoryPath == null)
+				return;
+
 			List<MediaPlaylist.MediaItem> items = new List<MediaPlaylist.MediaItem>();
 
+			Player.CloseVideoExt();
 
 			string[] files = Directory.GetFiles(directoryPath);
-
+			
 			if (files.Length == 0)
 				return;
 
@@ -202,11 +211,12 @@ namespace com.iris.common
 				if (!isAudio)
 					continue;
 
+				Debug.Log("Add to playlist : " + files[i]);
 				MediaPlaylist.MediaItem mi = new MediaPlaylist.MediaItem();
 				mi.fileLocation = MediaPlayer.FileLocation.AbsolutePathOrURL;
 				mi.filePath = files[i];
 				mi.autoPlay = false;
-				mi.startMode = PlaylistMediaPlayer.StartMode.Immediate;
+				mi.startMode = PlaylistMediaPlayer.StartMode.Manual;
 				mi.progressMode = PlaylistMediaPlayer.ProgressMode.OnFinish;
 				mi.progressTimeSeconds = 0f;
 				items.Add(mi);
@@ -216,8 +226,11 @@ namespace com.iris.common
 
 
 			Player.Playlist.Items = items;
-			Player.PlaylistIndex = -1;
+			/*Player.PlaylistIndex = -1;
 			Player.NextItem();
+			Player.Play();
+			*/
+			Player.JumpToItem(0);
 			
 		}
 

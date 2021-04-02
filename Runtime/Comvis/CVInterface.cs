@@ -147,6 +147,13 @@ namespace com.iris.common
 			else return 0;
 		}
 
+		public static void CheckForManagerRefresh( bool UseDepth, bool UseSkeleton )
+		{
+			if (_Instance == null)
+				return;
+
+			_Instance.StartCoroutine( _Instance._CheckForManagerRefresh(UseDepth, UseSkeleton) );
+		}
 
 
 
@@ -194,7 +201,7 @@ namespace com.iris.common
 		}
 
 		private DepthSensorBase CurrentSensorInterface;
-		private void Init()
+		private void Init(bool UseDepth = false, bool UseSkeleton = true)
 		{
 			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
 			ManagerGO.name = "KinectManager";
@@ -224,9 +231,60 @@ namespace com.iris.common
 				Debug.LogWarning("What platform ?!? = " + Application.platform);
 			}
 
+			if (UseDepth && !UseSkeleton)
+			{
+				if (KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
+				}
+			}
+			else if (!UseDepth && UseSkeleton)
+			{
+				if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+				}
+			}
+			else
+			{
+				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+			}
+
 			KManager.StartDepthSensors();
 			
 			Initialized = true;
+		}
+
+		private IEnumerator _CheckForManagerRefresh(bool UseDepth, bool UseSkeleton)
+		{
+			bool shouldRefresh = false;
+			if( UseDepth && !UseSkeleton)
+			{
+				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture)
+				{
+					shouldRefresh = true;
+				}
+			}
+			else if( !UseDepth && UseSkeleton)
+			{
+				if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture)
+				{
+					shouldRefresh = true;
+				}
+			}
+			if (shouldRefresh)
+			{
+
+				Destroy(ManagerGO);
+				ManagerGO = null;
+				KManager = null;
+				yield return null;
+				Init(UseDepth, UseSkeleton);
+			}
+			yield return null;
 		}
 
 		private void UpdateUserMetaBoneData( ulong user )

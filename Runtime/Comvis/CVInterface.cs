@@ -338,66 +338,73 @@ namespace com.iris.common
 			}
 		}
 
+
+		private byte[] boneData;
 		private void UpdateAllBonestexture()
 		{
-			if( AllBonesTexture == null)
+			if (AllBonesTexture == null || ( KManager.GetUsersCount() > 0 && KManager.GetUsersCount() != AllBonesTexture.height ) )
 			{
 				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
-				AllBonesTexture = new Texture2D(NbBones, 1, TextureFormat.RGBAFloat, false);
+				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
 			}
 
+			var lineLenght = NbBones * 4 * 4;
+			var totalbytes = lineLenght * KManager.GetUsersCount();
+			if ( boneData.Length != totalbytes)
+				boneData = new byte[totalbytes];
 			
-			//var joints = Enum.GetValues(typeof(IRISJoints.Joints));
 			var joints = Enum.GetValues(typeof(KinectInterop.JointType));
 			
-			ulong uid = KManager.GetUserIdByIndex(0);
-			
-			var data = new byte[NbBones * 4 * 4];
-
-
-			int i = 0;
-			foreach (KinectInterop.JointType j in joints)
+			int u = 0;
+			for (u = 0; u < KManager.GetUsersCount(); u++)
 			{
-				if (j == KinectInterop.JointType.Count)
-					continue;
+				ulong uid = KManager.GetUserIdByIndex(u);
+				int userDecal = u * lineLenght;
+				int i = 0;
 
-				Vector3 p = KManager.GetJointPosition(uid, j);
-				
-				float val;
-				byte[] biteval;
+				foreach (KinectInterop.JointType j in joints)
+				{
+					if (j == KinectInterop.JointType.Count)
+						continue;
 
-				val = p.x;
-				biteval = BitConverter.GetBytes(val);
-				data[i+0] = biteval[0];
-				data[i+1] = biteval[1];
-				data[i+2] = biteval[2];
-				data[i+3] = biteval[3];
+					Vector3 p = KManager.GetJointPosition(uid, j);
 
-				val = p.y;
-				biteval = BitConverter.GetBytes(val);
-				data[i + 4] = biteval[0];
-				data[i + 5] = biteval[1];
-				data[i + 6] = biteval[2];
-				data[i + 7] = biteval[3];
+					float val;
+					byte[] biteval;
 
-				val = p.z;
-				biteval = BitConverter.GetBytes(val);
-				data[i + 8] = biteval[0];
-				data[i + 9] = biteval[1];
-				data[i + 10] = biteval[2];
-				data[i + 11] = biteval[3];
+					val = p.x;
+					biteval = BitConverter.GetBytes(val);
+					boneData[userDecal + i + 0] = biteval[0];
+					boneData[userDecal + i + 1] = biteval[1];
+					boneData[userDecal + i + 2] = biteval[2];
+					boneData[userDecal + i + 3] = biteval[3];
 
-				val = (p!=Vector3.zero)?1f:0f;
-				biteval = BitConverter.GetBytes(val);
-				data[i + 12] = biteval[0];
-				data[i + 13] = biteval[1];
-				data[i + 14] = biteval[2];
-				data[i + 15] = biteval[3];
+					val = p.y;
+					biteval = BitConverter.GetBytes(val);
+					boneData[userDecal + i + 4] = biteval[0];
+					boneData[userDecal + i + 5] = biteval[1];
+					boneData[userDecal + i + 6] = biteval[2];
+					boneData[userDecal + i + 7] = biteval[3];
 
-				i += 16 ;
+					val = p.z;
+					biteval = BitConverter.GetBytes(val);
+					boneData[userDecal + i + 8] = biteval[0];
+					boneData[userDecal + i + 9] = biteval[1];
+					boneData[userDecal + i + 10] = biteval[2];
+					boneData[userDecal + i + 11] = biteval[3];
+
+					val = (p != Vector3.zero) ? 1f : 0f;
+					biteval = BitConverter.GetBytes(val);
+					boneData[userDecal + i + 12] = biteval[0];
+					boneData[userDecal + i + 13] = biteval[1];
+					boneData[userDecal + i + 14] = biteval[2];
+					boneData[userDecal + i + 15] = biteval[3];
+
+					i += 16;
+				}
 			}
 
-			AllBonesTexture.SetPixelData(data, 0);
+			AllBonesTexture.SetPixelData(boneData, 0);
 			AllBonesTexture.Apply();
 		}
 

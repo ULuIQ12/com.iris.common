@@ -10,7 +10,7 @@ namespace com.iris.common
 		public int NbSamplesWidth = 512;
 		public int NbSamplesHeight = 512;
 		public float ColliderRadius = 0.1f;
-		public Rect SpawnZone;
+		private Rect SpawnZone;
 		private Texture LastedDepthTexture;
 		private Coroutine WaitRoutine;
 		private GameObject[] ColliderGOs;
@@ -23,12 +23,12 @@ namespace com.iris.common
 
 		public void InitColliders()
 		{
-			Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
+			//Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
 
 			float worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
 			float textHeight = LastedDepthTexture.height;
 			float scale = worldScreenHeight / textHeight;
-			Debug.Log("Scale = " + scale);
+			//Debug.Log("Scale = " + scale);
 
 			SpawnZone = new Rect(-LastedDepthTexture.width / 2 * scale, -LastedDepthTexture.height / 2 * scale , LastedDepthTexture.width * scale , LastedDepthTexture.height * scale);
 
@@ -38,9 +38,6 @@ namespace com.iris.common
 			int i = 0;
 			Vector3 topleft = new Vector3(0f, 0f, ExperienceCamera.transform.position.z);
 			Vector3 lowerRight = new Vector3(Screen.width, Screen.height, ExperienceCamera.transform.position.z);
-			//ExperienceCamera.scre
-			//Vector3 worldPos = ExperienceCamera.ScreenToWorldPoint(screenPos);
-			//SpawnZone = new Rect(worldPos.x, worldPos.y, )
 
 			int j = 0;
 			for ( j=0;j<NbSamplesHeight;j++)

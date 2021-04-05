@@ -115,7 +115,10 @@ namespace com.iris.common
 				case MAP_DATA_TYPE.ColorMap:
 					return CVInterface.GetColorMap();
 				case MAP_DATA_TYPE.DepthMap:
-					return CVInterface.GetDepthMap();
+					if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer )
+						return CVInterface.GetUsersMap();
+					else
+						return CVInterface.GetDepthMap();
 				case MAP_DATA_TYPE.UserMap:
 					return CVInterface.GetUsersMap();
 				case MAP_DATA_TYPE.ColorPointCloud:

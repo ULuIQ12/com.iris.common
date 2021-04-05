@@ -9,7 +9,7 @@ namespace com.iris.common
     public class CVInterface : MonoBehaviour
     {
 		public static CVInterface _Instance;
-		private static Texture2D EmptyTexture;
+		public static Texture2D EmptyTexture;
 
 		public static Vector2 GetJointPositionTex(IRISJoints.Joints joints, ulong userId = 0)
 		{
@@ -253,6 +253,12 @@ namespace com.iris.common
 				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
 			}
 
+			if( Application.platform == RuntimePlatform.WindowsEditor)
+			{
+				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+			}
+
 			KManager.StartDepthSensors();
 			
 			Initialized = true;
@@ -393,6 +399,14 @@ namespace com.iris.common
 
 			AllBonesTexture.SetPixelData(data, 0);
 			AllBonesTexture.Apply();
+		}
+
+		private void TextureToScreenCoord( Vector2 position )
+		{
+			if( KManager != null)
+			{
+				KManager.MapDepthPointToColorCoords(0, position, 0);
+			}
 		}
 	}
 }

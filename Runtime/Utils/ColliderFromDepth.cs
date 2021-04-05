@@ -1,0 +1,148 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace com.iris.common
+{
+    public class ColliderFromDepth : MonoBehaviour
+    {
+		public Camera ExperienceCamera;
+		public int NbSamplesWidth = 512;
+		public int NbSamplesHeight = 512;
+		public float ColliderRadius = 0.1f;
+		public Rect SpawnZone;
+		private Texture LastedDepthTexture;
+		private Coroutine WaitRoutine;
+		private GameObject[] ColliderGOs;
+
+		public IEnumerator Start()
+		{
+			yield return WaitRoutine = StartCoroutine(WaitForDepthImage());
+			InitColliders();
+		}
+
+		public void InitColliders()
+		{
+			Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
+
+			float worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
+			float textHeight = LastedDepthTexture.height;
+			float scale = worldScreenHeight / textHeight;
+			Debug.Log("Scale = " + scale);
+
+			SpawnZone = new Rect(-LastedDepthTexture.width / 2 * scale, -LastedDepthTexture.height / 2 * scale , LastedDepthTexture.width * scale , LastedDepthTexture.height * scale);
+
+			int totalSamples = NbSamplesWidth * NbSamplesHeight;
+			ColliderGOs = new GameObject[totalSamples];
+
+			int i = 0;
+			Vector3 topleft = new Vector3(0f, 0f, ExperienceCamera.transform.position.z);
+			Vector3 lowerRight = new Vector3(Screen.width, Screen.height, ExperienceCamera.transform.position.z);
+			//ExperienceCamera.scre
+			//Vector3 worldPos = ExperienceCamera.ScreenToWorldPoint(screenPos);
+			//SpawnZone = new Rect(worldPos.x, worldPos.y, )
+
+			int j = 0;
+			for ( j=0;j<NbSamplesHeight;j++)
+			{
+				for( i=0;i<NbSamplesWidth;i++)
+				{
+					int index = i * NbSamplesWidth + j;
+					GameObject go = new GameObject();
+					//SphereCollider col = go.AddComponent<SphereCollider>();
+					CapsuleCollider col = go.AddComponent<CapsuleCollider>();
+					col.radius = ColliderRadius;
+					col.direction = 2;
+					col.height = 5f;
+					go.SetActive(false);
+					go.transform.parent = transform;
+					float posx = SpawnZone.x + (float)i / (float)NbSamplesWidth * (float)SpawnZone.width;
+					float posy = SpawnZone.y + (float)j / (float)NbSamplesHeight * (float)SpawnZone.height;
+
+					go.transform.localPosition = new Vector3(posx, posy, 0f);
+					ColliderGOs[index] = go;
+					
+				}
+			}
+			
+		}
+
+		public void Update()
+		{
+			UpdateColliderPositions();
+		}
+
+		private void UpdateColliderPositions()
+		{
+			if (ColliderGOs != null && ColliderGOs.Length > 0)
+			{
+				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				if (LastedDepthTexture == CVInterface.EmptyTexture)
+					return;
+				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
+
+				int i = 0;
+				int j = 0;
+				for (j = 0; j < NbSamplesHeight; j++)
+				{
+					for (i = 0; i < NbSamplesWidth; i++)
+					{
+						int index = i * NbSamplesWidth + j;
+						int px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
+						int py = (LastedDepthTexture.height-1) - Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
+						
+						Color col = t2d.GetPixel(px, py);
+						if( col.r + col.g + col.b > 0 )
+						{
+							ColliderGOs[index].SetActive(true);
+						}
+						else
+						{
+							ColliderGOs[index].SetActive(false);
+						}
+					}
+				}
+			}
+		}
+
+		private Texture2D depthT2D;
+		private Texture2D TextureToTexture2D(Texture texture)
+		{
+			if( depthT2D == null || depthT2D.width != texture.width || depthT2D.height != texture.height)
+				depthT2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+			
+			RenderTexture currentRT = RenderTexture.active;
+			RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
+			Graphics.Blit(texture, renderTexture);
+
+			RenderTexture.active = renderTexture;
+			depthT2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+			depthT2D.Apply();
+
+			RenderTexture.active = currentRT;
+			RenderTexture.ReleaseTemporary(renderTexture);
+			return depthT2D;
+		}
+
+		private IEnumerator WaitForDepthImage()
+		{
+			bool isReady = false;
+			while (!isReady)
+			{
+				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				if (LastedDepthTexture == CVInterface.EmptyTexture)
+					yield return null;
+				else
+					isReady = true;
+			}
+			
+		}
+
+		public void OnDestroy()
+		{
+			if (WaitRoutine != null)
+				StopCoroutine(WaitRoutine);
+		}
+
+	}
+}

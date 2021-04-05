@@ -350,7 +350,7 @@ namespace com.iris.common
 
 			var lineLenght = NbBones * 4 * 4;
 			var totalbytes = lineLenght * KManager.GetUsersCount();
-			if ( boneData.Length != totalbytes)
+			if ( boneData == null || boneData.Length != totalbytes)
 				boneData = new byte[totalbytes];
 			
 			var joints = Enum.GetValues(typeof(KinectInterop.JointType));

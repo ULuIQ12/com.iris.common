@@ -131,6 +131,44 @@ namespace com.iris.common
 			}
 		}
 
+		public static Vector2 GetMapSize( MAP_DATA_TYPE type)
+		{
+			Vector2 output = new Vector2();
+			Texture map = null;
+			switch (type)
+			{
+				case MAP_DATA_TYPE.ColorMap:
+					map = CVInterface.GetColorMap();
+					break;
+				case MAP_DATA_TYPE.DepthMap:
+					if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+						map = CVInterface.GetUsersMap();
+					else
+						map = CVInterface.GetDepthMap();
+					break;
+				case MAP_DATA_TYPE.UserMap:
+					map = CVInterface.GetUsersMap();
+					break;
+				case MAP_DATA_TYPE.ColorPointCloud:
+					map = CVInterface.GetColorPointCloud();
+					break;
+				case MAP_DATA_TYPE.VertexPointCloud:
+					map = CVInterface.GetVertexPointCloud();
+					break;
+				default:
+					break;
+
+			}
+			if( map == null)
+			{
+				return output;
+			}
+			output.x = map.width;
+			output.y = map.height;
+
+			return output;
+		}
+
 		public static Texture GetAllBonesTexture()
 		{
 			return CVInterface.GetAllBonesTexture();

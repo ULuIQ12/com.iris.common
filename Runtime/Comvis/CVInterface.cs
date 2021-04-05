@@ -348,6 +348,9 @@ namespace com.iris.common
 				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
 			}
 
+			if (KManager.GetUsersCount() == 0)
+				return;
+
 			var lineLenght = NbBones * 4 * 4;
 			var totalbytes = lineLenght * KManager.GetUsersCount();
 			if ( boneData == null || boneData.Length != totalbytes)

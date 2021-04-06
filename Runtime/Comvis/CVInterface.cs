@@ -165,7 +165,7 @@ namespace com.iris.common
 
 		private static void InitEmpty()
 		{
-			EmptyTexture = Texture2D.whiteTexture;
+			EmptyTexture = Texture2D.blackTexture;
 		}
 
 
@@ -359,7 +359,7 @@ namespace com.iris.common
 				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
 			}
-
+			
 			if (KManager.GetUsersCount() == 0)
 				return;
 
@@ -367,6 +367,11 @@ namespace com.iris.common
 			var totalbytes = lineLenght * KManager.GetUsersCount();
 			if ( boneData == null || boneData.Length != totalbytes)
 				boneData = new byte[totalbytes];
+
+			for( int b=0;b<boneData.Length;b++)
+			{
+				boneData[b] = 0;
+			}
 			
 			var joints = Enum.GetValues(typeof(KinectInterop.JointType));
 			

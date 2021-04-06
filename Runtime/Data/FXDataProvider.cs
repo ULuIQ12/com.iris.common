@@ -20,13 +20,18 @@ namespace com.iris.common
 
 			HandsHorizontalSeparation, 
 			HandsVerticalSeparation,
+			PelvisToLeftHand,
+			PelvisToRightHand,
 			HandsToPelvisFactor,
+			UserHorizontalPosition
 
 		}
 
 		public enum INT_DATA_TYPE
 		{
-			BoneCount
+			BoneCount, 
+			ScreenWidth, 
+			ScreenHeight
 		}
 
 		public enum MAP_DATA_TYPE
@@ -88,6 +93,12 @@ namespace com.iris.common
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsVerticalSeparation);
 				case FLOAT_DATA_TYPE.HandsToPelvisFactor:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsToPelvisFactor);
+				case FLOAT_DATA_TYPE.UserHorizontalPosition:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.UserHorizontalPosition);
+				case FLOAT_DATA_TYPE.PelvisToLeftHand:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToLeftHand, userIndex);
+				case FLOAT_DATA_TYPE.PelvisToRightHand:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToRightHand, userIndex);
 				default:
 					return 0.0f;
 			}
@@ -98,6 +109,10 @@ namespace com.iris.common
 			{
 				case INT_DATA_TYPE.BoneCount:
 					return CVInterface.GetBoneCount();
+				case INT_DATA_TYPE.ScreenWidth:
+					return Screen.width;
+				case INT_DATA_TYPE.ScreenHeight:
+					return Screen.height;
 				default:
 					return 0;
 			}

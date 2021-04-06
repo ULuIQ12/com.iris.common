@@ -17,20 +17,20 @@ namespace com.iris.common
 
 		public bool BindSize = false;
 
-		[VFXPropertyBinding("int"), SerializeField]
+		[VFXPropertyBinding("System.UInt32"), SerializeField]
 		protected ExposedProperty TextureWidthProperty = "TextureWidth";
 
-		[VFXPropertyBinding("int"), SerializeField]
+		[VFXPropertyBinding("System.UInt32"), SerializeField]
 		protected ExposedProperty TextureHeightProperty = "TextureHeight";
 
 
 		public FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.ColorMap;
-
+		
 		public override bool IsValid(VisualEffect component)
 		{
 			if( BindSize )
 			{
-				return component.HasTexture(TextureProperty) && component.HasInt(TextureWidthProperty) && component.HasInt(TextureHeightProperty);
+				return component.HasTexture(TextureProperty) && component.HasUInt(TextureWidthProperty) && component.HasUInt(TextureHeightProperty);
 			}
 			return component.HasTexture(TextureProperty);
 		}
@@ -41,8 +41,8 @@ namespace com.iris.common
 			if( BindSize )
 			{
 				Vector2 size = FXDataProvider.GetMapSize(TextureToBind);
-				component.SetInt(TextureWidthProperty, Mathf.FloorToInt(size.x));
-				component.SetInt(TextureHeightProperty, Mathf.FloorToInt(size.y));
+				component.SetUInt(TextureWidthProperty, (uint)size.x);
+				component.SetUInt(TextureHeightProperty, (uint)size.y);
 			}
 		}
 

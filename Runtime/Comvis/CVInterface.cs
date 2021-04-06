@@ -42,6 +42,12 @@ namespace com.iris.common
 					return _Instance.UsersMetaDatas[userID].HandsToPelvisFactor;
 				case FXDataProvider.FLOAT_DATA_TYPE.HandsVerticalSeparation:
 					return _Instance.UsersMetaDatas[userID].HandsVerticalSeparation;
+				case FXDataProvider.FLOAT_DATA_TYPE.UserHorizontalPosition:
+					return _Instance.UsersMetaDatas[userID].UserHorizontalPosition;
+				case FXDataProvider.FLOAT_DATA_TYPE.PelvisToLeftHand:
+					return _Instance.UsersMetaDatas[userID].PelvisToLeftHand;
+				case FXDataProvider.FLOAT_DATA_TYPE.PelvisToRightHand:
+					return _Instance.UsersMetaDatas[userID].PelvisToRightHand;
 				case FXDataProvider.FLOAT_DATA_TYPE.AudioBeat:
 					return AudioProcessor.GetBeat();
 				case FXDataProvider.FLOAT_DATA_TYPE.AudioLevel:
@@ -181,6 +187,9 @@ namespace com.iris.common
 			public float HandsHorizontalSeparation = 0.0f;
 			public float HandsVerticalSeparation = 0.0f;
 			public float HandsToPelvisFactor = 0.0f;
+			public float UserHorizontalPosition = 0.0f;
+			public float PelvisToLeftHand = 0.0f;
+			public float PelvisToRightHand = 0.0f;
 			public bool HandsAboveElbows = false;
 			public float lastUpdateTime = 0.0f;
 		}
@@ -315,13 +324,16 @@ namespace com.iris.common
 
 				Vector3 PelvisPosition = KManager.GetJointPosition(user, KinectInterop.JointType.Pelvis);
 
-				//posBodyX = KManager.GetJointPosition(user, KinectInterop.JointType.SpineNaval).x;
-
+				UsersMetaDatas[user].UserHorizontalPosition = HandRightPosition.x + (HandLeftPosition.x - HandRightPosition.x) / 2f;// KManager.GetJointPosition(user, KinectInterop.JointType.SpineNaval).x;
 				UsersMetaDatas[user].HandsHorizontalSeparation = HandRightPosition.x - HandLeftPosition.x;
 				UsersMetaDatas[user].HandsVerticalSeparation = HandRightPosition.y - HandLeftPosition.y;
+				
 
-				float distHandTopRight = HandRightPosition.y - PelvisPosition.y;
-				float distHandTopLeft = HandLeftPosition.y - PelvisPosition.y;
+				float distHandTopRight = Math.Abs( HandRightPosition.y - PelvisPosition.y );
+				float distHandTopLeft = Math.Abs( HandLeftPosition.y - PelvisPosition.y );
+
+				UsersMetaDatas[user].PelvisToLeftHand = distHandTopLeft;
+				UsersMetaDatas[user].PelvisToLeftHand = distHandTopRight;
 
 				UsersMetaDatas[user].HandsToPelvisFactor = distHandTopRight + distHandTopLeft;
 				

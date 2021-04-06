@@ -333,7 +333,7 @@ namespace com.iris.common
 				float distHandTopLeft = Math.Abs( HandLeftPosition.y - PelvisPosition.y );
 
 				UsersMetaDatas[user].PelvisToLeftHand = distHandTopLeft;
-				UsersMetaDatas[user].PelvisToLeftHand = distHandTopRight;
+				UsersMetaDatas[user].PelvisToRightHand = distHandTopRight;
 
 				UsersMetaDatas[user].HandsToPelvisFactor = distHandTopRight + distHandTopLeft;
 				

@@ -354,24 +354,26 @@ namespace com.iris.common
 		private byte[] boneData;
 		private void UpdateAllBonestexture()
 		{
+
+			if (KManager.GetUsersCount() == 0)
+			{
+				AllBonesTexture = EmptyTexture;
+				NbBones = 1;
+				return;
+			}
+
 			if (AllBonesTexture == null || ( KManager.GetUsersCount() > 0 && KManager.GetUsersCount() != AllBonesTexture.height ) )
 			{
 				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
 			}
 			
-			if (KManager.GetUsersCount() == 0)
-				return;
+				
 
 			var lineLenght = NbBones * 4 * 4;
 			var totalbytes = lineLenght * KManager.GetUsersCount();
 			if ( boneData == null || boneData.Length != totalbytes)
 				boneData = new byte[totalbytes];
-
-			for( int b=0;b<boneData.Length;b++)
-			{
-				boneData[b] = 0;
-			}
 			
 			var joints = Enum.GetValues(typeof(KinectInterop.JointType));
 			

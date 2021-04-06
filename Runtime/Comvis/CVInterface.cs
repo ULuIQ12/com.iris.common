@@ -357,6 +357,8 @@ namespace com.iris.common
 
 			if (KManager.GetUsersCount() == 0)
 			{
+				if (EmptyTexture == null)
+					InitEmpty();
 				AllBonesTexture = EmptyTexture;
 				NbBones = 1;
 				return;

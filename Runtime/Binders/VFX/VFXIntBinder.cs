@@ -18,7 +18,7 @@ namespace com.iris.common
 
 		public override bool IsValid(VisualEffect component)
 		{
-			return component.HasFloat(IntProperty);
+			return component.HasInt(IntProperty);
 		}
 
 		public override void UpdateBinding(VisualEffect component)

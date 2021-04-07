@@ -29,7 +29,8 @@ namespace com.iris.common
 
 		public enum INT_DATA_TYPE
 		{
-			BoneCount, 
+			BoneCount,
+			UserCount,
 			ScreenWidth, 
 			ScreenHeight
 		}
@@ -109,6 +110,8 @@ namespace com.iris.common
 			{
 				case INT_DATA_TYPE.BoneCount:
 					return CVInterface.GetBoneCount();
+				case INT_DATA_TYPE.UserCount:
+					return CVInterface.GetUserCount();
 				case INT_DATA_TYPE.ScreenWidth:
 					return Screen.width;
 				case INT_DATA_TYPE.ScreenHeight:

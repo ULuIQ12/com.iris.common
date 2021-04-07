@@ -153,6 +153,15 @@ namespace com.iris.common
 			else return 0;
 		}
 
+		public static int GetUserCount()
+		{
+			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			{
+				return _Instance.KManager.GetUsersCount() ;
+			}
+			else return 0;
+		}
+
 		public static void CheckForManagerRefresh( bool UseDepth, bool UseSkeleton )
 		{
 			if (_Instance == null)

@@ -11,7 +11,7 @@ namespace com.iris.common
 	[VFXBinder("IRIS/Int")]
 	public class VFXIntBinder: VFXBinderBase
 	{
-		[VFXPropertyBinding("Int"), SerializeField]
+		[VFXPropertyBinding("System.Int32"), SerializeField]
 		protected ExposedProperty IntProperty = "IntProperty";
 
 		public FXDataProvider.INT_DATA_TYPE IntToBind = FXDataProvider.INT_DATA_TYPE.UserCount;

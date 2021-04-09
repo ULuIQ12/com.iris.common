@@ -150,6 +150,11 @@ namespace com.iris.common
 			}
 		}
 
+		public static Vector2 GetMapScale(MAP_DATA_TYPE type)
+		{
+			return CVInterface.GetTextureScale(type);
+		}
+
 		public static Vector2 GetMapSize( MAP_DATA_TYPE type)
 		{
 			Vector2 output = new Vector2();

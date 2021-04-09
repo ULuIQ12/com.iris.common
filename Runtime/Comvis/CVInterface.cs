@@ -134,6 +134,27 @@ namespace com.iris.common
 			return EmptyTexture;
 		}
 
+		public static Vector2 GetTextureScale(FXDataProvider.MAP_DATA_TYPE type)
+		{
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+			{
+				return Vector2.one;
+			}
+			switch (type)
+			{
+				case FXDataProvider.MAP_DATA_TYPE.ColorMap:
+					return KinectManager.Instance.GetColorImageScale(0);
+				case FXDataProvider.MAP_DATA_TYPE.DepthMap:
+					return KinectManager.Instance.GetDepthImageScale(0);
+				case FXDataProvider.MAP_DATA_TYPE.UserMap:
+					return KinectManager.Instance.GetDepthImageScale(0);
+				case FXDataProvider.MAP_DATA_TYPE.ColorPointCloud:
+				case FXDataProvider.MAP_DATA_TYPE.VertexPointCloud:
+				default:
+					return Vector2.one;
+			}
+		}
+
 		public static Texture GetAllBonesTexture()
 		{
 			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())

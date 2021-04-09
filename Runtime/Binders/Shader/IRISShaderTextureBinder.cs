@@ -8,12 +8,18 @@ namespace com.iris.common
     public class IRISShaderTextureBinder : IRISShaderBinderBase
 	{
 		public FXDataProvider.MAP_DATA_TYPE TextureToBind;
-		public string TexturePropertyName = "_texture";
+		public string TexturePropertyName = "TexturePropertyName";
 		public bool ShowWarning = false;
+
+		public bool BindScale = false;
+		public string TextureScalePropertyName = "TextureScalePropertyName";
+		public Vector2 TextureScale = Vector2.one;
 
 		public bool BindSize = false;
 		public string TextureSizePropertyName = "_textureSize";
 		public Vector2 TextureSize = Vector2.zero;
+
+		
 
         void Update()
         {
@@ -28,6 +34,9 @@ namespace com.iris.common
 			Texture map = FXDataProvider.GetMap(TextureToBind);
 			if (map == null)
 				return;
+
+			TextureScale = FXDataProvider.GetMapScale(TextureToBind);
+
 			TextureSize.x = map.width;
 			TextureSize.y = map.height;
 
@@ -36,7 +45,16 @@ namespace com.iris.common
 			else
 				ShowWarning = true;
 
-			if(BindSize)
+			if (BindScale)
+			{
+				if (MyRenderer.sharedMaterial.HasProperty(TextureScalePropertyName))
+					MyRenderer.sharedMaterial.SetVector(TextureScalePropertyName, TextureScale);
+				else
+					ShowWarning = true;
+
+			}
+
+			if (BindSize)
 			{
 				if (MyRenderer.sharedMaterial.HasProperty(TextureSizePropertyName))
 					MyRenderer.sharedMaterial.SetVector(TextureSizePropertyName, TextureSize);

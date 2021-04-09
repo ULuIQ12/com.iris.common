@@ -27,8 +27,9 @@ namespace com.iris.common
 
 		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, int userIndex = 0)
 		{
-			if (_Instance == null)
+			if( (_Instance == null) || (_Instance.KManager == null) || (!_Instance.KManager.IsInitialized() ) )
 				return 0.0f;
+			
 
 			ulong userID = _Instance.KManager.GetUserIdByIndex(userIndex);
 
@@ -77,7 +78,7 @@ namespace com.iris.common
 
 		public static Texture GetDepthMap()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
 				return KinectManager.Instance.GetDepthImageTex(0);
 			}
@@ -90,8 +91,9 @@ namespace com.iris.common
 
 		public static Texture GetUsersMap()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized &&  KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
+				Debug.Log("USER IMG SCALE =  " + KinectManager.Instance.GetDepthImageScale(0));
 				return KinectManager.Instance.GetUsersImageTex(0);
 			}
 			if (EmptyTexture == null)
@@ -101,7 +103,7 @@ namespace com.iris.common
 
 		public static Texture GetColorMap()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
 				return KinectManager.Instance.GetColorImageTex(0);
 			}
@@ -112,7 +114,7 @@ namespace com.iris.common
 
 		public static Texture GetColorPointCloud()
 		{
-			if(KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+			if(_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
 			{
 				return _Instance.CurrentSensorInterface.pointCloudColorTexture;
 			}
@@ -123,7 +125,7 @@ namespace com.iris.common
 
 		public static Texture GetVertexPointCloud()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
 			{
 				return _Instance.CurrentSensorInterface.pointCloudVertexTexture;
 			}
@@ -134,7 +136,7 @@ namespace com.iris.common
 
 		public static Texture GetAllBonesTexture()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
 				_Instance.UpdateAllBonestexture();
 				return _Instance.AllBonesTexture;
@@ -146,7 +148,7 @@ namespace com.iris.common
 
 		public static int GetBoneCount()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
 				return _Instance.NbBones;
 			}
@@ -155,7 +157,7 @@ namespace com.iris.common
 
 		public static int GetUserCount()
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
 			{
 				return _Instance.KManager.GetUsersCount() ;
 			}
@@ -221,6 +223,8 @@ namespace com.iris.common
 		private DepthSensorBase CurrentSensorInterface;
 		private void Init(bool UseDepth = false, bool UseSkeleton = true)
 		{
+			Initialized = false;
+
 			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
 			ManagerGO.name = "KinectManager";
 			KManager = ManagerGO.GetComponent<KinectManager>();
@@ -267,11 +271,19 @@ namespace com.iris.common
 			}
 			else
 			{
-				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+				if (Application.platform == RuntimePlatform.IPhonePlayer)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+				}
+				else
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+				}
 			}
 
-			if( Application.platform == RuntimePlatform.WindowsEditor)
+			if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
 			{
 				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
 				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
@@ -287,21 +299,25 @@ namespace com.iris.common
 			bool shouldRefresh = false;
 			if( UseDepth && !UseSkeleton)
 			{
-				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture)
+				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
 				{
 					shouldRefresh = true;
 				}
 			}
 			else if( !UseDepth && UseSkeleton)
 			{
-				if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture)
+				if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
 				{
 					shouldRefresh = true;
 				}
 			}
+			else if( UseDepth && UseSkeleton)
+			{
+				shouldRefresh = true;
+			}
 			if (shouldRefresh)
 			{
-
+				Debug.Log("We should Refresh CVInterface");
 				Destroy(ManagerGO);
 				ManagerGO = null;
 				KManager = null;
@@ -377,6 +393,7 @@ namespace com.iris.common
 			{
 				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
+				AllBonesTexture.filterMode = FilterMode.Point;
 			}
 			
 				
@@ -405,7 +422,9 @@ namespace com.iris.common
 					float val;
 					byte[] biteval;
 
-					val = p.x;
+					//int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
+
+					val = p.x;// * invertX;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];

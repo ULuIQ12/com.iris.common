@@ -29,7 +29,7 @@ namespace com.iris.common
 
 		public void LoadInternalAudio(string songPath)
 		{
-
+			StartCoroutine(LoadMusic(songPath));
 		}
 
 		public void Next()

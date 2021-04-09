@@ -25,7 +25,11 @@ namespace com.iris.common
 		{
 			//Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
 
-			float worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
+			float worldScreenHeight;
+			if( ExperienceCamera == null )
+				worldScreenHeight = 10f;
+			else 
+				worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
 			float textHeight = LastedDepthTexture.height;
 			float scale = worldScreenHeight / textHeight;
 			//Debug.Log("Scale = " + scale);

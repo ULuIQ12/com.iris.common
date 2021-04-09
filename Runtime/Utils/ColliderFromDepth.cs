@@ -54,7 +54,7 @@ namespace com.iris.common
 					CapsuleCollider col = go.AddComponent<CapsuleCollider>();
 					col.radius = ColliderRadius;
 					col.direction = 2;
-					col.height = 5f;
+					col.height = 10f;
 					go.SetActive(false);
 					go.transform.parent = transform;
 					float posx = SpawnZone.x + (float)i / (float)NbSamplesWidth * (float)SpawnZone.width;

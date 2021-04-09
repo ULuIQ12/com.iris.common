@@ -18,7 +18,7 @@ namespace com.iris.common
 
 		public static Vector3 GetJointPos3D(IRISJoints.Joints joint, ulong userId = 0)
 		{
-			if (KinectManager.Instance != null && KinectManager.Instance.IsInitialized() )
+			if (AreDatasAvailable())
 			{
 				return KinectManager.Instance.GetJointPosition(0, IRISJoints.GetKinectJoint(joint));
 			}
@@ -27,8 +27,10 @@ namespace com.iris.common
 
 		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, int userIndex = 0)
 		{
-			if( (_Instance == null) || (_Instance.KManager == null) || (!_Instance.KManager.IsInitialized() ) )
+			if (!AreDatasAvailable())
+			{
 				return 0.0f;
+			}
 			
 
 			ulong userID = _Instance.KManager.GetUserIdByIndex(userIndex);
@@ -78,7 +80,7 @@ namespace com.iris.common
 
 		public static Texture GetDepthMap()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (AreDatasAvailable())
 			{
 				return KinectManager.Instance.GetDepthImageTex(0);
 			}
@@ -91,9 +93,9 @@ namespace com.iris.common
 
 		public static Texture GetUsersMap()
 		{
-			if (_Instance.Initialized &&  KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (AreDatasAvailable())
 			{
-				Debug.Log("USER IMG SCALE =  " + KinectManager.Instance.GetDepthImageScale(0));
+
 				return KinectManager.Instance.GetUsersImageTex(0);
 			}
 			if (EmptyTexture == null)
@@ -103,7 +105,7 @@ namespace com.iris.common
 
 		public static Texture GetColorMap()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (AreDatasAvailable())
 			{
 				return KinectManager.Instance.GetColorImageTex(0);
 			}
@@ -114,7 +116,7 @@ namespace com.iris.common
 
 		public static Texture GetColorPointCloud()
 		{
-			if(_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+			if (AreDatasAvailable())
 			{
 				return _Instance.CurrentSensorInterface.pointCloudColorTexture;
 			}
@@ -125,7 +127,7 @@ namespace com.iris.common
 
 		public static Texture GetVertexPointCloud()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+			if (AreDatasAvailable())
 			{
 				return _Instance.CurrentSensorInterface.pointCloudVertexTexture;
 			}
@@ -136,10 +138,12 @@ namespace com.iris.common
 
 		public static Vector2 GetTextureScale(FXDataProvider.MAP_DATA_TYPE type)
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
+
+			if (!AreDatasAvailable())
 			{
 				return Vector2.one; 
 			}
+
 			switch (type)
 			{
 				case FXDataProvider.MAP_DATA_TYPE.ColorMap:
@@ -157,7 +161,7 @@ namespace com.iris.common
 
 		public static Texture GetAllBonesTexture()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (AreDatasAvailable())
 			{
 				_Instance.UpdateAllBonestexture();
 				return _Instance.AllBonesTexture;
@@ -169,7 +173,7 @@ namespace com.iris.common
 
 		public static int GetBoneCount()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if (AreDatasAvailable())
 			{
 				return _Instance.NbBones;
 			}
@@ -178,7 +182,7 @@ namespace com.iris.common
 
 		public static int GetUserCount()
 		{
-			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized())
+			if( AreDatasAvailable() )
 			{
 				return _Instance.KManager.GetUsersCount() ;
 			}
@@ -200,6 +204,10 @@ namespace com.iris.common
 			EmptyTexture = Texture2D.blackTexture;
 		}
 
+		private static bool AreDatasAvailable()
+		{
+			return (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
+		}
 
 		////////////////////////////////////////////////////////////////
 		private const string KINECT_PREFAB = "CV/KinectManager";

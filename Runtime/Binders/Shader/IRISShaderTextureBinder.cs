@@ -36,7 +36,7 @@ namespace com.iris.common
 				return;
 
 			TextureScale = FXDataProvider.GetMapScale(TextureToBind);
-
+			
 			TextureSize.x = map.width;
 			TextureSize.y = map.height;
 

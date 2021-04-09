@@ -81,7 +81,7 @@ namespace com.iris.common
 				if (LastedDepthTexture == CVInterface.EmptyTexture)
 					return;
 				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
-
+				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.DepthMap);
 				int i = 0;
 				int j = 0;
 				for (j = 0; j < NbSamplesHeight; j++)
@@ -90,8 +90,12 @@ namespace com.iris.common
 					{
 						int index = i * NbSamplesWidth + j;
 						int px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
-						int py = (LastedDepthTexture.height-1) - Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
-						
+						int py = 0;
+						if( tscale.y > 0)
+							py = Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
+						else
+							py = (LastedDepthTexture.height - 1) - Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
+
 						Color col = t2d.GetPixel(px, py);
 						if( col.r + col.g + col.b > 0 )
 						{

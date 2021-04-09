@@ -206,7 +206,7 @@ namespace com.iris.common
 
 		private static bool AreDatasAvailable()
 		{
-			return (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
+			return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
 		}
 
 		////////////////////////////////////////////////////////////////

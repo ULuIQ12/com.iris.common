@@ -10,6 +10,8 @@ namespace com.iris.common
 	{
 		SerializedProperty TexturePropertyName;
 		SerializedProperty TextureToBind;
+		SerializedProperty BindScale;
+		SerializedProperty TextureScalePropertyName;		
 		SerializedProperty BindSizes;
 		SerializedProperty TextureSizePropertyName;
 		SerializedProperty ShowWarning;
@@ -23,6 +25,10 @@ namespace com.iris.common
 
 			TexturePropertyName = serializedObject.FindProperty("TexturePropertyName");
 			TextureToBind = serializedObject.FindProperty("TextureToBind");
+
+			BindScale = serializedObject.FindProperty("BindScale");
+			TextureScalePropertyName = serializedObject.FindProperty("TextureScalePropertyName");
+
 			BindSizes = serializedObject.FindProperty("BindSize");
 			TextureSizePropertyName = serializedObject.FindProperty("TextureSizePropertyName");
 			ShowWarning = serializedObject.FindProperty("ShowWarning");
@@ -34,6 +40,10 @@ namespace com.iris.common
 
 			EditorGUILayout.PropertyField(TexturePropertyName);
 			EditorGUILayout.PropertyField(TextureToBind);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.PropertyField(BindScale);
+			EditorGUILayout.PropertyField(TextureScalePropertyName);
 
 			EditorGUILayout.Space();
 			EditorGUILayout.PropertyField(BindSizes);	

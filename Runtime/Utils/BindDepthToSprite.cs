@@ -20,13 +20,13 @@ public class BindDepthToSprite : MonoBehaviour
 	{
 		if (depthImage != null)
 		{
-			if (FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap) != CVInterface.EmptyTexture)
+			if (FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap) != CVInterface.EmptyTexture)
 			{
 
 				//if (kinectManager && kinectManager.IsInitialized() && depthImage /**&& depthImage.sprite == null*/)
 				//{
 				//Texture texDepth = kinectManager.GetUsersImageTex();
-				Texture texDepth = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				Texture texDepth = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 
 				if (texDepth != null)
 				{

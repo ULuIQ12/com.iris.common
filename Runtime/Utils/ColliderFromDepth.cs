@@ -77,11 +77,11 @@ namespace com.iris.common
 		{
 			if (ColliderGOs != null && ColliderGOs.Length > 0)
 			{
-				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				if (LastedDepthTexture == CVInterface.EmptyTexture)
 					return;
 				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
-				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				int i = 0;
 				int j = 0;
 				for (j = 0; j < NbSamplesHeight; j++)
@@ -134,7 +134,7 @@ namespace com.iris.common
 			bool isReady = false;
 			while (!isReady)
 			{
-				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				if (LastedDepthTexture == CVInterface.EmptyTexture)
 					yield return null;
 				else

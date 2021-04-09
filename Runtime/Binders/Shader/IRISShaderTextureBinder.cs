@@ -31,7 +31,7 @@ namespace com.iris.common
 
 			ShowWarning = false;
 
-			Texture map = FXDataProvider.GetMap(TextureToBind);
+			Texture map = FXDataProvider.GetMap(TextureToBind); 
 			if (map == null)
 				return;
 

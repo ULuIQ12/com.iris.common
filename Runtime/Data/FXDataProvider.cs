@@ -143,7 +143,7 @@ namespace com.iris.common
 				case MAP_DATA_TYPE.ColorPointCloud:
 					return CVInterface.GetColorPointCloud();
 				case MAP_DATA_TYPE.VertexPointCloud:
-					return CVInterface.GetVertexPointCloud();
+					return CVInterface.GetVertexPointCloud(); 
 				default:
 					return null;
 				

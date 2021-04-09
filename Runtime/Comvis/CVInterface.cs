@@ -138,7 +138,7 @@ namespace com.iris.common
 		{
 			if (_Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface != null)
 			{
-				return Vector2.one;
+				return Vector2.one; 
 			}
 			switch (type)
 			{

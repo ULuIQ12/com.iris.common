@@ -453,21 +453,21 @@ namespace com.iris.common
 
 					int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
 
-					val = p.x * invertX;
+					val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];
 					boneData[userDecal + i + 2] = biteval[2];
 					boneData[userDecal + i + 3] = biteval[3];
 
-					val = p.y;
+					val = p.y * KManager.GetSensorSpaceScale(0).y;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 4] = biteval[0];
 					boneData[userDecal + i + 5] = biteval[1];
 					boneData[userDecal + i + 6] = biteval[2];
 					boneData[userDecal + i + 7] = biteval[3];
 
-					val = p.z;
+					val = p.z * KManager.GetSensorSpaceScale(0).z;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 8] = biteval[0];
 					boneData[userDecal + i + 9] = biteval[1];

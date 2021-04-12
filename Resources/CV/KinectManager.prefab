@@ -57,7 +57,7 @@ MonoBehaviour:
   maxLeftRightDistance: 0
   maxTrackedUsers: 0
   showAllowedUsersOnly: 0
-  userDetectionOrder: 2
+  userDetectionOrder: 1
   ignoreInferredJoints: 0
   ignoreZCoordinates: 0
   boneOrientationConstraints: 1

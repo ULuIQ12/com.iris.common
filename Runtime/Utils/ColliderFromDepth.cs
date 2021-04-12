@@ -15,6 +15,8 @@ namespace com.iris.common
 		private Coroutine WaitRoutine;
 		private GameObject[] ColliderGOs;
 
+		public bool visualDebugOn = true;
+
 		public IEnumerator Start()
 		{
 			yield return WaitRoutine = StartCoroutine(WaitForDepthImage());
@@ -49,13 +51,17 @@ namespace com.iris.common
 				for( i=0;i<NbSamplesWidth;i++)
 				{
 					int index = i * NbSamplesWidth + j;
-					GameObject go = new GameObject();
-					//SphereCollider col = go.AddComponent<SphereCollider>();
-					CapsuleCollider col = go.AddComponent<CapsuleCollider>();
-					col.radius = ColliderRadius;
-					col.direction = 2;
-					col.height = 10f;
+					GameObject go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+					go.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+					go.transform.localScale = new Vector3(1f, 10f, 1f);
+
+					if( !visualDebugOn)
+					{
+						go.GetComponent<MeshRenderer>().enabled = false;
+					}
 					go.SetActive(false);
+
+					
 					go.transform.parent = transform;
 					float posx = SpawnZone.x + (float)i / (float)NbSamplesWidth * (float)SpawnZone.width;
 					float posy = SpawnZone.y + (float)j / (float)NbSamplesHeight * (float)SpawnZone.height;

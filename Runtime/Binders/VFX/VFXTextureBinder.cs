@@ -55,8 +55,14 @@ namespace com.iris.common
 			component.SetTexture(TextureProperty, FXDataProvider.GetMap(TextureToBind));
 			if( BindSize )
 			{
-				Vector2 size = FXDataProvider.GetMapSize(TextureToBind);
+				_Size = FXDataProvider.GetMapSize(TextureToBind);
 				component.SetVector2(TextureSizeProperty, _Size);
+				
+			}
+
+			if( BindScale )
+			{
+				_Scale = FXDataProvider.GetMapScale(TextureToBind);
 				component.SetVector2(TextureScaleProperty, _Scale);
 			}
 		}

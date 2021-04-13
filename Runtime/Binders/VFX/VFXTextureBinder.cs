@@ -32,7 +32,7 @@ namespace com.iris.common
 		
 		public override bool IsValid(VisualEffect component)
 		{
-			bool valid = false;
+			bool valid = true;
 			if (!component.HasTexture(TextureProperty))
 				valid = false;
 

@@ -36,18 +36,19 @@ public class ManagerFlower : MonoBehaviour
     {
         if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() >0)
         {
-            //allUserIds = kinectManager.GetAllUserIds();
-            //for(int i = 0; i<allUserIds.Count; i++ )
-            //{ Vector3 pos1 = kinectManager.GetJointPosition( allUserIds[i], JointHandRight); }
+			//allUserIds = kinectManager.GetAllUserIds();
+			//for(int i = 0; i<allUserIds.Count; i++ )
+			//{ Vector3 pos1 = kinectManager.GetJointPosition( allUserIds[i], JointHandRight); }
+			Vector3 sensorScale = kinectManager.GetSensorSpaceScale(0);
 
-            ulong uid = kinectManager.GetUserIdByIndex(0);
+			ulong uid = kinectManager.GetUserIdByIndex(0);
             Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
 			if( RightHand != null )
-				RightHand.position = new Vector3(defaultX+HandPosition.x*scaleX, defaultY+HandPosition.y*scaleY, 0);
+				RightHand.position = new Vector3(defaultX+HandPosition.x*scaleX * sensorScale.x, defaultY+HandPosition.y*scaleY * sensorScale.y, 0);
 
 			HandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
 			if (LeftHand != null)
-				LeftHand.position = new Vector3(defaultX + HandPosition.x * scaleX, defaultY + HandPosition.y * scaleY, 0);
+				LeftHand.position = new Vector3(defaultX + HandPosition.x * scaleX * sensorScale.x, defaultY + HandPosition.y * scaleY * sensorScale.y, 0);
 
 		}
     }

@@ -17,6 +17,8 @@ namespace com.iris.common
 
 		public bool visualDebugOn = true;
 
+		private bool IsStarted = false;
+
 		public IEnumerator Start()
 		{
 			yield return WaitRoutine = StartCoroutine(WaitForDepthImage());
@@ -25,6 +27,11 @@ namespace com.iris.common
 
 		public void InitColliders()
 		{
+			if (!IsStarted)
+				return;
+
+			
+
 			//Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
 
 			float worldScreenHeight;
@@ -32,6 +39,7 @@ namespace com.iris.common
 				worldScreenHeight = 10f;
 			else 
 				worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
+
 			float textHeight = LastedDepthTexture.height;
 			float scale = worldScreenHeight / textHeight;
 			//Debug.Log("Scale = " + scale);
@@ -95,7 +103,11 @@ namespace com.iris.common
 					for (i = 0; i < NbSamplesWidth; i++)
 					{
 						int index = i * NbSamplesWidth + j;
-						int px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
+						int px;
+						if( tscale.x < 0 ) // inferieur pour mirroir
+							px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
+						else
+							px = (LastedDepthTexture.width - 1) - Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 						int py = 0;
 						if( tscale.y > 0)
 							py = Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
@@ -113,6 +125,10 @@ namespace com.iris.common
 						}
 					}
 				}
+			}
+			else
+			{
+				InitColliders();
 			}
 		}
 
@@ -137,6 +153,7 @@ namespace com.iris.common
 
 		private IEnumerator WaitForDepthImage()
 		{
+			yield return new WaitForSeconds(.5f);
 			bool isReady = false;
 			while (!isReady)
 			{
@@ -146,7 +163,9 @@ namespace com.iris.common
 				else
 					isReady = true;
 			}
-			
+			yield return new WaitForSeconds(.5f);
+
+			IsStarted = true;
 		}
 
 		public void OnDestroy()

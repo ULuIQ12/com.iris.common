@@ -220,7 +220,7 @@ namespace com.iris.common
 		private KinectManager KManager;
 
 		private Texture2D AllBonesTexture;
-		private int NbBones = 0;
+		private int NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
 
 		private class UserBonesMetaData
 		{
@@ -414,13 +414,14 @@ namespace com.iris.common
 				if (EmptyTexture == null)
 					InitEmpty();
 				AllBonesTexture = EmptyTexture;
-				NbBones = 1;
+				NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length; ;
 				return;
 			}
 
 			if (AllBonesTexture == null || ( KManager.GetUsersCount() > 0 && KManager.GetUsersCount() != AllBonesTexture.height ) )
 			{
-				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
+				//NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
+				NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
 				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
 				AllBonesTexture.filterMode = FilterMode.Point;
 			}

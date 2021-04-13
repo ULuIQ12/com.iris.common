@@ -15,24 +15,39 @@ namespace com.iris.common
 		[VFXPropertyBinding("Texture"), SerializeField]
 		protected ExposedProperty TextureProperty = "Texture";
 
+		public bool BindScale = false;
+		[VFXPropertyBinding("Vector2"), SerializeField]
+		protected ExposedProperty TextureScaleProperty = "TextureScale(Vec2)";
+
 		public bool BindSize = false;
 
-		[VFXPropertyBinding("System.UInt32"), SerializeField]
-		protected ExposedProperty TextureWidthProperty = "TextureWidth";
-
-		[VFXPropertyBinding("System.UInt32"), SerializeField]
-		protected ExposedProperty TextureHeightProperty = "TextureHeight";
+		[VFXPropertyBinding("Vector2"), SerializeField]
+		protected ExposedProperty TextureSizeProperty = "TextureSize(Vec2)";
 
 
 		public FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.ColorMap;
+
+		private Vector2 _Size = new Vector2();
+		private Vector2 _Scale = new Vector2();
 		
 		public override bool IsValid(VisualEffect component)
 		{
+			bool valid = false;
+			if (!component.HasTexture(TextureProperty))
+				valid = false;
+
 			if( BindSize )
 			{
-				return component.HasTexture(TextureProperty) && component.HasUInt(TextureWidthProperty) && component.HasUInt(TextureHeightProperty);
+				if (!component.HasVector2(TextureSizeProperty))
+					valid = false;
 			}
-			return component.HasTexture(TextureProperty);
+
+			if (BindScale)
+			{
+				if (!component.HasVector2(TextureScaleProperty))
+					valid = false;
+			}
+			return valid;
 		}
 
 		public override void UpdateBinding(VisualEffect component)
@@ -41,8 +56,8 @@ namespace com.iris.common
 			if( BindSize )
 			{
 				Vector2 size = FXDataProvider.GetMapSize(TextureToBind);
-				component.SetUInt(TextureWidthProperty, (uint)size.x);
-				component.SetUInt(TextureHeightProperty, (uint)size.y);
+				component.SetVector2(TextureSizeProperty, _Size);
+				component.SetVector2(TextureScaleProperty, _Scale);
 			}
 		}
 

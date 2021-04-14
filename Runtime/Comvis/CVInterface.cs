@@ -96,10 +96,17 @@ namespace com.iris.common
 			if (AreDatasAvailable())
 			{
 				Texture t = KinectManager.Instance.GetUsersImageTex(0);
+				if( t == null)
+				{
+					if (EmptyTexture == null)
+						InitEmpty();
+					return EmptyTexture;
+				}
 				if( t.height > 100)
 					LastUsersMapDimensions.Set(t.width, t.height);
 				return t;
 			}
+
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;

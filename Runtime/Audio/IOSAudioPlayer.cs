@@ -60,6 +60,13 @@ namespace com.iris.common
 
 		public void Play()
 		{
+			if( IsAudioClipPaused)
+			{
+				iOSMusicAudioSource.UnPause();
+				IsAudioClipPaused = false;
+				return;
+			}
+
 			iOSMusicAudioSource.Play();
 			HasAudioClipStartedPlaying = false;
 			IsAudioClipPaused = false;

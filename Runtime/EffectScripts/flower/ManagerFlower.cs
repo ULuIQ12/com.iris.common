@@ -21,25 +21,52 @@ public class ManagerFlower : MonoBehaviour
     List<GameObject> ListFlower = new List<GameObject>();
     int numFlowerCueillies = 0;
 
-    void OnEnable()
+	private bool IsInitialized = false;
+
+    void Start()
     {
-        kinectManager = KinectManager.Instance;
+		StartCoroutine(WaitForFrame());
+        
+	}
+
+	private IEnumerator WaitForFrame()
+	{
+		yield return new WaitForSeconds(0.5f);
+		while( KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
+		{
+			yield return null;
+		}
+
+		Init();
+	}
+
+	private void Init()
+	{
+		kinectManager = KinectManager.Instance;
 		totFlower = 25;// GameObject.FindGameObjectsWithTag("Flower").Length;
 
 		HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
 		htLeft.OnHandCollide += OnHandCollide;
 		HandTrigger htRight = RightHand.gameObject.GetComponent<HandTrigger>();
 		htRight.OnHandCollide += OnHandCollide;
+
+		IsInitialized = true;
 	}
 
     void Update()
     {
+		if (!IsInitialized)
+			return;
+
         if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() >0)
         {
 			//allUserIds = kinectManager.GetAllUserIds();
 			//for(int i = 0; i<allUserIds.Count; i++ )
 			//{ Vector3 pos1 = kinectManager.GetJointPosition( allUserIds[i], JointHandRight); }
 			Vector3 sensorScale = kinectManager.GetSensorSpaceScale(0);
+
+			if (Application.platform == RuntimePlatform.IPhonePlayer)
+				sensorScale.x *= -1f;
 
 			ulong uid = kinectManager.GetUserIdByIndex(0);
             Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);

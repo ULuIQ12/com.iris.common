@@ -90,13 +90,15 @@ namespace com.iris.common
 
 			return EmptyTexture;
 		}
-
+		public static Vector2 LastUsersMapDimensions = new Vector2();
 		public static Texture GetUsersMap()
 		{
 			if (AreDatasAvailable())
 			{
-
-				return KinectManager.Instance.GetUsersImageTex(0);
+				Texture t = KinectManager.Instance.GetUsersImageTex(0);
+				if( t.height > 100)
+					LastUsersMapDimensions.Set(t.width, t.height);
+				return t;
 			}
 			if (EmptyTexture == null)
 				InitEmpty();
@@ -325,8 +327,9 @@ namespace com.iris.common
 
 		private IEnumerator _CheckForManagerRefresh(bool UseDepth, bool UseSkeleton)
 		{
+			
 			bool shouldRefresh = false;
-			if( UseDepth && !UseSkeleton)
+			if ( UseDepth && !UseSkeleton)
 			{
 				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
 				{
@@ -344,6 +347,12 @@ namespace com.iris.common
 			{
 				shouldRefresh = true;
 			}
+
+			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+			{
+				shouldRefresh = false;
+			}
+
 			if (shouldRefresh)
 			{
 				Debug.Log("We should Refresh CVInterface");

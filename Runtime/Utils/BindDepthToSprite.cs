@@ -41,6 +41,7 @@ public class BindDepthToSprite : MonoBehaviour
 
 						depthImage.sprite = Sprite.Create(texDepth2D, rectDepth, pivotSprite);
 						Vector2 depthImageScale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.DepthMap);
+						
 						depthImage.flipX = depthImageScale.x < 0;
 						depthImage.flipY = depthImageScale.y < 0;
 						//depthImage.flipX = sensorData.depthImageScale.x < 0;

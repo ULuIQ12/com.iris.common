@@ -18,11 +18,16 @@ namespace com.iris.common
 		public bool visualDebugOn = true;
 
 		private bool IsStarted = false;
+		private bool CollidersCreated = false;
 
 		public IEnumerator Start()
 		{
 			yield return WaitRoutine = StartCoroutine(WaitForDepthImage());
-			InitColliders();
+			while (!CollidersCreated)
+			{
+				InitColliders();
+				yield return new WaitForSeconds(0.25f);
+			}
 		}
 
 		public void InitColliders()
@@ -30,8 +35,20 @@ namespace com.iris.common
 			if (!IsStarted)
 				return;
 
-			
 
+			LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
+			Vector2 TextureSize = new Vector2(LastedDepthTexture.width, LastedDepthTexture.height);
+			if( TextureSize.y < 100)
+			{
+				if( CVInterface.LastUsersMapDimensions.y >=100)
+				{
+					TextureSize.Set(CVInterface.LastUsersMapDimensions.x, CVInterface.LastUsersMapDimensions.y);
+				}
+				else
+				{
+					return;
+				}
+			}
 			//Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
 
 			float worldScreenHeight;
@@ -40,19 +57,20 @@ namespace com.iris.common
 			else 
 				worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
 
-			float textHeight = LastedDepthTexture.height;
+
+			float textHeight = TextureSize.y;
 			float scale = worldScreenHeight / textHeight;
 			//Debug.Log("Scale = " + scale);
 
-			SpawnZone = new Rect(-LastedDepthTexture.width / 2 * scale, -LastedDepthTexture.height / 2 * scale , LastedDepthTexture.width * scale , LastedDepthTexture.height * scale);
+			SpawnZone = new Rect(-TextureSize.x / 2 * scale, -TextureSize.y / 2 * scale , TextureSize.x * scale , TextureSize.y * scale);
 
 			int totalSamples = NbSamplesWidth * NbSamplesHeight;
 			ColliderGOs = new GameObject[totalSamples];
 
-			int i = 0;
-			Vector3 topleft = new Vector3(0f, 0f, ExperienceCamera.transform.position.z);
-			Vector3 lowerRight = new Vector3(Screen.width, Screen.height, ExperienceCamera.transform.position.z);
 
+			//Vector3 topleft = new Vector3(0f, 0f, ExperienceCamera.transform.position.z);
+			//Vector3 lowerRight = new Vector3(Screen.width, Screen.height, ExperienceCamera.transform.position.z);
+			int i = 0;
 			int j = 0;
 			for ( j=0;j<NbSamplesHeight;j++)
 			{
@@ -79,7 +97,7 @@ namespace com.iris.common
 					
 				}
 			}
-			
+			CollidersCreated = true;
 		}
 
 		public void Update()
@@ -96,6 +114,7 @@ namespace com.iris.common
 					return;
 				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
 				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.UserMap);
+				
 				int i = 0;
 				int j = 0;
 				for (j = 0; j < NbSamplesHeight; j++)
@@ -104,7 +123,7 @@ namespace com.iris.common
 					{
 						int index = i * NbSamplesWidth + j;
 						int px;
-						if( tscale.x < 0 ) // inferieur pour mirroir
+						if( tscale.x > 0 )
 							px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 						else
 							px = (LastedDepthTexture.width - 1) - Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
@@ -153,7 +172,7 @@ namespace com.iris.common
 
 		private IEnumerator WaitForDepthImage()
 		{
-			yield return new WaitForSeconds(.5f);
+			
 			bool isReady = false;
 			while (!isReady)
 			{
@@ -163,7 +182,6 @@ namespace com.iris.common
 				else
 					isReady = true;
 			}
-			yield return new WaitForSeconds(.5f);
 
 			IsStarted = true;
 		}

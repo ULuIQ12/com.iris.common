@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9222560839141619193}
   - component: {fileID: 5313924308260927350}
   - component: {fileID: 1346406098182181799}
+  - component: {fileID: 6561643667449831678}
   m_Layer: 0
   m_Name: ExperienceTester
   m_TagString: Untagged
@@ -71,3 +72,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayMusic: 0
   autoPlayMusicDir: 
+--- !u!81 &6561643667449831678
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964634858988744830}
+  m_Enabled: 1

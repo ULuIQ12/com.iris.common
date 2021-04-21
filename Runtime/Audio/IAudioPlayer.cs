@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,13 @@ namespace com.iris.common
 		void Stop();
 		void Pause();
 		void UnPause();
-		void LoadAudio();
+		
 		void Next();
 		void Previous();
+
+		void LoadAudio();
 		void LoadInternalAudio(string songDir);
+
+		
     }
 }

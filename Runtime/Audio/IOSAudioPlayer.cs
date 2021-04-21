@@ -12,6 +12,7 @@ namespace com.iris.common
 	[RequireComponent(typeof(AudioSource))]
 	public class IOSAudioPlayer : MonoBehaviour, IAudioPlayer
     {
+		public static Action<string> OnFolderComplete;
 
 		private static IOSAudioPlayer _Instance;
 
@@ -22,28 +23,100 @@ namespace com.iris.common
 
 		public void LoadAudio()
 		{
+			if (WaitForFinishRoutine != null)
+				StopCoroutine(WaitForFinishRoutine);
+
+			InternalMode = false;
+
 			HasAudioClipStartedPlaying = false;
 			IsAudioClipPaused = false;
 			musicManager.loadAudioClip(false);
 		}
 
+		private string[] localSongsPaths;
+		private bool InternalMode = false;
+		private int InternalIndex = 0;
+		private Coroutine WaitForFinishRoutine;
 		public void LoadInternalAudio(string songPath)
 		{
+			InternalMode = true;
+			localSongsPaths = Directory.GetFiles(songPath, "*.m4a");
+
+			if (iOSMusicAudioSource.isPlaying)
+			{
+				iOSMusicAudioSource.Stop();
+				Resources.UnloadUnusedAssets();
+
+				if (iOSMusicAudioSource.clip != null)
+				{
+					iOSMusicAudioSource.clip = null;
+				}
+			}
+			/// var / mobile / Containers / Data / Application /< guid >/ Documents.
+			/*
+			string path = Application.persistentDataPath.Substring(0, Application.persistentDataPath.Length - 5);
+			path = path.Substring(0, path.LastIndexOf('/'));
+			string songPath = path + "/Documents/" + "song" + ".m4a";
 			StartCoroutine(LoadMusic(songPath));
+			*/
+			if( localSongsPaths.Length > 0 )
+				StartCoroutine(LoadMusic(localSongsPaths[0]));
 		}
 
 		public void Next()
 		{
-			HasAudioClipStartedPlaying = false;
-			IsAudioClipPaused = false;
-			musicManager.nextSong(); 
+			if (!InternalMode)
+			{
+				HasAudioClipStartedPlaying = false;
+				IsAudioClipPaused = false;
+				musicManager.nextSong();
+			}
+			else
+			{
+				if (iOSMusicAudioSource.isPlaying)
+				{
+					iOSMusicAudioSource.Stop();
+					Resources.UnloadUnusedAssets();
+
+					if (iOSMusicAudioSource.clip != null)
+					{
+						iOSMusicAudioSource.clip = null;
+					}
+				}
+				InternalIndex++;
+				if (InternalIndex >= localSongsPaths.Length - 1)
+					InternalIndex = 0;
+				StartCoroutine(LoadMusic(localSongsPaths[InternalIndex]));
+				
+			}
 		}
 
 		public void Previous()
 		{
-			HasAudioClipStartedPlaying = false;
-			IsAudioClipPaused = false;
-			musicManager.previousSong();
+			if (!InternalMode)
+			{
+				HasAudioClipStartedPlaying = false;
+				IsAudioClipPaused = false;
+				musicManager.previousSong();
+			}
+			else
+			{
+				if (iOSMusicAudioSource.isPlaying)
+				{
+					iOSMusicAudioSource.Stop();
+					Resources.UnloadUnusedAssets();
+
+					if (iOSMusicAudioSource.clip != null)
+					{
+						iOSMusicAudioSource.clip = null;
+					}
+				}
+				InternalIndex--;
+				if (InternalIndex < 0 )
+					InternalIndex = localSongsPaths.Length - 1;
+
+				StartCoroutine(LoadMusic(localSongsPaths[InternalIndex]));
+			}
 		}
 
 		public void Pause()
@@ -77,6 +150,9 @@ namespace com.iris.common
 			iOSMusicAudioSource.Stop();
 			HasAudioClipStartedPlaying = false;
 			IsAudioClipPaused = false;
+
+			if (WaitForFinishRoutine != null)
+				StopCoroutine(WaitForFinishRoutine);
 		}
 
 		public void LoadAudioClip()
@@ -177,10 +253,14 @@ namespace com.iris.common
 
 		IEnumerator LoadMusic(string songPath)
 		{
+			if (WaitForFinishRoutine != null)
+				StopCoroutine(WaitForFinishRoutine);
+
+			Debug.Log("LoadMusic : " + songPath);
 			if (System.IO.File.Exists(songPath))
 			{
 				iOSMusicAudioSource.Stop();
-
+				Debug.Log("file://" + songPath);
 				using (var uwr = UnityWebRequestMultimedia.GetAudioClip("file://" + songPath, AudioType.AUDIOQUEUE))
 				{
 					((DownloadHandlerAudioClip)uwr.downloadHandler).streamAudio = true;
@@ -211,6 +291,12 @@ namespace com.iris.common
 							iOSMusicAudioSource.Play();
 							HasAudioClipStartedPlaying = true;
 							Debug.Log("Playing song using Audio Source!");
+
+							if (InternalMode)
+							{
+								
+								WaitForFinishRoutine = StartCoroutine(WaitForFinish());
+							}
 							//ResetButtonStates();
 						}
 						else
@@ -230,10 +316,22 @@ namespace com.iris.common
 			}
 		}
 
+		private IEnumerator WaitForFinish()
+		{
+			while( iOSMusicAudioSource.time < iOSMusicAudioSource.clip.length)
+			{
+				if (!InternalMode)
+					StopCoroutine(WaitForFinishRoutine);
+
+				yield return null;
+			}
+			Next();
+		}
+
 		void ExtractMusicData(AudioClip songClip)
 		{
 			musicData = new float[songClip.samples * songClip.channels];
-
+			
 			Debug.Log("Extracting music data... found " + musicData.Length.ToString() + " samples!");
 
 			// Use GetData() to access audio sample data

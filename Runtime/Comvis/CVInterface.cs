@@ -218,6 +218,29 @@ namespace com.iris.common
 			return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
 		}
 
+		private static bool LastDebugValue = false;
+		public static void SetDebug(bool isOn)
+		{
+			LastDebugValue = isOn;
+
+			if (!AreDatasAvailable())
+				return;
+
+			if (isOn)
+			{
+				List<KinectManager.DisplayImageType> disp = new List<KinectManager.DisplayImageType>();
+				disp.Add(KinectManager.DisplayImageType.Sensor0ColorImage);
+				disp.Add(KinectManager.DisplayImageType.Sensor0DepthImage);
+				disp.Add(KinectManager.DisplayImageType.UserBodyImage);
+				KinectManager.Instance.displayImages = disp;
+			}
+			else
+			{
+				KinectManager.Instance.displayImages.Clear();
+			}
+
+		}
+
 		////////////////////////////////////////////////////////////////
 		private const string KINECT_PREFAB = "CV/KinectManager";
 		private const string K2_INTERFACE_PREFAB = "CV/K2Interface";
@@ -326,7 +349,7 @@ namespace com.iris.common
 				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
 				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
 			}
-
+			SetDebug(LastDebugValue);
 			KManager.StartDepthSensors();
 			
 			Initialized = true;

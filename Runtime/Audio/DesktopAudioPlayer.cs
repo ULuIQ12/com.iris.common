@@ -11,6 +11,8 @@ namespace com.iris.common
 	[RequireComponent(typeof(PlaylistMediaPlayer))]
     public class DesktopAudioPlayer : MonoBehaviour, IAudioPlayer
     {
+		public static Action<string> OnFolderComplete;
+
 		public static string[] SUPPORTED_AUDIO_EXT = new string[]
 		{
 			".mp3",
@@ -141,6 +143,10 @@ namespace com.iris.common
 			Debug.Log("MPE : " + et);
 			switch (et)
 			{
+				case MediaPlayerEvent.EventType.FinishedBuffering:
+					if( Player.PlaylistIndex > 0 )
+						Play();
+					break;
 				case MediaPlayerEvent.EventType.ReadyToPlay:
 					break;
 				case MediaPlayerEvent.EventType.Started:
@@ -172,8 +178,11 @@ namespace com.iris.common
 			if (singleFolder != "")
 			{
 				lastLoadPath = singleFolder;
+				
 				Debug.Log("HandleFolderComplete ->" + lastLoadPath);
 				LoadPlaylist(singleFolder);
+
+				OnFolderComplete?.Invoke(singleFolder);
 			}
 		}
 

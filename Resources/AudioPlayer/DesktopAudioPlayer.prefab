@@ -189,7 +189,7 @@ MonoBehaviour:
   m_VideoLocation: 2
   m_VideoPath: 
   m_AutoOpen: 1
-  m_AutoStart: 1
+  m_AutoStart: 0
   m_Loop: 0
   m_Volume: 0.1
   m_Balance: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_VideoLocation: 2
   m_VideoPath: 
   m_AutoOpen: 1
-  m_AutoStart: 1
+  m_AutoStart: 0
   m_Loop: 0
   m_Volume: 0.1
   m_Balance: 0

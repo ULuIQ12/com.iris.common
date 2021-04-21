@@ -21,7 +21,7 @@ namespace com.iris.common
 			if (Instance != null || SceneManager.GetSceneByName("AppLoading").IsValid() )
 				Destroy(gameObject);
 
-			Instance = this;
+			Instance = this; 
 		}
 
 		IEnumerator Start()

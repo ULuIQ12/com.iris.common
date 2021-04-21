@@ -2,32 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using com.iris.common;
+using UnityEditor;
 
-public class AssetTester : MonoBehaviour
+namespace com.iris.common
 {
-	public bool PlayMusic = false;
-	public string autoPlayMusicDir = "D:/_music/Ghost/2015 - Meliora/";
-	private AudioInterface ai;
-	// Start is called before the first frame update
-	IEnumerator Start()
+	public class AssetTester : MonoBehaviour
 	{
-		if (autoPlayMusicDir != "" && PlayMusic)
+
+		private static AssetTester Instance;
+		public bool PlayMusic = false;
+		public string autoPlayMusicDir = "D:/_music/Ghost/2015 - Meliora/";
+		private AudioInterface ai;
+
+		public void Awake()
 		{
+			if (Instance != null || SceneManager.GetSceneByName("AppLoading") != null )
+				Destroy(gameObject);
+		}
 
-			while ((ai = GetComponent<AudioInterface>()) == null)
+		IEnumerator Start()
+		{
+			if (autoPlayMusicDir != "" && PlayMusic)
 			{
-				yield return null;
-			}
 
-			while (!ai.Initialized)
-			{
-				yield return null;
-			}
+				while ((ai = GetComponent<AudioInterface>()) == null)
+				{
+					yield return null;
+				}
 
-			ai.LoadInternalAudio(autoPlayMusicDir);
-			yield return new WaitForSeconds(1.5f);
-			ai.Play();
+				while (!ai.Initialized)
+				{
+					yield return null;
+				}
+
+				ai.LoadInternalAudio(autoPlayMusicDir);
+				yield return new WaitForSeconds(1.5f);
+				ai.Play();
+			}
 		}
 	}
 }

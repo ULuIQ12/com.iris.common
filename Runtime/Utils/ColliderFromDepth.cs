@@ -79,7 +79,7 @@ namespace com.iris.common
 					int index = i * NbSamplesWidth + j;
 					GameObject go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 					go.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-					go.transform.localScale = new Vector3(1f, 10f, 1f);
+					go.transform.localScale = new Vector3(ColliderRadius, 10f, ColliderRadius);
 
 					if( !visualDebugOn)
 					{

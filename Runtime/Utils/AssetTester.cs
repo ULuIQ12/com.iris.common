@@ -18,8 +18,10 @@ namespace com.iris.common
 
 		public void Awake()
 		{
-			if (Instance != null || SceneManager.GetSceneByName("AppLoading") != null )
+			if (Instance != null || SceneManager.GetSceneByName("AppLoading").IsValid() )
 				Destroy(gameObject);
+
+			Instance = this;
 		}
 
 		IEnumerator Start()

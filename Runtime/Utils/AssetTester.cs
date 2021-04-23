@@ -14,6 +14,8 @@ namespace com.iris.common
 		private static AssetTester Instance;
 		public bool PlayMusic = false;
 		public string autoPlayMusicDir = "D:/_music/Ghost/2015 - Meliora/";
+		[Range(0.0f, 1.0f)]
+		public float AmplitudeValue = 1.0f;
 		private AudioInterface ai;
 
 		public void Awake()
@@ -43,6 +45,11 @@ namespace com.iris.common
 				yield return new WaitForSeconds(1.5f);
 				ai.Play();
 			}
+		}
+
+		public void Update()
+		{
+			CVInterface.SetAmplitudeLevel(AmplitudeValue);
 		}
 	}
 }

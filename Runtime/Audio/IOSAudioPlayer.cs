@@ -37,10 +37,13 @@ namespace com.iris.common
 		private bool InternalMode = false;
 		private int InternalIndex = 0;
 		private Coroutine WaitForFinishRoutine;
+		private System.Random rng = new System.Random();
 		public void LoadInternalAudio(string songPath)
 		{
 			InternalMode = true;
 			localSongsPaths = Directory.GetFiles(songPath, "*.m4a");
+			
+
 
 			if (iOSMusicAudioSource.isPlaying)
 			{

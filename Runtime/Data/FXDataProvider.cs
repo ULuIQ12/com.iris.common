@@ -10,7 +10,7 @@ namespace com.iris.common
 
 		public enum BOOL_DATA_TYPE
 		{
-			HandsAboveElbows
+			HandsAboveElbows, 
 		}
 
 		public enum FLOAT_DATA_TYPE
@@ -23,8 +23,9 @@ namespace com.iris.common
 			PelvisToLeftHand,
 			PelvisToRightHand,
 			HandsToPelvisFactor,
-			UserHorizontalPosition
+			UserHorizontalPosition, 
 
+			AmplitudeSetting
 		}
 
 		public enum INT_DATA_TYPE
@@ -100,6 +101,8 @@ namespace com.iris.common
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToLeftHand, userIndex);
 				case FLOAT_DATA_TYPE.PelvisToRightHand:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToRightHand, userIndex);
+				case FLOAT_DATA_TYPE.AmplitudeSetting:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.AmplitudeSetting);
 				default:
 					return 0.0f;
 			}

@@ -13,12 +13,12 @@ namespace com.iris.common
 			Level1,
 			Level2,
 		}
-
+		/*
 		public enum AMPLITUDE
 		{
 			Small, 
 			Large
-		}
+		}*/
 
 		public string uid = "UNIQUE_ID";
 		public string Title = "Titre de l'effet";
@@ -29,16 +29,19 @@ namespace com.iris.common
 		public Sprite ThumbnailTexture;
 		public bool UseSkeleton = true;
 		public bool UseDepth = false;
+
+		public bool isDateSet = false;
 		//public MOTRICITY MotricityLevel = MOTRICITY.Level1;
-		public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;
+		//public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;
 
 
 		public void Awake()
 		{
-			if (CreationDate == 0)
+			if (!isDateSet)
 			{
 				CreationDate = DateTime.Now.ToBinary();
 				LastUpdateDate = CreationDate;
+				isDateSet = false;
 			}
 
 		}

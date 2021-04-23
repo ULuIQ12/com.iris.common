@@ -18,7 +18,7 @@ namespace com.iris.common
 		SerializedProperty CreationDate;
 		SerializedProperty LastUpdateDate;
 		//SerializedProperty MotricityLevel;
-		SerializedProperty AmplitudeLevel;
+		//SerializedProperty AmplitudeLevel;
 		SerializedProperty Instructions;
 		SerializedProperty ThumbnailTexture;
 		SerializedProperty UseSkeleton;
@@ -35,7 +35,7 @@ namespace com.iris.common
 			CreationDate = serializedObject.FindProperty("CreationDate");
 			LastUpdateDate = serializedObject.FindProperty("LastUpdateDate");
 			//MotricityLevel = serializedObject.FindProperty("MotricityLevel");
-			AmplitudeLevel = serializedObject.FindProperty("AmplitudeLevel");
+			//AmplitudeLevel = serializedObject.FindProperty("AmplitudeLevel");
 			Instructions = serializedObject.FindProperty("Instructions");
 			ThumbnailTexture = serializedObject.FindProperty("ThumbnailTexture");
 			UseSkeleton = serializedObject.FindProperty("UseSkeleton");
@@ -71,7 +71,7 @@ namespace com.iris.common
 			Instructions.stringValue = EditorGUILayout.TextArea(Instructions.stringValue, style, GUILayout.Height(60));
 			EditorGUILayout.Separator();
 
-			EditorGUILayout.PropertyField(AmplitudeLevel);
+			//EditorGUILayout.PropertyField(AmplitudeLevel);
 			serializedObject.ApplyModifiedProperties();
 		}
 	}

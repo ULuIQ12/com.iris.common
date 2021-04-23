@@ -11,6 +11,12 @@ namespace com.iris.common
 		public static CVInterface _Instance;
 		public static Texture2D EmptyTexture;
 
+		private static float AmplitudeLevel = 1.0f;
+		public static void SetAmplitudeLevel( float level )
+		{
+			AmplitudeLevel = level;
+		}
+
 		public static Vector2 GetJointPositionTex(IRISJoints.Joints joints, ulong userId = 0)
 		{
 			return Vector2.zero;
@@ -55,6 +61,8 @@ namespace com.iris.common
 					return AudioProcessor.GetBeat();
 				case FXDataProvider.FLOAT_DATA_TYPE.AudioLevel:
 					return AudioProcessor.GetLevel();
+				case FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting:
+					return AmplitudeLevel;
 				default:
 					return 0.0f;
 

@@ -233,7 +233,6 @@ namespace com.iris.common
 
 			//mpl.Items = items;
 
-
 			Player.Playlist.Items = items;
 			/*Player.PlaylistIndex = -1;
 			Player.NextItem();

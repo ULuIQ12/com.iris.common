@@ -57,10 +57,10 @@ namespace com.iris.common
 			Instance = this;
 			kinectManager = KinectManager.Instance;
 
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < bHandRight.Length; i++)
 			{
-				bHandRight[i].GetComponent<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
-				bHandLeft[i].GetComponent<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
+				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
+				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
 			}
 
 			listTabs.Add(tab1);
@@ -91,7 +91,7 @@ namespace com.iris.common
 					MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandLeft[i].transform, backgroundRect);
 					MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandRight[i].transform, backgroundRect);
 				}
-				for (int i = allUserIds.Count; i < 6; i++)
+				for (int i = allUserIds.Count; i < bHandLeft.Length; i++)
 				{
 					bHandLeft[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 					bHandRight[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
@@ -110,7 +110,7 @@ namespace com.iris.common
 				{
 					int sensorIndex = kinectManager.GetPrimaryBodySensorIndex();
 					//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
-					
+
 					//KinectManager.Instance.getsensr
 					// 3d position to depth
 					Vector2 posDepth = kinectManager.MapSpacePointToDepthCoords(sensorIndex, posJoint);
@@ -123,7 +123,7 @@ namespace com.iris.common
 
 						if (posColor.x != 0f && !float.IsInfinity(posColor.x))
 						{
-							
+
 							float xScaled = (float)posColor.x * imageRect.width / kinectManager.GetColorImageWidth(0); ;
 							float yScaled = (float)posColor.y * imageRect.height / kinectManager.GetColorImageHeight(0); ;
 
@@ -152,7 +152,7 @@ namespace com.iris.common
 			for (int i = 0; i < listTabs[currentTab].Count; i++)
 			{
 				Debug.Log(i + "   :  " + listTabs[currentTab].Count);
-				tabGoPointer[i].transform.position = new Vector3(listTabs[currentTab][i].x, listTabs[currentTab][i].y, -0.3f);
+				tabGoPointer[i].transform.position = new Vector3(listTabs[currentTab][i].x, listTabs[currentTab][i].y - 1.0f, -0.3f);
 				AppearPointer(tabGoPointer[i]);
 			}
 
@@ -170,7 +170,7 @@ namespace com.iris.common
 
 		public static void HandTrigger(GameObject goPointer)
 		{
-			if (goPointer.CompareTag("Pointer"))
+			if (goPointer.CompareTag("Flower"))
 			{
 				int idPointer = Instance.ArrayContains(Instance.tabGoPointer, goPointer);
 				if (idPointer != -1 && idPointer == Instance.currentPointer)
@@ -195,9 +195,9 @@ namespace com.iris.common
 
 			LeanTween.value(gameObject, 1f, 0f, 1f).setEase(LeanTweenType.easeInOutQuad).setOnUpdate((float val) =>
 			{
-				Color currentColor = goPointer.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+				Color currentColor = goPointer.GetComponent<Renderer>().material.GetColor("_BaseColor");
 				currentColor.a = val;
-				goPointer.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+				goPointer.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
 			});
 
 			goPointer.GetComponent<BoxCollider>().enabled = false;
@@ -208,9 +208,9 @@ namespace com.iris.common
 			goPointer.GetComponent<BoxCollider>().enabled = true;
 			LeanTween.value(gameObject, 0f, 1f, 0.1f).setEase(LeanTweenType.easeInOutQuad).setOnUpdate((float val) =>
 			{
-				Color currentColor = goPointer.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+				Color currentColor = goPointer.GetComponent<Renderer>().material.GetColor("_BaseColor");
 				currentColor.a = val;
-				goPointer.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+				goPointer.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
 			});
 		}
 

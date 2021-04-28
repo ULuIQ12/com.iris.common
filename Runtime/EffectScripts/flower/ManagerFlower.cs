@@ -14,12 +14,34 @@ public class ManagerFlower : MonoBehaviour
     public float defaultX = 0f;
     public float scaleX = 5f;
     public float defaultY = 0f;
-    public float scaleY = 5f;    
-    KinectManager kinectManager;
-    KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
+    public float scaleY = 5f;
+
+	public static ManagerFlower Instance;
+
+	public float scaleGlobal = 1f;
+	public float width = 1600f;
+	public float height = 1200f;
+	public GameObject[] bHandRight;
+	public GameObject[] bHandLeft;
+	public Color[] tabColor;
+	public Camera foregroundCamera;
+
+	public GameObject goPanier;
+	public GameObject goFlowers;
+
+	KinectManager kinectManager;
+	KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
 	KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
-    List<GameObject> ListFlower = new List<GameObject>();
-    int numFlowerCueillies = 0;
+	List<ulong> allUserIds;
+
+	Vector2[] stockPos;
+	List<GameObject> ListFlower = new List<GameObject>();
+	List<Vector3> ListPosFlower = new List<Vector3>();
+	List<Vector3> ListScaleFlower = new List<Vector3>();
+	List<int> countFlower = new List<int>();
+	int numFlowerCueillies = 0;
+	Rect backgroundRect;
+
 
 	private bool IsInitialized = false;
 
@@ -92,93 +114,146 @@ public class ManagerFlower : MonoBehaviour
 		catch (System.Exception e) { Debug.Log(e); };
 	}
 
-	public void OnHandCollide( GameObject go )
+	public void OnHandCollide(GameObject goFlower)
 	{
-		if (!ListFlower.Contains(go))
+		if (goFlower.CompareTag("Flower"))
 		{
-			ListFlower.Add(go);
-			DisappearFlower(go);
-			numFlowerCueillies++;
-			Debug.Log("fleur cueillies N° " + numFlowerCueillies + " sur " + totFlower);
-			if (numFlowerCueillies >= totFlower)
+			int idFlower = Instance.ListFlower.IndexOf(goFlower);
+			if (idFlower != -1 && !Instance.countFlower.Contains(idFlower))
 			{
-				Invoke("AppearFlowers", 3);
+				Instance.countFlower.Add(idFlower);
+				Instance.GoFlowerToPanier(idFlower);
+				Instance.numFlowerCueillies++;
+				if (Instance.numFlowerCueillies >= Instance.totFlower)
+				{
+					Instance.Invoke("AppearFlowers", 2f);
+				}
 			}
 		}
 	}
-
 	/*
-    void OnTriggerEnter(Collider other)
-    {
-        //if (other.gameObject.CompareTag("Flower") )
-		if (true)
+	public static void HandTrigger(GameObject goFlower)
+	{
+		if (goFlower.CompareTag("Flower"))
+		{
+			int idFlower = Instance.ListFlower.IndexOf(goFlower);
+			if (idFlower != -1 && !Instance.countFlower.Contains(idFlower))
 			{
-            //Destroy(other.gameObject);
-            if(!ListFlower.Contains(other.gameObject)){
-                ListFlower.Add(other.gameObject);
-                DisappearFlower(other.gameObject);
-                numFlowerCueillies ++;
-                Debug.Log("fleur cueillies N° "+numFlowerCueillies+" sur "+totFlower);
-                if(numFlowerCueillies >= totFlower){
-                    Invoke("AppearFlowers", 3);
-                }
-            }
-        }
-    }*/
+				Instance.countFlower.Add(idFlower);
+				Instance.GoFlowerToPanier(idFlower);
+				Instance.numFlowerCueillies++;
+				if (Instance.numFlowerCueillies >= Instance.totFlower)
+				{
+					Instance.Invoke("AppearFlowers", 2f);
+				}
+			}
+		}
+	}*/
 
-    void DisappearFlower(GameObject flower)
-    {
-        
-        float startAngle = flower.transform.rotation.eulerAngles.z;
-        float endAngle = startAngle + 720.0f;
-        LeanTween.rotateZ( flower, endAngle, 2f).setEase(LeanTweenType.easeInOutQuad);
-        
-        Vector3 endPos = new Vector3(flower.transform.localPosition.x + 5.0f, flower.transform.localPosition.y + 1.0f, flower.transform.localPosition.z);
-        Debug.Log("ca réapparait !! "+flower+ "  "+flower.transform.position + "   " + endPos);
-        LeanTween.moveLocal( flower, endPos, 2f).setEase(LeanTweenType.easeInOutQuad);
+	void GoFlowerToPanier(int idFlower)
+	{
+		GameObject flower = ListFlower[idFlower];
+		float startAngle = flower.transform.rotation.eulerAngles.z;
+		float endAngle = startAngle + 720.0f;
+		LeanTween.rotateZ(flower, endAngle, 2f).setEase(LeanTweenType.easeInOutQuad);
 
-        Vector3 startScale = flower.transform.localScale;
-        Vector3 endScale = startScale*2f;
-        LeanTween.scale( flower, endScale, 2f).setEase(LeanTweenType.easeInOutQuad);
+		Vector3 endPos = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(-3f, -2.1f), 0f);
+		LeanTween.moveLocal(flower, endPos, 2f).setEase(LeanTweenType.easeInOutQuad);
 
-        LeanTween.value( gameObject, 1f, 0f, 1f).setEase(LeanTweenType.easeInOutQuad).setDelay(1f).setOnUpdate( (float val)=>{
-            Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_BaseColor");
-            currentColor.a = val;
-            flower.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
-        });
-        
+		flower.GetComponent<Renderer>().rendererPriority = Instance.numFlowerCueillies + 2;
+	}
 
-    }
 
-    void AppearFlowers()
-    {   
-        float iDelay = 0;
-        foreach(GameObject flower in ListFlower)
-        {
-            Vector3 endPos = new Vector3(flower.transform.localPosition.x - 5.0f, flower.transform.localPosition.y - 1.0f, flower.transform.localPosition.z);
-            //Debug.Log("ca réapparait !! "+flower + "   "  +flower.transform.position + "   " + endPos);
-            LeanTween.moveLocal( flower, endPos, 0.01f).setDelay(iDelay*0.2f).setEase(LeanTweenType.easeInOutQuad);
+	void AppearFlowers()
+	{
+		RandomizeListePosFlower();
+		ShowPanier(false);
+		float iDelay = 10;
+		for (int i = 0; i < ListFlower.Count; i++)
+		{
+			GameObject flower = ListFlower[i];
+			Vector3 endPos = new Vector3(ListPosFlower[i].x, ListPosFlower[i].y - 0.5f, ListPosFlower[i].z);
+			LeanTween.moveLocal(flower, endPos, 0.01f).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
-            float startAngle = flower.transform.rotation.eulerAngles.z;
-            float endAngle = startAngle + 180.0f;
-            LeanTween.rotateZ( flower, endAngle, 0.5f).setDelay(iDelay*0.2f).setEase(LeanTweenType.easeInOutQuad);
+			LeanTween.rotateZ(flower, 180f, 0.5f).setFrom(0f).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
-            Vector3 startScale = flower.transform.localScale;
-            Vector3 endScale = startScale*0.5f;
-            Vector3 fromScale = startScale*0.1f;
-            LeanTween.scale( flower, endScale, 0.5f).setFrom(fromScale).setDelay(iDelay*0.2f).setEase(LeanTweenType.easeInOutQuad);
+			Vector3 endScale = ListScaleFlower[i];
+			Vector3 fromScale = ListScaleFlower[i] * 0.1f;
+			LeanTween.scale(flower, endScale, 0.5f).setFrom(fromScale).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
-            LeanTween.value( gameObject, 0f, 1f, 0.5f).setEase(LeanTweenType.easeInOutQuad).setDelay(iDelay*0.2f).setOnUpdate( (float val)=>{
-                Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_BaseColor");
-                currentColor.a = val;
-                flower.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
-            } );    
+			LeanTween.value(gameObject, 0f, 1f, 0.5f).setEase(LeanTweenType.easeInOutQuad).setDelay(iDelay * 0.1f).setOnUpdate((float val) => {
+				Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+				currentColor.a = val;
+				flower.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+			});
 
-            iDelay ++;        
-        }
+			iDelay++;
+		}
 
-        numFlowerCueillies = 0;
-        ListFlower.Clear();
-    }
+		Invoke("EndApparitionFlowers", 3f);
+	}
+
+	void EndApparitionFlowers()
+	{
+		ShowPanier(true);
+		numFlowerCueillies = 0;
+		countFlower.Clear();
+	}
+
+	void ShowPanier(bool bShow)
+	{
+		Vector3 endPosPanier, endPosFlowers;
+		if (!bShow)
+		{
+			endPosPanier = new Vector3(0f, -6f, 0f);
+			for (int i = 0; i < ListFlower.Count; i++)
+			{
+				endPosFlowers = new Vector3(ListFlower[i].transform.position.x, ListFlower[i].transform.position.y - 3.5f, ListFlower[i].transform.position.z);
+				LeanTween.moveLocal(ListFlower[i], endPosFlowers, 1f).setEase(LeanTweenType.easeInOutQuad);
+			}
+		}
+		else
+		{
+			endPosPanier = new Vector3(0f, -2.5f, 0f);
+		}
+		LeanTween.moveLocal(goPanier, endPosPanier, 1f).setEase(LeanTweenType.easeInOutQuad);
+	}
+
+	void RandomizeListePosFlower()
+	{
+		stockPos = new Vector2[25];
+		for (int i = 0; i < ListPosFlower.Count; i++)
+		{
+			ListPosFlower[i] = GetNewRandValueNotInsideTab(i);
+		}
+	}
+
+	Vector2 GetNewRandValueNotInsideTab(int i)
+	{
+		bool bAlreadyIn = false;
+		int randX = Random.Range(-6, 6);
+		int randY = Random.Range(0, 5);
+
+		for (int j = 0; j < stockPos.Length; j++)
+		{
+			if (stockPos[j].x == randX && stockPos[j].y == randY)
+			{
+				bAlreadyIn = true;
+				break;
+			}
+		}
+
+		if (!bAlreadyIn)
+		{
+			stockPos[i] = new Vector2(randX, randY);
+		}
+		else
+		{
+			//récursivité !
+			stockPos[i] = GetNewRandValueNotInsideTab(i);
+		}
+
+		return stockPos[i];
+	}
 
 }

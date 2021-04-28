@@ -65,7 +65,16 @@ public class ManagerFlower : MonoBehaviour
 	private void Init()
 	{
 		kinectManager = KinectManager.Instance;
-		totFlower = 25;// GameObject.FindGameObjectsWithTag("Flower").Length;
+		
+
+		for( int i =0;i< goFlowers.transform.childCount;i++)
+		{
+			Transform t = goFlowers.transform.GetChild(i);
+			ListFlower.Add(t.gameObject);
+			ListPosFlower.Add(t.localPosition);
+			ListScaleFlower.Add(t.localScale);
+		}
+
 
 		HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
 		htLeft.OnHandCollide += OnHandCollide;

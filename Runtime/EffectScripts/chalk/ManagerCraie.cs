@@ -47,8 +47,13 @@ namespace com.iris.common
 		int currentPointer;
 		int totGOPointer = 5;
 
-		void Start()
+		IEnumerator Start()
 		{
+			while (KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
+			{
+				yield return null;
+			}
+
 			Instance = this;
 			kinectManager = KinectManager.Instance;
 

@@ -10,7 +10,6 @@ public class ManagerFlower : MonoBehaviour
 {
 	public Transform LeftHand;
 	public Transform RightHand;
-    public int totFlower;
     public float defaultX = 0f;
     public float scaleX = 5f;
     public float defaultY = 0f;
@@ -74,7 +73,7 @@ public class ManagerFlower : MonoBehaviour
 			ListPosFlower.Add(t.localPosition);
 			ListScaleFlower.Add(t.localScale);
 		}
-
+		
 
 		HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
 		htLeft.OnHandCollide += OnHandCollide;
@@ -133,7 +132,7 @@ public class ManagerFlower : MonoBehaviour
 				Instance.countFlower.Add(idFlower);
 				Instance.GoFlowerToPanier(idFlower);
 				Instance.numFlowerCueillies++;
-				if (Instance.numFlowerCueillies >= Instance.totFlower)
+				if (Instance.numFlowerCueillies >= Instance.ListFlower.Count)
 				{
 					Instance.Invoke("AppearFlowers", 2f);
 				}

@@ -25,12 +25,12 @@ namespace com.iris.common
 		Rect backgroundRect;
 
 		KinectManager kinectManager;
-		KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
-		KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
+		//KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
+		//KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
 		List<ulong> allUserIds;
 
 		List<int> countPointer = new List<int>();
-		int numFlowerCueillies = 0;
+		//int numFlowerCueillies = 0;
 
 		List<List<Vector2>> listTabs = new List<List<Vector2>>();
 		List<Vector2> tab1 = new List<Vector2> { new Vector2(1.7f, 1f), new Vector2(-2.4f, 1f) };

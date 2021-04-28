@@ -10,10 +10,10 @@ public class ManagerFlower : MonoBehaviour
 {
 	public Transform LeftHand;
 	public Transform RightHand;
-    public float defaultX = 0f;
-    public float scaleX = 5f;
-    public float defaultY = 0f;
-    public float scaleY = 5f;
+	public float defaultX = 0f;
+	public float scaleX = 5f;
+	public float defaultY = 0f;
+	public float scaleY = 5f;
 
 	public static ManagerFlower Instance;
 
@@ -27,6 +27,8 @@ public class ManagerFlower : MonoBehaviour
 
 	public GameObject goPanier;
 	public GameObject goFlowers;
+
+	public Transform BasketTarget;
 
 	KinectManager kinectManager;
 	KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
@@ -42,18 +44,20 @@ public class ManagerFlower : MonoBehaviour
 	Rect backgroundRect;
 
 
+
+
 	private bool IsInitialized = false;
 
-    void Start()
-    {
+	void Start()
+	{
 		StartCoroutine(WaitForFrame());
-        
+
 	}
 
 	private IEnumerator WaitForFrame()
 	{
 		yield return new WaitForSeconds(0.5f);
-		while( KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
+		while (KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
 		{
 			yield return null;
 		}
@@ -64,16 +68,16 @@ public class ManagerFlower : MonoBehaviour
 	private void Init()
 	{
 		kinectManager = KinectManager.Instance;
-		
+		Instance = this;
 
-		for( int i =0;i< goFlowers.transform.childCount;i++)
+		for (int i = 0; i < goFlowers.transform.childCount; i++)
 		{
 			Transform t = goFlowers.transform.GetChild(i);
 			ListFlower.Add(t.gameObject);
-			ListPosFlower.Add(t.localPosition);
+			ListPosFlower.Add(t.position);
 			ListScaleFlower.Add(t.localScale);
 		}
-		
+
 
 		HandTrigger htLeft = LeftHand.gameObject.GetComponent<HandTrigger>();
 		htLeft.OnHandCollide += OnHandCollide;
@@ -83,13 +87,13 @@ public class ManagerFlower : MonoBehaviour
 		IsInitialized = true;
 	}
 
-    void Update()
-    {
+	void Update()
+	{
 		if (!IsInitialized)
 			return;
 
-        if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() >0)
-        {
+		if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() > 0)
+		{
 			//allUserIds = kinectManager.GetAllUserIds();
 			//for(int i = 0; i<allUserIds.Count; i++ )
 			//{ Vector3 pos1 = kinectManager.GetJointPosition( allUserIds[i], JointHandRight); }
@@ -99,16 +103,16 @@ public class ManagerFlower : MonoBehaviour
 				sensorScale.x *= -1f;
 
 			ulong uid = kinectManager.GetUserIdByIndex(0);
-            Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
-			if( RightHand != null )
-				RightHand.position = new Vector3(defaultX+HandPosition.x*scaleX * sensorScale.x, defaultY+HandPosition.y*scaleY * sensorScale.y, 0);
+			Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
+			if (RightHand != null)
+				RightHand.position = new Vector3(defaultX + HandPosition.x * scaleX * sensorScale.x, defaultY + HandPosition.y * scaleY * sensorScale.y, 0);
 
 			HandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
 			if (LeftHand != null)
 				LeftHand.position = new Vector3(defaultX + HandPosition.x * scaleX * sensorScale.x, defaultY + HandPosition.y * scaleY * sensorScale.y, 0);
 
 		}
-    }
+	}
 
 	public void OnDisable()
 	{
@@ -165,8 +169,10 @@ public class ManagerFlower : MonoBehaviour
 		float endAngle = startAngle + 720.0f;
 		LeanTween.rotateZ(flower, endAngle, 2f).setEase(LeanTweenType.easeInOutQuad);
 
-		Vector3 endPos = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(-3f, -2.1f), 0f);
-		LeanTween.moveLocal(flower, endPos, 2f).setEase(LeanTweenType.easeInOutQuad);
+		//Vector3 endPos = new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(-3f, -2.1f), 0f);
+		Vector3 endPos = new Vector3(BasketTarget.position.x + Random.Range(-0.25f, 0.25f), BasketTarget.position.y + Random.Range(-0.25f, -0.25f), 0f);
+		//LeanTween.moveLocal(flower, endPos, 2f).setEase(LeanTweenType.easeInOutQuad);
+		LeanTween.move(flower, endPos, 2f).setEase(LeanTweenType.easeInOutQuad);
 
 		flower.GetComponent<Renderer>().rendererPriority = Instance.numFlowerCueillies + 2;
 	}
@@ -181,7 +187,7 @@ public class ManagerFlower : MonoBehaviour
 		{
 			GameObject flower = ListFlower[i];
 			Vector3 endPos = new Vector3(ListPosFlower[i].x, ListPosFlower[i].y - 0.5f, ListPosFlower[i].z);
-			LeanTween.moveLocal(flower, endPos, 0.01f).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
+			LeanTween.move(flower, endPos, 0.01f).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
 			LeanTween.rotateZ(flower, 180f, 0.5f).setFrom(0f).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
@@ -190,9 +196,9 @@ public class ManagerFlower : MonoBehaviour
 			LeanTween.scale(flower, endScale, 0.5f).setFrom(fromScale).setDelay(iDelay * 0.1f).setEase(LeanTweenType.easeInOutQuad);
 
 			LeanTween.value(gameObject, 0f, 1f, 0.5f).setEase(LeanTweenType.easeInOutQuad).setDelay(iDelay * 0.1f).setOnUpdate((float val) => {
-				Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_UnlitColor");
+				Color currentColor = flower.GetComponent<Renderer>().material.GetColor("_BaseColor");
 				currentColor.a = val;
-				flower.GetComponent<Renderer>().material.SetColor("_UnlitColor", currentColor);
+				flower.GetComponent<Renderer>().material.SetColor("_BaseColor", currentColor);
 			});
 
 			iDelay++;
@@ -222,7 +228,7 @@ public class ManagerFlower : MonoBehaviour
 		}
 		else
 		{
-			endPosPanier = new Vector3(0f, -2.5f, 0f);
+			endPosPanier = new Vector3(0f, -4.6f, 0f);
 		}
 		LeanTween.moveLocal(goPanier, endPosPanier, 1f).setEase(LeanTweenType.easeInOutQuad);
 	}

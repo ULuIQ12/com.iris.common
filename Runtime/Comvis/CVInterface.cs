@@ -474,7 +474,7 @@ namespace com.iris.common
 			}
 			
 				
-
+			
 			var lineLenght = NbBones * 4 * 4;
 			var totalbytes = lineLenght * KManager.GetUsersCount();
 			if ( boneData == null || boneData.Length != totalbytes)
@@ -493,6 +493,11 @@ namespace com.iris.common
 				{
 					if (j == KinectInterop.JointType.Count)
 						continue;
+
+					if( (int)j > 23)
+					{
+						continue;
+					}
 
 					Vector3 p = KManager.GetJointPosition(uid, j);
 

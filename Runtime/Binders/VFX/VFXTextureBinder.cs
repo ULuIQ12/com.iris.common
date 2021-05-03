@@ -52,18 +52,32 @@ namespace com.iris.common
 
 		public override void UpdateBinding(VisualEffect component)
 		{
-			component.SetTexture(TextureProperty, FXDataProvider.GetMap(TextureToBind));
-			if( BindSize )
+			if (component != null)
 			{
-				_Size = FXDataProvider.GetMapSize(TextureToBind);
-				component.SetVector2(TextureSizeProperty, _Size);
-				
-			}
+				Texture t = FXDataProvider.GetMap(TextureToBind);
+				if (t == null)
+					return;
 
-			if( BindScale )
-			{
-				_Scale = FXDataProvider.GetMapScale(TextureToBind);
-				component.SetVector2(TextureScaleProperty, _Scale);
+				component.SetTexture(TextureProperty, t);
+
+				if (BindSize)
+				{
+					_Size = FXDataProvider.GetMapSize(TextureToBind);
+					if (_Size != null)
+						component.SetVector2(TextureSizeProperty, _Size);
+					else
+						component.SetVector2(TextureSizeProperty, Vector2.one);
+
+				}
+
+				if (BindScale)
+				{
+					_Scale = FXDataProvider.GetMapScale(TextureToBind);
+					if (_Scale != null)
+						component.SetVector2(TextureScaleProperty, _Scale);
+					else
+						component.SetVector2(TextureScaleProperty, Vector2.one);
+				}
 			}
 		}
 

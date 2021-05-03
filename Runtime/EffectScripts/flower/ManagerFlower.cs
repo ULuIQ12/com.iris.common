@@ -103,13 +103,25 @@ public class ManagerFlower : MonoBehaviour
 				sensorScale.x *= -1f;
 
 			ulong uid = kinectManager.GetUserIdByIndex(0);
-			Vector3 HandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
+			Vector3 RightHandPosition;
+			Vector3 LeftHandPosition;
+			if( Application.platform == RuntimePlatform.IPhonePlayer)
+			{
+				LeftHandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
+				RightHandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
+			}
+			else
+			{
+				RightHandPosition = kinectManager.GetJointPosition(uid, JointHandRight);
+				LeftHandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
+			}
+			
 			if (RightHand != null)
-				RightHand.position = new Vector3(defaultX + HandPosition.x * scaleX * sensorScale.x, defaultY + HandPosition.y * scaleY * sensorScale.y, 0);
+				RightHand.position = new Vector3(defaultX + RightHandPosition.x * scaleX * sensorScale.x, defaultY + RightHandPosition.y * scaleY * sensorScale.y, 0);
 
-			HandPosition = kinectManager.GetJointPosition(uid, JointHandLeft);
+			
 			if (LeftHand != null)
-				LeftHand.position = new Vector3(defaultX + HandPosition.x * scaleX * sensorScale.x, defaultY + HandPosition.y * scaleY * sensorScale.y, 0);
+				LeftHand.position = new Vector3(defaultX + LeftHandPosition.x * scaleX * sensorScale.x, defaultY + LeftHandPosition.y * scaleY * sensorScale.y, 0);
 
 		}
 	}

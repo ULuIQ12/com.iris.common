@@ -8,6 +8,8 @@ namespace com.iris.common
     public interface IAudioPlayer
     {
 		void Play();
+		bool IsPaused();
+		string GetTitle();
 		void Stop();
 		void Pause();
 		void UnPause();

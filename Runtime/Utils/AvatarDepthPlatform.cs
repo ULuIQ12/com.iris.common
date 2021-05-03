@@ -25,6 +25,7 @@ namespace com.iris.common
 			Debug.Log("appplaotf = " + Application.platform);
 			if( Application.platform == RuntimePlatform.IPhonePlayer)
 			{
+				//c.flipLeftRight = false;
 				c.flipLeftRight = true;
 				camTransform.position = iosCamPosition;
 				camTransform.rotation = Quaternion.Euler(iosEulerCamRot);
@@ -38,7 +39,7 @@ namespace com.iris.common
 				camTransform.localRotation = Quaternion.identity;
 			}
         }
-		/*
+		
 		public void Update()
 		{
 			AvatarController c = GetComponent<AvatarController>();
@@ -62,6 +63,6 @@ namespace com.iris.common
 				camTransform.localRotation = Quaternion.identity;
 			}
 		}
-		*/
+		
 	}
 }

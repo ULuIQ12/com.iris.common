@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RenderHeads.Media.AVProVideo;
 using Crosstales.FB;
+using TagLib;
 
 namespace com.iris.common
 {
@@ -52,6 +53,30 @@ namespace com.iris.common
 		{
 			if (Player.Control != null)
 				Player.Control.Play();
+		}
+
+		public string GetTitle()
+		{
+			if (Player.CurrentPlayer != null && !string.IsNullOrEmpty(Player.CurrentPlayer.m_VideoPath))
+			{
+				//return Player.Control.tit
+				//Player.CurrentPlayer.
+				var tfile = TagLib.File.Create(Player.CurrentPlayer.m_VideoPath);
+				string title = tfile.Tag.Title;
+				
+				return title;
+			}
+			else
+				return "";
+		}
+
+		public bool IsPaused()
+		{
+			if (Player != null && Player.Control != null)
+				return !Player.Control.IsPlaying();
+			else
+				return false;
+
 		}
 
 		public void Stop()

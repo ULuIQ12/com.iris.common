@@ -13,7 +13,10 @@ namespace com.iris.common
 		{
 			InitPlayer();
 		}
-
+		public string GetTitle()
+		{
+			return Player.GetTitle();
+		}
 		public void LoadAudio()
 		{
 			Player.LoadAudio();
@@ -42,6 +45,19 @@ namespace com.iris.common
 			Player.Play();
 		}
 
+		public void PlayPause()
+		{
+			if (Player.IsPaused())
+				Play();
+			else
+				Pause();
+		}
+
+		public bool IsPaused()
+		{
+			return Player.IsPaused();
+		}
+
 		public void Previous()
 		{
 			Player.Previous();
@@ -55,6 +71,16 @@ namespace com.iris.common
 		public void UnPause()
 		{
 			Player.UnPause();
+		}
+
+		public float GetVolume()
+		{
+			return AudioListener.volume;
+		}
+
+		public void SetVolume(float value)
+		{
+			AudioListener.volume = value;
 		}
 
 		const string IOSPrefab = "AudioPlayer/IOSAudioPlayer";
@@ -91,5 +117,6 @@ namespace com.iris.common
 			OnFolderComplete?.Invoke(folder);
 		}
 
+		
 	}
 }

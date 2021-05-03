@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using com.hodges.iosmusic;
-
+using TagLib;
 
 namespace com.iris.common
 {
@@ -19,6 +19,20 @@ namespace com.iris.common
 		public static IAudioPlayer GetInstance()
 		{
 			return _Instance;
+		}
+
+		public bool IsPaused()
+		{
+			return _isAudioClipPaused;
+		}
+
+		public string GetTitle()
+		{
+			if (true)
+			{
+				return LastTitle;
+
+			}
 		}
 
 		public void LoadAudio()
@@ -254,6 +268,7 @@ namespace com.iris.common
 			}*/
 		}
 
+		private string LastTitle = "";
 		IEnumerator LoadMusic(string songPath)
 		{
 			if (WaitForFinishRoutine != null)
@@ -264,6 +279,21 @@ namespace com.iris.common
 			{
 				iOSMusicAudioSource.Stop();
 				Debug.Log("file://" + songPath);
+
+				try
+				{
+					var tfile = TagLib.File.Create(@"file://" + songPath);
+					string title = tfile.Tag.Title;
+					LastTitle = title;
+					Debug.Log(title);
+
+				}
+				catch (Exception e) {
+					Debug.Log(e);
+					LastTitle = "";
+				};
+
+
 				using (var uwr = UnityWebRequestMultimedia.GetAudioClip("file://" + songPath, AudioType.AUDIOQUEUE))
 				{
 					((DownloadHandlerAudioClip)uwr.downloadHandler).streamAudio = true;
@@ -389,9 +419,9 @@ namespace com.iris.common
 			byte[] fileData;
 			string artworkPath = Application.persistentDataPath + "/songArtwork.png";
 
-			if (File.Exists(artworkPath))
+			if (System.IO.File.Exists(artworkPath))
 			{
-				fileData = File.ReadAllBytes(artworkPath);
+				fileData = System.IO.File.ReadAllBytes(artworkPath);
 				tex = new Texture2D(2, 2);
 				tex.LoadImage(fileData);
 
@@ -409,6 +439,6 @@ namespace com.iris.common
 			Debug.Log("User has cancelled the song selection.");
 		}
 
-
+		
 	}
 }

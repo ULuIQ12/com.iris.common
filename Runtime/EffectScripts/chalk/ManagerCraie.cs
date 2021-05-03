@@ -88,8 +88,17 @@ namespace com.iris.common
 				allUserIds = kinectManager.GetAllUserIds();
 				for (int i = 0; i < allUserIds.Count; i++)
 				{
-					MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandLeft[i].transform, backgroundRect);
-					MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandRight[i].transform, backgroundRect);
+					if( Application.platform == RuntimePlatform.IPhonePlayer)
+					{
+						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandLeft[i].transform, backgroundRect);
+						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandRight[i].transform, backgroundRect);
+					}
+					else
+					{
+						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandLeft[i].transform, backgroundRect);
+						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandRight[i].transform, backgroundRect);
+					}
+					
 				}
 				for (int i = allUserIds.Count; i < bHandLeft.Length; i++)
 				{
@@ -128,6 +137,9 @@ namespace com.iris.common
 							float yScaled = (float)posColor.y * imageRect.height / kinectManager.GetColorImageHeight(0); ;
 
 							Vector3 sensorScale = kinectManager.GetColorImageScale(0);
+							if (Application.platform == RuntimePlatform.IPhonePlayer)
+								sensorScale.x *= -1f;
+
 							float xScreen = imageRect.x + (sensorScale.x > 0 ? xScaled : imageRect.width - xScaled);
 							float yScreen = imageRect.y + (sensorScale.y > 0 ? yScaled : imageRect.height - yScaled);
 

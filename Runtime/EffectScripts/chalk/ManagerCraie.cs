@@ -77,6 +77,10 @@ namespace com.iris.common
 			InitTableau();
 		}
 
+
+		public float scaleX = 6f;
+		public float scaleY = 5f;
+
 		void Update()
 		{
 			if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() > 0)
@@ -105,6 +109,36 @@ namespace com.iris.common
 					bHandLeft[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 					bHandRight[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 				}
+
+				Vector3 RightHandPosition;
+				Vector3 LeftHandPosition;
+				ulong uid = kinectManager.GetUserIdByIndex(0);
+				if (Application.platform == RuntimePlatform.IPhonePlayer)
+				{
+
+					Vector3 sensorScale = kinectManager.GetSensorSpaceScale(0);
+
+					if (Application.platform == RuntimePlatform.IPhonePlayer)
+						sensorScale.x *= -1f;
+
+					LeftHandPosition = kinectManager.GetJointPosition(0, KinectInterop.JointType.HandLeft);
+					RightHandPosition = kinectManager.GetJointPosition(0, KinectInterop.JointType.HandRight);
+
+
+					if (bHandRight[0] != null)
+						bHandRight[0].transform.position = new Vector3(defaultX + RightHandPosition.x * scaleX * sensorScale.x, defaultY + RightHandPosition.y * scaleY * sensorScale.y, 0f);
+
+
+					if (bHandLeft[0] != null)
+						bHandLeft[0].transform.position = new Vector3(defaultX + LeftHandPosition.x * scaleX * sensorScale.x, defaultY + LeftHandPosition.y * scaleY * sensorScale.y, 0f);
+				}
+				else
+				{
+					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
+					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
+				}
+
+				
 			}
 		}
 

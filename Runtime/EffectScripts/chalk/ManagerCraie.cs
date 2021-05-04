@@ -92,7 +92,7 @@ namespace com.iris.common
 				allUserIds = kinectManager.GetAllUserIds();
 				for (int i = 0; i < allUserIds.Count; i++)
 				{
-					if( Application.platform == RuntimePlatform.IPhonePlayer)
+					if (Application.platform == RuntimePlatform.IPhonePlayer)
 					{
 						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandLeft[i].transform, backgroundRect);
 						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandRight[i].transform, backgroundRect);
@@ -102,7 +102,7 @@ namespace com.iris.common
 						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandLeft, bHandLeft[i].transform, backgroundRect);
 						MoveHand(allUserIds[i], (int)KinectInterop.JointType.HandRight, bHandRight[i].transform, backgroundRect);
 					}
-					
+
 				}
 				for (int i = allUserIds.Count; i < bHandLeft.Length; i++)
 				{
@@ -113,7 +113,8 @@ namespace com.iris.common
 				Vector3 RightHandPosition;
 				Vector3 LeftHandPosition;
 				ulong uid = kinectManager.GetUserIdByIndex(0);
-				if (Application.platform == RuntimePlatform.IPhonePlayer)
+				//if (Application.platform == RuntimePlatform.IPhonePlayer)
+				if (true)
 				{
 
 					Vector3 sensorScale = kinectManager.GetSensorSpaceScale(0);
@@ -121,9 +122,9 @@ namespace com.iris.common
 					if (Application.platform == RuntimePlatform.IPhonePlayer)
 						sensorScale.x *= -1f;
 
-					LeftHandPosition = kinectManager.GetJointPosition(0, KinectInterop.JointType.HandLeft);
-					RightHandPosition = kinectManager.GetJointPosition(0, KinectInterop.JointType.HandRight);
-
+					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
+					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
+					Debug.Log(LeftHandPosition);
 
 					if (bHandRight[0] != null)
 						bHandRight[0].transform.position = new Vector3(defaultX + RightHandPosition.x * scaleX * sensorScale.x, defaultY + RightHandPosition.y * scaleY * sensorScale.y, 0f);
@@ -138,7 +139,7 @@ namespace com.iris.common
 					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
 				}
 
-				
+
 			}
 		}
 
@@ -152,7 +153,7 @@ namespace com.iris.common
 				if (posJoint != Vector3.zero)
 				{
 					int sensorIndex = 0;//kinectManager.GetPrimaryBodySensorIndex();
-					//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
+										//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
 
 					//KinectManager.Instance.getsensr
 					// 3d position to depth

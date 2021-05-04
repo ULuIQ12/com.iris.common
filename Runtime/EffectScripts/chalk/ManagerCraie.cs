@@ -122,8 +122,8 @@ namespace com.iris.common
 					if (Application.platform == RuntimePlatform.IPhonePlayer)
 						sensorScale.x *= -1f;
 
-					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
-					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
+					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
+					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
 					Debug.Log(LeftHandPosition);
 
 					if (bHandRight[0] != null)

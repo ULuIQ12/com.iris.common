@@ -22,7 +22,7 @@ namespace com.iris.common
 			if (c == null)
 				return;
 
-			Debug.Log("appplaotf = " + Application.platform);
+			//Debug.Log("appplaotf = " + Application.platform);
 			if( Application.platform == RuntimePlatform.IPhonePlayer)
 			{
 				//c.flipLeftRight = false;

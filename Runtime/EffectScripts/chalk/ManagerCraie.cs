@@ -59,8 +59,8 @@ namespace com.iris.common
 
 			for (int i = 0; i < bHandRight.Length; i++)
 			{
-				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
-				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", tabColor[i]);
+				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
+				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
 			}
 
 			listTabs.Add(tab1);
@@ -117,7 +117,7 @@ namespace com.iris.common
 
 				if (posJoint != Vector3.zero)
 				{
-					int sensorIndex = kinectManager.GetPrimaryBodySensorIndex();
+					int sensorIndex = 0;//kinectManager.GetPrimaryBodySensorIndex();
 					//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
 
 					//KinectManager.Instance.getsensr

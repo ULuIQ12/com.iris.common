@@ -122,7 +122,7 @@ public class ManagerFlower : MonoBehaviour
 			
 			if (LeftHand != null)
 				LeftHand.position = new Vector3(defaultX + LeftHandPosition.x * scaleX * sensorScale.x, defaultY + LeftHandPosition.y * scaleY * sensorScale.y, 0);
-
+			 
 		}
 	}
 

@@ -35,7 +35,7 @@ namespace com.iris.common
 			}
 		}
 
-		public void LoadAudio()
+		public void LoadAudio(bool isRandom = false)
 		{
 			if (WaitForFinishRoutine != null)
 				StopCoroutine(WaitForFinishRoutine);
@@ -51,12 +51,16 @@ namespace com.iris.common
 		private bool InternalMode = false;
 		private int InternalIndex = 0;
 		private Coroutine WaitForFinishRoutine;
-		private System.Random rng = new System.Random();
-		public void LoadInternalAudio(string songPath)
+		private static System.Random rng = new System.Random();
+		public void LoadInternalAudio(string songPath, bool isRandom = false)
 		{
 			InternalMode = true;
 			localSongsPaths = Directory.GetFiles(songPath, "*.m4a");
 			
+			if( isRandom )
+			{
+				Shuffle(localSongsPaths);
+			}
 
 
 			if (iOSMusicAudioSource.isPlaying)
@@ -78,6 +82,18 @@ namespace com.iris.common
 			*/
 			if( localSongsPaths.Length > 0 )
 				StartCoroutine(LoadMusic(localSongsPaths[0]));
+		}
+
+		public static void Shuffle<T>(T[] array)
+		{
+			int n = array.Length;
+			while (n > 1)
+			{
+				int k = rng.Next(n--);
+				T temp = array[n];
+				array[n] = array[k];
+				array[k] = temp;
+			}
 		}
 
 		public void Next()

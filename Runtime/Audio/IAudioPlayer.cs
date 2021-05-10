@@ -17,9 +17,10 @@ namespace com.iris.common
 		void Next();
 		void Previous();
 
-		void LoadAudio();
-		void LoadInternalAudio(string songDir);
+		void LoadAudio(bool isRandom = false);
+		void LoadInternalAudio(string songDir, bool isRandom = false);
 
-		
-    }
+
+
+	}
 }

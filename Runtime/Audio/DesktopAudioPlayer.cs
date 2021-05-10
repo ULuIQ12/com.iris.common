@@ -14,6 +14,8 @@ namespace com.iris.common
     {
 		public static Action<string> OnFolderComplete;
 
+		private static bool isRandomized = false;
+
 		public static string[] SUPPORTED_AUDIO_EXT = new string[]
 		{
 			".mp3",
@@ -98,10 +100,11 @@ namespace com.iris.common
 				Player.Control.Play();
 		}
 
-		public void LoadAudio()
+		public void LoadAudio(bool isRandom = false)
 		{
 			if (PlayerInitialized)
 			{
+				isRandomized = isRandom;
 				Debug.Log("LLP=" + lastLoadPath);
 				FileBrowser.Instance.OpenSingleFolderAsync("",(lastLoadPath != "") ? "" : null);
 			}
@@ -109,8 +112,9 @@ namespace com.iris.common
 				throw new System.Exception("LoadAudio called before the player finished initializing !");
 		}
 
-		public void LoadInternalAudio(string songPath)
+		public void LoadInternalAudio(string songPath, bool isRandom = false)
 		{
+			isRandomized = isRandom;
 			HandleFolderComplete(false, songPath, null);
 		}
 
@@ -220,12 +224,20 @@ namespace com.iris.common
 			if (directoryPath == null)
 				return;
 
+			Debug.Log("Israndomized = " + isRandomized);
 			List<MediaPlaylist.MediaItem> items = new List<MediaPlaylist.MediaItem>();
-
+			
 			Player.CloseVideoExt();
 
 			string[] files = Directory.GetFiles(directoryPath);
-			
+
+			if (isRandomized)
+			{
+				Debug.Log("Randomize playlist");
+				Shuffle(files);
+			}
+
+
 			if (files.Length == 0)
 				return;
 
@@ -265,6 +277,20 @@ namespace com.iris.common
 			*/
 			Player.JumpToItem(0);
 			
+		}
+
+		private static System.Random rng = new System.Random();
+
+		public static void Shuffle<T>(T[] array)
+		{
+			int n = array.Length;
+			while (n > 1)
+			{
+				int k = rng.Next(n--);
+				T temp = array[n];
+				array[n] = array[k];
+				array[k] = temp;
+			}
 		}
 
 	}

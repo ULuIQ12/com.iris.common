@@ -17,17 +17,17 @@ namespace com.iris.common
 		{
 			return Player.GetTitle();
 		}
-		public void LoadAudio()
+		public void LoadAudio(bool isRandom = false)
 		{
 			Player.LoadAudio();
 		}
 
-		public void LoadInternalAudio(string songDir = "")
+		public void LoadInternalAudio(string songDir = "", bool isRandom = false)
 		{
 			if (songDir != "")
-				Player.LoadInternalAudio(songDir);
+				Player.LoadInternalAudio(songDir, isRandom);
 			else
-				LoadAudio();
+				LoadAudio(isRandom);
 		}
 
 		public void Next()

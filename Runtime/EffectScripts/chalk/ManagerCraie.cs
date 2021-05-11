@@ -109,7 +109,7 @@ namespace com.iris.common
 					bHandLeft[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 					bHandRight[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 				}
-
+				/*
 				Vector3 RightHandPosition;
 				Vector3 LeftHandPosition;
 				ulong uid = kinectManager.GetUserIdByIndex(0);
@@ -138,7 +138,7 @@ namespace com.iris.common
 					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
 					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
 				}
-
+				*/
 
 			}
 		}

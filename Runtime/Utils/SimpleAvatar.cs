@@ -59,6 +59,9 @@ namespace com.iris.common
 		public Transform RightShoulderToPelvis;
 		public Transform LeftHipToThorax;
 		public Transform RightHipToTHorax;
+
+		public Transform LeftShoulderToLeftHip;
+		public Transform RightShoulderToRightHip;
 		
 		private Dictionary<KinectInterop.JointType, Transform> JointsToTransforms = new Dictionary<KinectInterop.JointType, Transform>();
 		private List<Link> links = new List<Link>();
@@ -242,6 +245,20 @@ namespace com.iris.common
 			l15.j2 = ThoraxT;
 			l15.tr = RightHipToTHorax;
 			links.Add(l15);
+
+			Link l16 = new Link();
+			l16.j1 = LeftShoulderT;
+			l16.j2 = LeftHipT;
+			l16.tr = LeftShoulderToLeftHip;
+			links.Add(l16);
+
+			Link l17 = new Link();
+			l17.j1 = RightShoulderT;
+			l17.j2 = RightHipT;
+			l17.tr = RightShoulderToRightHip;
+			links.Add(l17);
+
+
 
 		}
 

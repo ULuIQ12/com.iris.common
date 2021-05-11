@@ -8,6 +8,8 @@ namespace com.iris.common
     public class SimpleAvatar : MonoBehaviour
     {
 
+		public bool FlipLR = false;
+
 		public Transform HeadT;
 		public Transform NeckT;
 		public Transform ThoraxT;
@@ -66,7 +68,8 @@ namespace com.iris.common
         {
 			InitAssoc();
 			InitLinks();
-			
+			if (Application.platform == RuntimePlatform.IPhonePlayer)
+				FlipLR = true;
 
 		}
 
@@ -83,7 +86,10 @@ namespace com.iris.common
 			{
 				if (KinectManager.Instance.IsJointTracked(uid, couples.Key))
 				{
-					couples.Value.position = Vector3.Lerp( couples.Value.position,  KinectManager.Instance.GetJointPosition(uid, couples.Key), .5f);
+					Vector3 p = KinectManager.Instance.GetJointPosition(uid, couples.Key);
+					if (FlipLR)
+						p.x *= -1f;
+					couples.Value.position = Vector3.Lerp( couples.Value.position,  p, .5f);
 				}
 			}
 

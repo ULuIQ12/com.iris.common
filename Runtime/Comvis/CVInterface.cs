@@ -221,7 +221,7 @@ namespace com.iris.common
 			EmptyTexture = Texture2D.blackTexture;
 		}
 
-		private static bool AreDatasAvailable()
+		public static bool AreDatasAvailable()
 		{
 			return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
 		}

@@ -6,7 +6,7 @@ using com.rfilkov.components;
 
 namespace com.iris.common
 {
-	[RequireComponent(typeof(AvatarController))]
+	
 	public class AvatarDepthPlatform : MonoBehaviour
 	{
 		private Vector3 iosCamPosition = new Vector3(0.0f, 0.5f, 0f);
@@ -42,15 +42,15 @@ namespace com.iris.common
 
 		public void Update()
 		{
-			AvatarController c = GetComponent<AvatarController>();
+			//AvatarController c = GetComponent<AvatarController>();
 
-			if (c == null)
-				return;
+			//if (c == null)
+				//return;
 
 			//Debug.Log("appplaotf = " + Application.platform);
 			if (Application.platform == RuntimePlatform.IPhonePlayer)
 			{
-				c.flipLeftRight = true;
+				//c.flipLeftRight = true;
 				camTransform.position = iosCamPosition;
 				camTransform.rotation = Quaternion.Euler(iosEulerCamRot);
 
@@ -58,7 +58,7 @@ namespace com.iris.common
 			}
 			else
 			{
-				c.flipLeftRight = false;
+				//c.flipLeftRight = false;
 				camTransform.localPosition = windowsCamPosition;
 				camTransform.localRotation = Quaternion.identity;
 			}

@@ -56,12 +56,12 @@ namespace com.iris.common
 
 			Instance = this;
 			kinectManager = KinectManager.Instance;
-
+			/*
 			for (int i = 0; i < bHandRight.Length; i++)
 			{
 				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
 				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
-			}
+			}*/
 
 			listTabs.Add(tab1);
 			listTabs.Add(tab2);
@@ -155,7 +155,7 @@ namespace com.iris.common
 			for (int i = 0; i < listTabs[currentTab].Count; i++)
 			{
 				Debug.Log(i + "   :  " + listTabs[currentTab].Count);
-				tabGoPointer[i].transform.position = new Vector3(listTabs[currentTab][i].x, listTabs[currentTab][i].y - 1.0f, -0.3f);
+				tabGoPointer[i].transform.localPosition = new Vector3(listTabs[currentTab][i].x, listTabs[currentTab][i].y - 1.0f, -0.3f);
 				AppearPointer(tabGoPointer[i]);
 			}
 

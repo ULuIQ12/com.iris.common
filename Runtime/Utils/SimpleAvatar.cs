@@ -105,7 +105,7 @@ namespace com.iris.common
 
 			foreach ( Link l in links)
 			{
-				l.tr.position = l.j1.position + (l.j2.position - l.j1.position) / 2f; ;
+				l.tr.position = l.j1.position + (l.j2.position - l.j1.position) / 2f;
 				l.tr.rotation = Quaternion.LookRotation(l.j2.position - l.j1.position) * Quaternion.LookRotation(Vector3.up);
 				Vector3 s = l.tr.localScale;
 				l.tr.localScale = new Vector3(s.x, (l.j2.position - l.j1.position).magnitude / 2f , s.z);

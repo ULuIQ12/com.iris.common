@@ -143,17 +143,40 @@ namespace com.iris.common
 			}
 		}
 
+		private Transform sensorTransform;
+		private Vector3 NotDetectedPos = new Vector3(50f, 50f - 50f);
 		// overlays the given object over the given user joint
 		private void MoveHand(ulong userId, int jointIndex, Transform overlayObj, Rect imageRect)
 		{
+			if (foregroundCamera)
+			{
+				// get the background rectangle (use the portrait background, if available)
+				backgroundRect = foregroundCamera.pixelRect;
+			}
+
 			if (kinectManager.IsJointTracked(userId, jointIndex))
 			{
-				Vector3 posJoint = kinectManager.GetJointKinectPosition(userId, jointIndex, false);
+
+				
+
+				//Vector3 posJoint = kinectManager.GetJointKinectPosition(userId, jointIndex, false);
+				Vector3 posJoint = foregroundCamera ?
+						kinectManager.GetJointPosColorOverlay(userId, jointIndex, 0, foregroundCamera, backgroundRect) :
+						sensorTransform ? kinectManager.GetJointKinectPosition(userId, jointIndex, true) :
+						kinectManager.GetJointPosition(userId, jointIndex);
+
 
 				if (posJoint != Vector3.zero)
 				{
-					int sensorIndex = 0;//kinectManager.GetPrimaryBodySensorIndex();
+					//int sensorIndex = 0;//kinectManager.GetPrimaryBodySensorIndex();
 										//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
+
+					if (sensorTransform)
+					{
+						posJoint = sensorTransform.TransformPoint(posJoint);
+					}
+					overlayObj.position = posJoint;
+					/*
 
 					//KinectManager.Instance.getsensr
 					// 3d position to depth
@@ -186,6 +209,11 @@ namespace com.iris.common
 							}
 						}
 					}
+					*/
+				}
+				else
+				{
+					overlayObj.position = NotDetectedPos;
 				}
 			}
 		}

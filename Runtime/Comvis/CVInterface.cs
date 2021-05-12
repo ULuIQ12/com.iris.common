@@ -27,7 +27,11 @@ namespace com.iris.common
 			if (AreDatasAvailable())
 			{
 				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
-				return KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
+				Vector3 pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
+				if (Application.platform == RuntimePlatform.IPhonePlayer)
+					pos.x *= -1f;
+
+				return pos;
 			}
 			return Vector3.zero;
 		}

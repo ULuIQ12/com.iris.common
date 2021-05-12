@@ -215,8 +215,10 @@ public class ManagerFlower : MonoBehaviour
 	Vector3 GetNewRandValueNotInsideTab(int i)
 	{
 		bool bAlreadyIn = false;
-		float randX = Random.Range(-5.5f, 5.5f);
-		float randY = Random.Range(-2f, 4f);
+		float amp = Remap(0f, 1f, 0.2f, 1.0f, FXDataProvider.GetFloat(FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting) );
+
+		float randX = Random.Range(-5.5f * amp, 5.5f * amp);
+		float randY = Random.Range(-2f * amp, 4f * amp);
 
 		for (int j = 0; j < stockPos.Length; j++)
 		{
@@ -238,6 +240,14 @@ public class ManagerFlower : MonoBehaviour
 		}
 
 		return stockPos[i];
+	}
+
+	private float Remap(float InputLow, float InputHigh, float OutputLow, float OutputHigh, float value )
+	{
+		value = Mathf.InverseLerp(InputLow, InputHigh, value);
+		value = Mathf.Lerp(OutputLow, OutputHigh, value);
+
+		return value;
 	}
 
 }

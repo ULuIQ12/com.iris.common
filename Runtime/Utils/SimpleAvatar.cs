@@ -74,8 +74,6 @@ namespace com.iris.common
         {
 			InitAssoc();
 			InitLinks();
-			if (Application.platform == RuntimePlatform.IPhonePlayer)
-				FlipLR = true;
 
 		}
 
@@ -90,8 +88,6 @@ namespace com.iris.common
 				if (CVInterface.IsJointTracked(couples.Key))
 				{
 					Vector3 p = CVInterface.GetJointPos3D(couples.Key);
-					if (FlipLR)
-						p.x *= -1f;
 
 					couples.Value.position = Vector3.Lerp( couples.Value.position,  p, .5f);
 				}

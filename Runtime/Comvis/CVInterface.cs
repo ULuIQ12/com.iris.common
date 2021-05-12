@@ -22,13 +22,24 @@ namespace com.iris.common
 			return Vector2.zero;
 		}
 
-		public static Vector3 GetJointPos3D(IRISJoints.Joints joint, ulong userId = 0)
+		public static Vector3 GetJointPos3D(IRISJoints.Joints joint, int userIndex = 0)
 		{
 			if (AreDatasAvailable())
 			{
-				return KinectManager.Instance.GetJointPosition(0, IRISJoints.GetKinectJoint(joint));
+				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
+				return KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
 			}
 			return Vector3.zero;
+		}
+
+		public static bool IsJointTracked(IRISJoints.Joints joint, int userIndex = 0)
+		{
+			if (!AreDatasAvailable())
+			{
+				return false;
+			}
+			ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
+			return KinectManager.Instance.IsJointTracked(uid, IRISJoints.GetKinectJoint(joint));
 		}
 
 		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, int userIndex = 0)

@@ -61,11 +61,13 @@ namespace com.iris.common
 			{Joints.ShoulderLeft, KinectInterop.JointType.ShoulderLeft},
 			{Joints.ElbowLeft, KinectInterop.JointType.ElbowLeft},
 			{Joints.WristLeft, KinectInterop.JointType.WristLeft},
+			{Joints.HandLeft, KinectInterop.JointType.HandLeft},
 
 			{Joints.ClavicleRight, KinectInterop.JointType.ClavicleRight},
 			{Joints.ShoulderRight, KinectInterop.JointType.ShoulderRight},
 			{Joints.ElbowRight, KinectInterop.JointType.ElbowRight},
 			{Joints.WristRight, KinectInterop.JointType.WristRight},
+			{Joints.HandRight, KinectInterop.JointType.HandRight},
 
 			{Joints.HipLeft, KinectInterop.JointType.HipLeft},
 			{Joints.KneeLeft, KinectInterop.JointType.KneeLeft},

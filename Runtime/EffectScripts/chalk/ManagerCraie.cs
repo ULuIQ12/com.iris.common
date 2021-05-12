@@ -83,6 +83,7 @@ namespace com.iris.common
 
 		void Update()
 		{
+			/*
 			if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() > 0)
 			{
 				width = Screen.width;
@@ -109,40 +110,12 @@ namespace com.iris.common
 					bHandLeft[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 					bHandRight[i].transform.position = new Vector3(i * 5f, i * 5f, i * 5f);
 				}
-				/*
-				Vector3 RightHandPosition;
-				Vector3 LeftHandPosition;
-				ulong uid = kinectManager.GetUserIdByIndex(0);
-				//if (Application.platform == RuntimePlatform.IPhonePlayer)
-				if (true)
-				{
 
-					Vector3 sensorScale = kinectManager.GetSensorSpaceScale(0);
-
-					if (Application.platform == RuntimePlatform.IPhonePlayer)
-						sensorScale.x *= -1f;
-
-					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
-					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
-					Debug.Log(LeftHandPosition);
-
-					if (bHandRight[0] != null)
-						bHandRight[0].transform.position = new Vector3(defaultX + RightHandPosition.x * scaleX * sensorScale.x, defaultY + RightHandPosition.y * scaleY * sensorScale.y, 0f);
-
-
-					if (bHandLeft[0] != null)
-						bHandLeft[0].transform.position = new Vector3(defaultX + LeftHandPosition.x * scaleX * sensorScale.x, defaultY + LeftHandPosition.y * scaleY * sensorScale.y, 0f);
-				}
-				else
-				{
-					RightHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandRight);
-					LeftHandPosition = kinectManager.GetJointPosition(uid, KinectInterop.JointType.HandLeft);
-				}
-				*/
 
 			}
+			*/
 		}
-
+		/*
 		private Transform sensorTransform;
 		private Vector3 NotDetectedPos = new Vector3(50f, 50f - 50f);
 		// overlays the given object over the given user joint
@@ -157,66 +130,21 @@ namespace com.iris.common
 			if (kinectManager.IsJointTracked(userId, jointIndex))
 			{
 
-				
-
-				//Vector3 posJoint = kinectManager.GetJointKinectPosition(userId, jointIndex, false);
-				Vector3 posJoint = foregroundCamera ?
-						kinectManager.GetJointPosColorOverlay(userId, jointIndex, 0, foregroundCamera, backgroundRect) :
-						sensorTransform ? kinectManager.GetJointKinectPosition(userId, jointIndex, true) :
-						kinectManager.GetJointPosition(userId, jointIndex);
+				Vector3 posJoint = kinectManager.GetJointPosition(userId, jointIndex);
 
 
 				if (posJoint != Vector3.zero)
 				{
-					//int sensorIndex = 0;//kinectManager.GetPrimaryBodySensorIndex();
-										//KinectInterop.SensorData sensorData = kinectManager.GetSensorData(sensorIndex);
 
-					if (sensorTransform)
-					{
-						posJoint = sensorTransform.TransformPoint(posJoint);
-					}
 					overlayObj.position = posJoint;
-					/*
-
-					//KinectManager.Instance.getsensr
-					// 3d position to depth
-					Vector2 posDepth = kinectManager.MapSpacePointToDepthCoords(sensorIndex, posJoint);
-					ushort depthValue = kinectManager.GetDepthForPixel(sensorIndex, (int)posDepth.x, (int)posDepth.y);
-
-					if (posDepth != Vector2.zero && depthValue > 0)// && sensorData != null)
-					{
-						// depth pos to color pos
-						Vector2 posColor = kinectManager.MapDepthPointToColorCoords(sensorIndex, posDepth, depthValue);
-
-						if (posColor.x != 0f && !float.IsInfinity(posColor.x))
-						{
-
-							float xScaled = (float)posColor.x * imageRect.width / kinectManager.GetColorImageWidth(0); ;
-							float yScaled = (float)posColor.y * imageRect.height / kinectManager.GetColorImageHeight(0); ;
-
-							Vector3 sensorScale = kinectManager.GetColorImageScale(0);
-							if (Application.platform == RuntimePlatform.IPhonePlayer)
-								sensorScale.x *= -1f;
-
-							float xScreen = imageRect.x + (sensorScale.x > 0 ? xScaled : imageRect.width - xScaled);
-							float yScreen = imageRect.y + (sensorScale.y > 0 ? yScaled : imageRect.height - yScaled);
-
-							if (overlayObj && foregroundCamera)
-							{
-								float zDistance = overlayObj.position.z - foregroundCamera.transform.position.z;
-								posJoint = foregroundCamera.ScreenToWorldPoint(new Vector3(xScreen, yScreen, zDistance));
-								overlayObj.position = new Vector3(posJoint.x, posJoint.y, 0f);
-							}
-						}
-					}
-					*/
+					
 				}
 				else
 				{
 					overlayObj.position = NotDetectedPos;
 				}
 			}
-		}
+		}*/
 
 		void InitTableau()
 		{

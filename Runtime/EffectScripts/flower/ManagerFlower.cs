@@ -215,7 +215,7 @@ public class ManagerFlower : MonoBehaviour
 	Vector3 GetNewRandValueNotInsideTab(int i)
 	{
 		bool bAlreadyIn = false;
-		float amp = Remap(0f, 1f, 0.2f, 1.0f, FXDataProvider.GetFloat(FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting) );
+		float amp = Remap(0f, 1f, 0.5f, 1.0f, FXDataProvider.GetFloat(FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting) );
 
 		float randX = Random.Range(-5.5f * amp, 5.5f * amp);
 		float randY = Random.Range(-2f * amp, 4f * amp);

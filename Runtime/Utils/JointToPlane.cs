@@ -14,7 +14,7 @@ namespace com.iris.common
 		// Start is called before the first frame update
 		void Start()
 		{
-
+			
 		}
 
 		// Update is called once per frame
@@ -23,7 +23,7 @@ namespace com.iris.common
 			if (CVInterface.AreDatasAvailable())
 			{
 				Vector3 pos = CVInterface.GetJointPos3D(joint);
-				//pos = Vector3.ProjectOnPlane(pos, planeToProjectOnto.position);
+				
 				pos = projCam.WorldToViewportPoint(pos);
 				pos.z = planeToProjectOnto.position.z;
 				pos = projCam.ViewportToWorldPoint(pos);

@@ -27,9 +27,17 @@ namespace com.iris.common
 			if (AreDatasAvailable())
 			{
 				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
-				Vector3 pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
+
+				Vector3 pos;
 				if (Application.platform == RuntimePlatform.IPhonePlayer)
-					pos.x *= -1f;
+				{
+					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetInvertedKinectJoint(joint));
+					//pos.x *= -1f;
+				}
+				else
+				{
+					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
+				}
 
 				return pos;
 			}
@@ -431,7 +439,8 @@ namespace com.iris.common
 				if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
 					return;
 
-
+				
+				/*
 				Vector3 HandRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandRight);
 				Vector3 HandLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandLeft);
 
@@ -439,6 +448,15 @@ namespace com.iris.common
 				Vector3 ElbowLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.ElbowLeft);
 
 				Vector3 PelvisPosition = KManager.GetJointPosition(user, KinectInterop.JointType.Pelvis);
+				*/
+
+				Vector3 HandRightPosition = GetJointPos3D(IRISJoints.Joints.HandRight);
+				Vector3 HandLeftPosition = GetJointPos3D(IRISJoints.Joints.HandLeft);
+
+				Vector3 ElbowRightPosition = GetJointPos3D(IRISJoints.Joints.ElbowRight);
+				Vector3 ElbowLeftPosition = GetJointPos3D(IRISJoints.Joints.ElbowLeft);
+
+				Vector3 PelvisPosition = GetJointPos3D(IRISJoints.Joints.Pelvis);
 
 				UsersMetaDatas[user].UserHorizontalPosition = HandRightPosition.x + (HandLeftPosition.x - HandRightPosition.x) / 2f;// KManager.GetJointPosition(user, KinectInterop.JointType.SpineNaval).x;
 				UsersMetaDatas[user].HandsHorizontalSeparation = HandRightPosition.x - HandLeftPosition.x;
@@ -504,24 +522,27 @@ namespace com.iris.common
 				int userDecal = u * lineLenght;
 				int i = 0;
 
-				foreach (KinectInterop.JointType j in joints)
+				//foreach (KinectInterop.JointType j in joints)
+				foreach (IRISJoints.Joints j in joints)
 				{
-					if (j == KinectInterop.JointType.Count)
-						continue;
+					//if (j == KinectInterop.JointType.Count)
+						//continue;
 
-					if( (int)j > 23)
+					if( (int)j >= 23)
 					{
 						continue;
 					}
 
-					Vector3 p = KManager.GetJointPosition(uid, j);
+					Vector3 p = GetJointPos3D(j, i);
+					//Vector3 p = KManager.GetJointPosition(uid, j);
 
 					float val;
 					byte[] biteval;
 
-					int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
+					//int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
 
-					val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
+					//val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
+					val = p.x * KManager.GetSensorSpaceScale(0).x;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];

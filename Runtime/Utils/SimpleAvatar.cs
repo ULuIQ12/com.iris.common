@@ -101,8 +101,12 @@ namespace com.iris.common
 
 			foreach ( Link l in links)
 			{
-				l.tr.position = l.j1.position + (l.j2.position - l.j1.position) / 2f;
-				l.tr.rotation = Quaternion.LookRotation(l.j2.position - l.j1.position) * Quaternion.LookRotation(Vector3.up);
+				Vector3 delta = l.j2.position - l.j1.position;
+				if (delta == Vector3.zero)
+					continue;
+
+				l.tr.position = l.j1.position + (delta) / 2f;
+				l.tr.rotation = Quaternion.LookRotation(delta) * Quaternion.LookRotation(Vector3.up);
 				Vector3 s = l.tr.localScale;
 				l.tr.localScale = new Vector3(s.x, (l.j2.position - l.j1.position).magnitude / 2f , s.z);
 			}
@@ -249,7 +253,7 @@ namespace com.iris.common
 			{
 				MiddleMesh = new Mesh();
 				middleVerts = new Vector3[4];
-				middleTri = new int[] { 0, 1, 2, 2, 3, 0 };
+				middleTri = new int[] { 0, 1, 2, 2, 3, 0 , 0, 3, 2, 2, 1, 0};
 			}
 
 			MiddleMesh.Clear();

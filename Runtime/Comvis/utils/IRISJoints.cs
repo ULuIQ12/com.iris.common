@@ -80,9 +80,45 @@ namespace com.iris.common
 			{Joints.FootRight, KinectInterop.JointType.FootRight},
 		};
 
+		protected static readonly Dictionary<Joints, KinectInterop.JointType> IRISJointToKinectJointReverse = new Dictionary<Joints, KinectInterop.JointType>
+		{
+			{Joints.Pelvis, KinectInterop.JointType.Pelvis},
+			{Joints.SpineNaval, KinectInterop.JointType.SpineNaval},
+			{Joints.SpineChest, KinectInterop.JointType.SpineChest},
+			{Joints.Neck, KinectInterop.JointType.Neck},
+			{Joints.Head, KinectInterop.JointType.Head},
+
+			{Joints.ClavicleLeft, KinectInterop.JointType.ClavicleRight},
+			{Joints.ShoulderLeft, KinectInterop.JointType.ShoulderRight},
+			{Joints.ElbowLeft, KinectInterop.JointType.ElbowRight},
+			{Joints.WristLeft, KinectInterop.JointType.WristRight},
+			{Joints.HandLeft, KinectInterop.JointType.HandRight},
+
+			{Joints.ClavicleRight, KinectInterop.JointType.ClavicleLeft},
+			{Joints.ShoulderRight, KinectInterop.JointType.ShoulderLeft},
+			{Joints.ElbowRight, KinectInterop.JointType.ElbowLeft},
+			{Joints.WristRight, KinectInterop.JointType.WristLeft},
+			{Joints.HandRight, KinectInterop.JointType.HandLeft},
+
+			{Joints.HipLeft, KinectInterop.JointType.HipRight},
+			{Joints.KneeLeft, KinectInterop.JointType.KneeRight},
+			{Joints.AnkleLeft, KinectInterop.JointType.AnkleRight},
+			{Joints.FootLeft, KinectInterop.JointType.FootRight},
+
+			{Joints.HipRight, KinectInterop.JointType.HipLeft},
+			{Joints.KneeRight, KinectInterop.JointType.KneeLeft},
+			{Joints.AnkleRight, KinectInterop.JointType.AnkleLeft},
+			{Joints.FootRight, KinectInterop.JointType.FootLeft},
+		};
+
 		public static KinectInterop.JointType GetKinectJoint( Joints joint)
 		{
 			return IRISJointToKinectJoint[joint];
 		}
-    }
+
+		public static KinectInterop.JointType GetInvertedKinectJoint(Joints joint)
+		{
+			return IRISJointToKinectJointReverse[joint];
+		}
+	}
 }

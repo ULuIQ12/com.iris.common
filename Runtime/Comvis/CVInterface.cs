@@ -544,10 +544,10 @@ namespace com.iris.common
 					float val;
 					byte[] biteval;
 
-					int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
+					//int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
 
-					val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
-					//val = p.x * KManager.GetSensorSpaceScale(0).x;
+					//val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
+					val = p.x * KManager.GetSensorSpaceScale(0).x;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];

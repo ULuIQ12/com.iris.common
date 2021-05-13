@@ -38,7 +38,7 @@ namespace com.iris.common
 				{
 					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
 				}
-				Debug.Log(joint + "/" + userIndex);
+				//Debug.Log(joint + "/" + userIndex);
 				return pos;
 			}
 			return Vector3.zero;

@@ -38,7 +38,7 @@ namespace com.iris.common
 				{
 					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
 				}
-
+				Debug.Log(joint + "/" + userIndex);
 				return pos;
 			}
 			return Vector3.zero;
@@ -495,7 +495,8 @@ namespace com.iris.common
 				if (EmptyTexture == null)
 					InitEmpty();
 				AllBonesTexture = EmptyTexture;
-				NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length; ;
+				//NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length; 
+				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 				return;
 			}
 			
@@ -536,7 +537,8 @@ namespace com.iris.common
 						continue;
 					}
 
-					Vector3 p = GetJointPos3D(j, i);
+					Vector3 p = GetJointPos3D(j, u);
+					
 					//Vector3 p = KManager.GetJointPosition(uid, j);
 
 					float val;

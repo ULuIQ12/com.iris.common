@@ -32,7 +32,7 @@ namespace com.iris.common
 				if (Application.platform == RuntimePlatform.IPhonePlayer)
 				{
 					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetInvertedKinectJoint(joint));
-					//pos.x *= -1f;
+					pos.x *= -1f;
 				}
 				else
 				{
@@ -488,8 +488,9 @@ namespace com.iris.common
 		private byte[] boneData;
 		private void UpdateAllBonestexture()
 		{
+			int userCount = KManager.GetUsersCount();
 
-			if (KManager.GetUsersCount() == 0)
+			if (userCount == 0)
 			{
 				if (EmptyTexture == null)
 					InitEmpty();
@@ -497,26 +498,28 @@ namespace com.iris.common
 				NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length; ;
 				return;
 			}
+			
 
-			if (AllBonesTexture == null || ( KManager.GetUsersCount() > 0 && KManager.GetUsersCount() != AllBonesTexture.height ) )
+			if (AllBonesTexture == null || (userCount > 0 && userCount != AllBonesTexture.height ) )
 			{
-				//NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
-				NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
-				AllBonesTexture = new Texture2D(NbBones, KManager.GetUsersCount(), TextureFormat.RGBAFloat, false);
+				NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
+				//NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
+				AllBonesTexture = new Texture2D(NbBones, userCount, TextureFormat.RGBAFloat, false);
 				AllBonesTexture.filterMode = FilterMode.Point;
 			}
 			
 				
 			
 			var lineLenght = NbBones * 4 * 4;
-			var totalbytes = lineLenght * KManager.GetUsersCount();
+			var totalbytes = lineLenght * userCount;
 			if ( boneData == null || boneData.Length != totalbytes)
 				boneData = new byte[totalbytes];
-			
-			var joints = Enum.GetValues(typeof(KinectInterop.JointType));
-			
+
+			//var joints = Enum.GetValues(typeof(KinectInterop.JointType));
+			var joints = Enum.GetValues(typeof(IRISJoints.Joints));
+
 			int u = 0;
-			for (u = 0; u < KManager.GetUsersCount(); u++)
+			for (u = 0; u < userCount; u++)
 			{
 				ulong uid = KManager.GetUserIdByIndex(u);
 				int userDecal = u * lineLenght;
@@ -539,10 +542,10 @@ namespace com.iris.common
 					float val;
 					byte[] biteval;
 
-					//int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
+					int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
 
-					//val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
-					val = p.x * KManager.GetSensorSpaceScale(0).x;
+					val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
+					//val = p.x * KManager.GetSensorSpaceScale(0).x;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];

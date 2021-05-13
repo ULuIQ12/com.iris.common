@@ -14,18 +14,13 @@ public class BindDepthToSprite : MonoBehaviour
 		depthImage = GetComponent<SpriteRenderer>();
 
 	}
-
-	// Update is called once per frame
+	
 	void Update()
 	{
 		if (depthImage != null)
 		{
 			if (FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap) != CVInterface.EmptyTexture)
 			{
-
-				//if (kinectManager && kinectManager.IsInitialized() && depthImage /**&& depthImage.sprite == null*/)
-				//{
-				//Texture texDepth = kinectManager.GetUsersImageTex();
 				Texture texDepth = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 
 				if (texDepth != null)
@@ -35,7 +30,6 @@ public class BindDepthToSprite : MonoBehaviour
 					Vector2 pivotSprite = new Vector2(0.5f, 0.5f);
 
 					if (texDepth2D == null && texDepth != null)
-					//if (texDepth2D == null && texDepth != null && sensorData != null)
 					{
 						texDepth2D = new Texture2D(texDepth.width, texDepth.height, TextureFormat.ARGB32, false);
 
@@ -44,8 +38,6 @@ public class BindDepthToSprite : MonoBehaviour
 						
 						depthImage.flipX = depthImageScale.x < 0;
 						depthImage.flipY = depthImageScale.y < 0;
-						//depthImage.flipX = sensorData.depthImageScale.x < 0;
-						//depthImage.flipY = sensorData.depthImageScale.y < 0;
 					}
 
 					if (texDepth2D != null)
@@ -63,7 +55,6 @@ public class BindDepthToSprite : MonoBehaviour
 				{
 					depthImage.enabled = false;
 				}
-				//}
 			}
 			else
 			{

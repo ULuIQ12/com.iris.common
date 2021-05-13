@@ -95,7 +95,7 @@ namespace com.iris.common
 
 			Vector3 ol = LeftShoulderT.position;
 			Vector3 or = RightShoulderT.position;
-
+			// shoulders positions hack to straighten the middle mesh
 			LeftShoulderT.position = Vector3.Lerp(ol, or, .15f);
 			RightShoulderT.position = Vector3.Lerp(ol, or, .85f);
 

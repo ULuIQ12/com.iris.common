@@ -7,9 +7,9 @@ using UnityEngine.VFX.Utility;
 namespace com.iris.common
 {
 
-	[AddComponentMenu("IRIS/Single Bone Binder")]
-	[VFXBinder("IRIS/SingleBoneBinder")]
-	public class VFXSingleBoneBinder : VFXBinderBase
+	[AddComponentMenu("IRIS/Single Joint Binder")]
+	[VFXBinder("IRIS/SingleJointBinder")]
+	public class VFXSingleJointBinder : VFXBinderBase
 	{
 		public IRISJoints.Joints Joint = IRISJoints.Joints.HandLeft;
 		public int userIndex = 0;
@@ -37,7 +37,7 @@ namespace com.iris.common
 
 		public override string ToString()
 		{
-			return "IRIS: SingleBone Binder";
+			return "IRIS: SingleJoint Binder";
 		}
 
 	}

@@ -8,6 +8,11 @@ namespace com.iris.common
 		public bool bindY = true;
 		public bool bindZ = true;
 
+		public bool ProjectToPlane = false;
+		public Camera ProjectionCamera;
+		public Transform ProjectionPlane;
+
+
 		public IRISJoints.Joints Joint;
 		public int userIndex = 0;
 
@@ -18,6 +23,14 @@ namespace com.iris.common
 			if (CVInterface.AreDatasAvailable())
 			{
 				Vector3 pos = CVInterface.GetJointPos3D(Joint, userIndex);
+
+				if(ProjectionCamera != null && ProjectToPlane)
+				{
+					pos = ProjectionCamera.WorldToViewportPoint(pos);
+					pos.z = ProjectionPlane.position.z;
+					pos = ProjectionCamera.ViewportToWorldPoint(pos);
+				}
+
 				if (bindX)
 					targetPos.x = pos.x;
 				else

@@ -16,6 +16,11 @@ namespace com.iris.common
 		[VFXPropertyBinding("System.Vector3"), SerializeField]
 		protected ExposedProperty JointPositionProperty = "JointPositionProperty";
 
+		public bool ProjectToPlane = false;
+		public Camera ProjectionCamera;
+		public Transform ProjectionPlane;
+
+
 		public bool BindRotation = false;
 		[VFXPropertyBinding("System.Vector3"), SerializeField]
 		protected ExposedProperty JointRotationProperty = "JointRotationProperty";
@@ -30,7 +35,15 @@ namespace com.iris.common
 
 		public override void UpdateBinding(VisualEffect component)
 		{
-			component.SetVector3(JointPositionProperty, FXDataProvider.GetJointPosition(Joint, userIndex));
+			Vector3 pos = FXDataProvider.GetJointPosition(Joint, userIndex);
+			if( ProjectToPlane && ProjectionPlane != null && ProjectionCamera != null)
+			{
+				pos = ProjectionCamera.WorldToViewportPoint(pos);
+				pos.z = ProjectionPlane.position.z;
+				pos = ProjectionCamera.ViewportToWorldPoint(pos);
+			}
+
+			component.SetVector3(JointPositionProperty, pos);
 			if( BindRotation)
 				component.SetVector3(JointPositionProperty, FXDataProvider.GetJointRotation(Joint, userIndex));
 		}

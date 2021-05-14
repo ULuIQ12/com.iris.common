@@ -44,6 +44,28 @@ namespace com.iris.common
 			return Vector3.zero;
 		}
 
+		public static Vector3 GetJointRot3D(IRISJoints.Joints joint, int userIndex = 0)
+		{
+			if (AreDatasAvailable())
+			{
+				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
+
+				Vector3 rot;
+				if (Application.platform == RuntimePlatform.IPhonePlayer)
+				{
+					rot = KinectManager.Instance.GetJointOrientation(uid, IRISJoints.GetInvertedKinectJoint(joint),true).eulerAngles;
+				
+				}
+				else
+				{
+					rot = KinectManager.Instance.GetJointOrientation(uid, IRISJoints.GetInvertedKinectJoint(joint), true).eulerAngles;
+				}
+				
+				return rot;
+			}
+			return Vector3.zero;
+		}
+
 		public static bool IsJointTracked(IRISJoints.Joints joint, int userIndex = 0)
 		{
 			if (!AreDatasAvailable())

@@ -50,10 +50,6 @@ namespace com.iris.common
 
 		}
 
-		public enum V3_DATA_TYPE
-		{
-
-		}
 
 		public enum COLOR_TYPE
 		{
@@ -128,6 +124,7 @@ namespace com.iris.common
 		{
 			return Vector2.zero;
 		}
+
 
 		public static Texture GetMap( MAP_DATA_TYPE type )
 		{
@@ -204,6 +201,16 @@ namespace com.iris.common
 		public static Texture GetAllBonesTexture()
 		{
 			return CVInterface.GetAllBonesTexture();
+		}
+
+		public static Vector3 GetJointPosition(IRISJoints.Joints joint, int userIndex = 0)
+		{
+			return CVInterface.GetJointPos3D(joint, userIndex);
+		}
+
+		public static Vector3 GetJointRotation(IRISJoints.Joints joint, int userIndex = 0)
+		{
+			return CVInterface.GetJointRot3D(joint, userIndex);
 		}
 
 		public static Color GetColor(COLOR_TYPE type)

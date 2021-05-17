@@ -17,14 +17,27 @@ namespace com.iris.common
 		public int userIndex = 0;
 
 		private Vector3 targetPos = new Vector3();
+		private Vector3 previousValue = new Vector3();
 
 		public void Update()
 		{
 			if (CVInterface.AreDatasAvailable())
 			{
 				Vector3 pos = CVInterface.GetJointPos3D(Joint, userIndex);
+				if( pos == Vector3.zero )
+				{
+					pos = previousValue;
+					if (ProjectionCamera != null && ProjectToPlane && ProjectionPlane != null)
+					{
+						pos.z = ProjectionPlane.transform.position.z;
+					}
+					transform.position = Vector3.Lerp(transform.position, targetPos, .5f);
+					previousValue = transform.position;
 
-				if(ProjectionCamera != null && ProjectToPlane)
+					return;
+				}
+				
+				if(ProjectionCamera != null && ProjectToPlane && ProjectionPlane != null)
 				{
 					pos = ProjectionCamera.WorldToViewportPoint(pos);
 					pos.z = ProjectionPlane.position.z;
@@ -46,7 +59,20 @@ namespace com.iris.common
 				else
 					targetPos.z = transform.position.z;
 
-				transform.position = targetPos;
+				transform.position = Vector3.Lerp(transform.position,  targetPos, .5f);
+
+				previousValue = transform.position;
+			}
+			else
+			{
+				Vector3 pos = Vector3.zero;
+				if (ProjectionCamera != null && ProjectToPlane && ProjectionPlane != null)
+				{
+					pos.z = ProjectionPlane.transform.position.z;
+				}
+
+				transform.position = Vector3.Lerp(transform.position, targetPos, .5f);
+				previousValue = transform.position;
 			}
 		}
 	}

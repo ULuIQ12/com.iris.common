@@ -9,6 +9,8 @@ public class BindDepthToSprite : MonoBehaviour
 	private Texture2D texDepth2D = null;
 	public Camera foregroundCamera;
 
+	public bool Stretch = false;
+
 	void Start()
 	{
 		depthImage = GetComponent<SpriteRenderer>();
@@ -48,8 +50,22 @@ public class BindDepthToSprite : MonoBehaviour
 					float worldScreenHeight = foregroundCamera.orthographicSize * 2f;
 					float spriteHeight = depthImage.sprite.bounds.size.y;
 
-					float scale = worldScreenHeight / spriteHeight;
-					depthImage.transform.localScale = new Vector3(scale, scale, 1f);
+					float scaleX = 1.0f;
+					float scaleY = 1.0f;
+					if(!Stretch)
+					{
+						scaleX = scaleY = worldScreenHeight / spriteHeight;
+					}
+					else
+					{
+						
+						scaleY = worldScreenHeight / spriteHeight;
+						scaleX = scaleY * (depthImage.sprite.bounds.size.x / depthImage.sprite.bounds.size.y);
+					}
+
+					//float scale = worldScreenHeight / spriteHeight;
+					//depthImage.transform.localScale = new Vector3(scale, scale, 1f);
+					depthImage.transform.localScale = new Vector3(scaleX, scaleY, 1f);
 				}
 				else
 				{

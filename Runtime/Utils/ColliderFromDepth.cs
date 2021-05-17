@@ -16,7 +16,7 @@ namespace com.iris.common
 		private GameObject[] ColliderGOs;
 
 		public bool visualDebugOn = true;
-
+		public bool Stretch = false;
 		private bool IsStarted = false;
 		private bool CollidersCreated = false;
 
@@ -51,18 +51,34 @@ namespace com.iris.common
 			}
 			//Debug.Log("TEX SIZE = " + LastedDepthTexture.width + "/" + LastedDepthTexture.height);
 
+
 			float worldScreenHeight;
 			if( ExperienceCamera == null )
 				worldScreenHeight = 10f;
 			else 
 				worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
 
-
 			float textHeight = TextureSize.y;
 			float scale = worldScreenHeight / textHeight;
+
+			float scaleX = 1.0f;
+			float scaleY = 1.0f;
+			if (!Stretch)
+			{
+				scaleX = scaleY = worldScreenHeight / textHeight;
+			}
+			else
+			{
+
+				scaleY = worldScreenHeight / textHeight;
+				scaleX = scaleY * (TextureSize.x / TextureSize.y);
+			}
+
+
+			
 			//Debug.Log("Scale = " + scale);
 
-			SpawnZone = new Rect(-TextureSize.x / 2 * scale, -TextureSize.y / 2 * scale , TextureSize.x * scale , TextureSize.y * scale);
+			SpawnZone = new Rect(-TextureSize.x / 2 * scaleX, -TextureSize.y / 2 * scaleY, TextureSize.x * scaleX, TextureSize.y * scaleY);
 
 			int totalSamples = NbSamplesWidth * NbSamplesHeight;
 			ColliderGOs = new GameObject[totalSamples];

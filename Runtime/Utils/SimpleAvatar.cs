@@ -105,6 +105,9 @@ namespace com.iris.common
 				if (delta == Vector3.zero)
 					continue;
 
+				if (l.tr == null)
+					continue;
+				
 				l.tr.position = l.j1.position + (delta) / 2f;
 				l.tr.rotation = Quaternion.LookRotation(delta) * Quaternion.LookRotation(Vector3.up);
 				Vector3 s = l.tr.localScale;
@@ -249,12 +252,17 @@ namespace com.iris.common
 		private int[] middleTri;
 		private void DrawMiddle()
 		{
+
+			if (MiddleMF == null )
+				return;
+
 			if (MiddleMesh == null)
 			{
 				MiddleMesh = new Mesh();
 				middleVerts = new Vector3[4];
 				middleTri = new int[] { 0, 1, 2, 2, 3, 0 , 0, 3, 2, 2, 1, 0};
 			}
+
 
 			MiddleMesh.Clear();
 

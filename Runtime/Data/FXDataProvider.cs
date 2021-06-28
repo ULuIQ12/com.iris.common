@@ -171,7 +171,8 @@ namespace com.iris.common
 					break;
 				case MAP_DATA_TYPE.DepthMap:
 					if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-						map = CVInterface.GetUsersMap();
+						//map = CVInterface.GetUsersMap();
+						map = CVInterface.GetDepthMap();
 					else
 						map = CVInterface.GetDepthMap();
 					break;

@@ -21,9 +21,12 @@ namespace com.iris.common
 		//SerializedProperty AmplitudeLevel;
 		SerializedProperty Instructions;
 		SerializedProperty ThumbnailTexture;
+		SerializedProperty DataRequested;
+		/*
 		SerializedProperty UseSkeleton;
 		SerializedProperty UseDepth;
-
+		SerializedProperty UseUsers;
+		*/
 		string tempInstructions;
 		static CultureInfo culture = new CultureInfo("fr-fr");
 
@@ -38,8 +41,12 @@ namespace com.iris.common
 			//AmplitudeLevel = serializedObject.FindProperty("AmplitudeLevel");
 			Instructions = serializedObject.FindProperty("Instructions");
 			ThumbnailTexture = serializedObject.FindProperty("ThumbnailTexture");
+			/*
 			UseSkeleton = serializedObject.FindProperty("UseSkeleton");
 			UseDepth = serializedObject.FindProperty("UseDepth");
+			UseDepth = serializedObject.FindProperty("UseUsers");
+			*/
+			DataRequested = serializedObject.FindProperty("DataRequested");
 
 		}
 
@@ -54,8 +61,13 @@ namespace com.iris.common
 			EditorGUILayout.PropertyField(Title);
 			EditorGUILayout.PropertyField(Author);
 			EditorGUILayout.PropertyField(ThumbnailTexture);
+			EditorGUILayout.PropertyField(DataRequested);
+
+			/*
 			EditorGUILayout.PropertyField(UseSkeleton);
 			EditorGUILayout.PropertyField(UseDepth);
+			EditorGUILayout.PropertyField(UseUsers);
+			*/
 			
 			EditorGUILayout.Space();
 

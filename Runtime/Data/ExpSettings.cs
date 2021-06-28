@@ -20,6 +20,13 @@ namespace com.iris.common
 			Large
 		}*/
 
+		public enum DATA_REQUESTED
+		{
+			Body, 
+			Depth, 
+			Users
+		}
+
 		public string uid = "UNIQUE_ID";
 		public string Title = "Titre de l'effet";
 		public string Instructions = "Instructions effet";
@@ -27,9 +34,12 @@ namespace com.iris.common
 		public long CreationDate = 0;
 		public long LastUpdateDate = 0;
 		public Sprite ThumbnailTexture;
+		public DATA_REQUESTED DataRequested = DATA_REQUESTED.Body;
+		/*
 		public bool UseSkeleton = true;
 		public bool UseDepth = false;
-
+		public bool UseUsers = false;
+		*/
 		public bool isDateSet = false;
 		//public MOTRICITY MotricityLevel = MOTRICITY.Level1;
 		//public AMPLITUDE AmplitudeLevel = AMPLITUDE.Large;

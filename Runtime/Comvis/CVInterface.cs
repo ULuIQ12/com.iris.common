@@ -251,12 +251,14 @@ namespace com.iris.common
 			else return 0;
 		}
 
-		public static void CheckForManagerRefresh( bool UseDepth, bool UseSkeleton )
+		//public static void CheckForManagerRefresh( bool UseDepth, bool UseSkeleton )
+		public static void CheckForManagerRefresh( ExpSettings.DATA_REQUESTED dataRequested)
 		{
 			if (_Instance == null)
 				return;
 
-			_Instance.StartCoroutine( _Instance._CheckForManagerRefresh(UseDepth, UseSkeleton) );
+			//_Instance.StartCoroutine( _Instance._CheckForManagerRefresh(UseDepth, UseSkeleton) );
+			_Instance.StartCoroutine( _Instance._CheckForManagerRefresh(dataRequested) );
 		}
 
 
@@ -335,7 +337,9 @@ namespace com.iris.common
 		}
 
 		private DepthSensorBase CurrentSensorInterface;
-		private void Init(bool UseDepth = false, bool UseSkeleton = true)
+		private ExpSettings.DATA_REQUESTED LastResquestedData = ExpSettings.DATA_REQUESTED.Body;
+		private void Init(ExpSettings.DATA_REQUESTED dataRequest = ExpSettings.DATA_REQUESTED.Body)
+		//private void Init(bool UseDepth = false, bool UseSkeleton = true)
 		{
 			Initialized = false;
 
@@ -344,7 +348,9 @@ namespace com.iris.common
 			KManager = ManagerGO.GetComponent<KinectManager>();
 			Debug.Log("CVInterface: Init platform " + Application.platform);
 
-			if( Application.platform == RuntimePlatform.WindowsEditor )
+			LastResquestedData = dataRequest;
+
+			if ( Application.platform == RuntimePlatform.WindowsEditor )
 			{
 
 				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
@@ -367,6 +373,36 @@ namespace com.iris.common
 				Debug.LogWarning("What platform ?!? = " + Application.platform);
 			}
 
+			if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+			{
+				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+
+			}
+			else if( Application.platform == RuntimePlatform.IPhonePlayer)
+			{
+				ARKitInterface ark = CurrentSensorInterface as ARKitInterface;
+				if ( dataRequest == ExpSettings.DATA_REQUESTED.Body)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
+				}
+				else if( dataRequest == ExpSettings.DATA_REQUESTED.Depth)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
+
+					ark.depthMode = com.rfilkov.kinect.ARKitInterface.ArKitDepthMode.EnvironmentDepth;
+				}
+				else if( dataRequest == ExpSettings.DATA_REQUESTED.Users)
+				{
+					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
+					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
+
+					ark.depthMode = com.rfilkov.kinect.ARKitInterface.ArKitDepthMode.HumanDepth;
+				}
+			}
+			/*
 			if (UseDepth && !UseSkeleton)
 			{
 				if (KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture)
@@ -396,45 +432,73 @@ namespace com.iris.common
 					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
 				}
 			}
-
+			*/
+			/*
 			if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
 			{
 				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
 				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
 			}
+			*/
 			SetDebug(LastDebugValue);
 			KManager.StartDepthSensors();
 			
 			Initialized = true;
 		}
 
-		private IEnumerator _CheckForManagerRefresh(bool UseDepth, bool UseSkeleton)
+		private IEnumerator _CheckForManagerRefresh(ExpSettings.DATA_REQUESTED dataResquested)
 		{
 			
 			bool shouldRefresh = false;
-			if ( UseDepth && !UseSkeleton)
+
+			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+			{
+				shouldRefresh = false;
+			}
+			else if( Application.platform == RuntimePlatform.IPhonePlayer)
+			{
+				shouldRefresh = (dataResquested != LastResquestedData);				
+			}
+			else
+			{
+				shouldRefresh = false;
+			}
+				//if ( UseDepth && !UseSkeleton)
+				/*
+			if (dataResquested == ExpSettings.DATA_REQUESTED.Depth)
 			{
 				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
 				{
 					shouldRefresh = true;
 				}
 			}
-			else if( !UseDepth && UseSkeleton)
+			//else if( !UseDepth && UseSkeleton)
+			else if (dataResquested == ExpSettings.DATA_REQUESTED.Body)
 			{
 				if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
 				{
 					shouldRefresh = true;
 				}
 			}
+			else if( dataResquested == ExpSettings.DATA_REQUESTED.Users)
+			{
+				if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
+				{
+					shouldRefresh = true;
+				}
+			}
+			*/
+			/*
 			else if( UseDepth && UseSkeleton)
 			{
 				shouldRefresh = true;
 			}
-
+			*/
+			/*
 			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
 			{
 				shouldRefresh = false;
-			}
+			}*/
 
 			if (shouldRefresh)
 			{
@@ -443,7 +507,8 @@ namespace com.iris.common
 				ManagerGO = null;
 				KManager = null;
 				yield return null;
-				Init(UseDepth, UseSkeleton);
+				//Init(UseDepth, UseSkeleton);
+				Init(dataResquested);
 			}
 			yield return null;
 		}

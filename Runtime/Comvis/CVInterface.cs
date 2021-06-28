@@ -346,7 +346,7 @@ namespace com.iris.common
 			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
 			ManagerGO.name = "KinectManager";
 			KManager = ManagerGO.GetComponent<KinectManager>();
-			Debug.Log("CVInterface: Init platform " + Application.platform);
+			Debug.Log("CVInterface: Init platform " + Application.platform + "/ data req = " + dataRequest);
 
 			LastResquestedData = dataRequest;
 
@@ -401,6 +401,12 @@ namespace com.iris.common
 
 					ark.depthMode = com.rfilkov.kinect.ARKitInterface.ArKitDepthMode.HumanDepth;
 				}
+				else
+				{
+					Debug.Log("Probleme avec dataRequest : " + dataRequest);
+				}
+
+				Debug.Log("arkit depth set to " + ark.depthMode);
 			}
 			/*
 			if (UseDepth && !UseSkeleton)
@@ -448,7 +454,7 @@ namespace com.iris.common
 
 		private IEnumerator _CheckForManagerRefresh(ExpSettings.DATA_REQUESTED dataResquested)
 		{
-			
+			Debug.Log("_CheckForManagerRefresh : " + dataResquested + "/ platform = " + Application.platform );
 			bool shouldRefresh = false;
 
 			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
@@ -463,31 +469,31 @@ namespace com.iris.common
 			{
 				shouldRefresh = false;
 			}
-				//if ( UseDepth && !UseSkeleton)
-				/*
-			if (dataResquested == ExpSettings.DATA_REQUESTED.Depth)
+			//if ( UseDepth && !UseSkeleton)
+			/*
+		if (dataResquested == ExpSettings.DATA_REQUESTED.Depth)
+		{
+			if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
 			{
-				if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
-				{
-					shouldRefresh = true;
-				}
+				shouldRefresh = true;
 			}
-			//else if( !UseDepth && UseSkeleton)
-			else if (dataResquested == ExpSettings.DATA_REQUESTED.Body)
+		}
+		//else if( !UseDepth && UseSkeleton)
+		else if (dataResquested == ExpSettings.DATA_REQUESTED.Body)
+		{
+			if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
 			{
-				if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
-				{
-					shouldRefresh = true;
-				}
+				shouldRefresh = true;
 			}
-			else if( dataResquested == ExpSettings.DATA_REQUESTED.Users)
+		}
+		else if( dataResquested == ExpSettings.DATA_REQUESTED.Users)
+		{
+			if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
 			{
-				if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
-				{
-					shouldRefresh = true;
-				}
+				shouldRefresh = true;
 			}
-			*/
+		}
+		*/
 			/*
 			else if( UseDepth && UseSkeleton)
 			{
@@ -499,10 +505,10 @@ namespace com.iris.common
 			{
 				shouldRefresh = false;
 			}*/
-
+			Debug.Log("ShouldRefresh = " + shouldRefresh);
 			if (shouldRefresh)
 			{
-				Debug.Log("We should Refresh CVInterface");
+				Debug.Log("We should Refresh CVInterface for " + dataResquested);
 				Destroy(ManagerGO);
 				ManagerGO = null;
 				KManager = null;

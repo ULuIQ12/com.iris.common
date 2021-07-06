@@ -26,7 +26,7 @@ namespace com.iris.common
 					ListFlower.Add(other.gameObject);
 					DisappearFlower(other.gameObject);
 					numFlowerCueillies++;
-					Debug.Log("fleur cueillies N° " + numFlowerCueillies + " sur " + totFlower);
+					Debug.Log("fleur cueillies N " + numFlowerCueillies + " sur " + totFlower);
 					if (numFlowerCueillies >= totFlower)
 					{
 						Invoke("AppearFlowers", 3);

@@ -15,7 +15,7 @@ namespace com.iris.common
 		[VFXPropertyBinding("ClutterFloat"), SerializeField]
 		protected ExposedProperty FloatProperty = "FloatProperty";
 
-		public FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
+		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
 		public int NbSamplesHeight = 64;
 		private Texture LastedDepthTexture;
@@ -74,7 +74,7 @@ namespace com.iris.common
 
 			if( (countLeft+countRight) == 0 )
 			{
-				percentRightLeft = 0;
+				percentRightLeft = 0.0f;
 			}
 			else 
 			{

@@ -7,12 +7,12 @@ using UnityEngine.VFX.Utility;
 namespace com.iris.common
 {
 			
-	[AddComponentMenu("IRIS/Float Binder")]
-	[VFXBinder("IRIS/Float")]
+	[AddComponentMenu("IRIS/Clutter Binder")]
+	[VFXBinder("IRIS/Clutter")]
 	public class VFXClutterBinder : VFXBinderBase
 	{
 
-		[VFXPropertyBinding("Float"), SerializeField]
+		[VFXPropertyBinding("ClutterFloat"), SerializeField]
 		protected ExposedProperty FloatProperty = "FloatProperty";
 
 		public FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;

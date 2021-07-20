@@ -26,13 +26,7 @@ namespace com.iris.common
 		public GameObject Spawn2Pos;
 
 		private float randomAngle = 0;
-
-
-
-		private Vector3 Pos = new Vector3();
-
-
-
+		// private Vector3 Pos = new Vector3();
 		private GameObject PrefabToSpawn;
 
 		public int SpawnInterval_1;
@@ -44,7 +38,7 @@ namespace com.iris.common
 		public float ScaleLowRandomRange = 1f;
 		public float ScaleHighRandomRange = 1f;
 		private float LastSpawnTime = 0f;
-		private Vector3 SpawnPosition = new Vector3();
+		// private Vector3 SpawnPosition = new Vector3();
 
 		public float AngleForceMin_Gauche;
 		public float AngleForceMax_Gauche;

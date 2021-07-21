@@ -58,7 +58,6 @@ namespace com.iris.common
 
 		public void Update()
 		{
-
 			int randomSpawn = Random.Range(SpawnInterval_1, SpawnInterval_2);
 
 			Effect.SendEvent("OnExplosion");
@@ -146,9 +145,6 @@ namespace com.iris.common
 				randomAngle = Random.Range(AngleForceMin_Droit, AngleForceMax_Droit);
 
 			}
-
-
-
 
 			//SpawnPosition.Set(Random.Range(PositionLowRandomRange.x, PositionHighRandomRange.x), Random.Range(PositionLowRandomRange.y, PositionHighRandomRange.y), Random.Range(PositionLowRandomRange.z, PositionHighRandomRange.z));
 

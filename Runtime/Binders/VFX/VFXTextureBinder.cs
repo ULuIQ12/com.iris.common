@@ -20,7 +20,6 @@ namespace com.iris.common
 		protected ExposedProperty TextureScaleProperty = "TextureScale(Vec2)";
 
 		public bool BindSize = false;
-
 		[VFXPropertyBinding("Vector2"), SerializeField]
 		protected ExposedProperty TextureSizeProperty = "TextureSize(Vec2)";
 
@@ -67,7 +66,6 @@ namespace com.iris.common
 						component.SetVector2(TextureSizeProperty, _Size);
 					else
 						component.SetVector2(TextureSizeProperty, Vector2.one);
-
 				}
 
 				if (BindScale)

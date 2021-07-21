@@ -12,8 +12,17 @@ namespace com.iris.common
 	public class VFXClutterBinder : VFXBinderBase
 	{
 
-		[VFXPropertyBinding("ClutterFloat"), SerializeField]
-		protected ExposedProperty FloatProperty = "FloatProperty";
+		public bool BindClutterHorizontal = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty HorizontalProperty = "PercentHorizontalProperty";
+
+		public bool BindClutterVertical = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty VerticalProperty = "PercentVerticalProperty";
+
+		public bool BindClutterTotal = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty TotalProperty = "PercentTotalProperty";
 
 		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
@@ -22,11 +31,31 @@ namespace com.iris.common
 
 		public float countLeft = 0;
 		public float countRight = 0;
-		public float percentRightLeft;
+
+		public float countTop = 0;
+		public float countDown = 0;
 
 		public override bool IsValid(VisualEffect component)
 		{
-			return component.HasFloat(FloatProperty);
+			bool valid = true;
+			if( BindClutterHorizontal )
+			{
+				if (!component.HasFloat(HorizontalProperty))
+					valid = false;
+			}
+
+			if( BindClutterVertical )
+			{
+				if (!component.HasFloat(VerticalProperty))
+					valid = false;
+			}
+
+			if (BindClutterTotal)
+			{
+				if (!component.HasFloat(TotalProperty))
+					valid = false;
+			}
+			return valid;
 		}
 
 		public override void UpdateBinding(VisualEffect component)
@@ -39,7 +68,7 @@ namespace com.iris.common
 			
 			int i = 0;
 			int j = 0;
-			countLeft = countRight = 0;
+			countTop = countDown = countLeft = countRight = 0;
 			for (j = 0; j < NbSamplesHeight; j++)
 			{
 				for (i = 0; i < NbSamplesWidth; i++)
@@ -64,24 +93,65 @@ namespace com.iris.common
 							countLeft += 1;
 						else 
 							countRight += 1;
-					}
-					else
-					{
-						//inactif                    
+
+						if(j<(NbSamplesHeight*0.5))
+							countTop += 1;
+						else 
+							countDown += 1;
 					}
 				}
 			}
 
-			if( (countLeft+countRight) == 0 )
+			
+			float percent, countTotalActive, countTotal;
+
+			if(BindClutterHorizontal)
 			{
-				percentRightLeft = 0.0f;
-			}
-			else 
-			{
-				percentRightLeft = Remap(0, 1, -1, 1, countLeft / (countLeft + countRight));            
+				countTotalActive = countLeft + countRight;
+				if( countTotalActive == 0 )
+				{
+					percent = 0.0f;
+				}
+				else 
+				{
+					percent = Remap(0, 1, -1, 1, countLeft / countTotalActive);            
+				}
+
+				component.SetFloat(HorizontalProperty, percent);
 			}
 
-			component.SetFloat(FloatProperty, percentRightLeft);
+			if(BindClutterVertical)
+			{
+				countTotalActive = countTop + countDown;
+				if( countTotalActive == 0 )
+				{
+					percent = 0.0f;
+				}
+				else
+				{
+					percent = Remap(0, 1, -1, 1, countDown / countTotalActive );            
+				}
+
+				component.SetFloat(VerticalProperty, percent);
+			}
+
+			if(BindClutterTotal)
+			{
+				countTotalActive = countTop + countDown;
+				countTotal = NbSamplesHeight*NbSamplesWidth;
+				if(countTotalActive == 0)
+				{
+					percent = 0;
+				}
+				else
+				{
+					percent = countTotalActive / countTotal;
+				}
+
+				component.SetFloat(TotalProperty, percent);
+			}
+
+			
 		}
 
 		private Texture2D depthT2D;
@@ -113,7 +183,7 @@ namespace com.iris.common
 
 		public override string ToString()
 		{
-			return "IRIS: Float Position Binder";
+			return "IRIS: Clutter Binder";
 		}
 
 	}

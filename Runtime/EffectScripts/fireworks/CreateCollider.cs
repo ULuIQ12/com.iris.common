@@ -37,7 +37,6 @@ namespace com.iris.common
 			if (!IsStarted)
 				return;
 
-
 			LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 			Vector2 TextureSize = new Vector2(LastedDepthTexture.width, LastedDepthTexture.height);
 			if (TextureSize.y < 100)

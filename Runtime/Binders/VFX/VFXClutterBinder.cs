@@ -24,6 +24,10 @@ namespace com.iris.common
 		[VFXPropertyBinding("Float"), SerializeField]
 		protected ExposedProperty TotalProperty = "PercentTotalProperty";
 
+		public bool BindClutterDeltaHorizontal = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty DeltaHorizontalProperty = "DeltaHorizontalProperty";
+
 		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
 		public int NbSamplesHeight = 64;
@@ -31,9 +35,10 @@ namespace com.iris.common
 
 		public float countLeft = 0;
 		public float countRight = 0;
-
 		public float countTop = 0;
 		public float countDown = 0;
+		public float minLeft = 0;
+		public float maxRight = 0;
 
 		public override bool IsValid(VisualEffect component)
 		{
@@ -55,6 +60,13 @@ namespace com.iris.common
 				if (!component.HasFloat(TotalProperty))
 					valid = false;
 			}
+			
+			if (BindClutterDeltaHorizontal)
+			{
+				if (!component.HasFloat(DeltaHorizontalProperty))
+					valid = false;
+			}
+			
 			return valid;
 		}
 
@@ -69,6 +81,8 @@ namespace com.iris.common
 			int i = 0;
 			int j = 0;
 			countTop = countDown = countLeft = countRight = 0;
+			minLeft = NbSamplesWidth;
+			maxRight = 0;
 			for (j = 0; j < NbSamplesHeight; j++)
 			{
 				for (i = 0; i < NbSamplesWidth; i++)
@@ -88,7 +102,6 @@ namespace com.iris.common
 					Color col = t2d.GetPixel(px, py);
 					if( col.r + col.g + col.b > 0 )
 					{
-						//actif
 						if(i<(NbSamplesWidth*0.5))
 							countLeft += 1;
 						else 
@@ -98,6 +111,9 @@ namespace com.iris.common
 							countTop += 1;
 						else 
 							countDown += 1;
+
+						if( i < minLeft) minLeft = i;
+						if( i > maxRight) maxRight = i;
 					}
 				}
 			}
@@ -149,6 +165,11 @@ namespace com.iris.common
 				}
 
 				component.SetFloat(TotalProperty, percent);
+			}
+
+			if(BindClutterDeltaHorizontal)
+			{
+				component.SetFloat(DeltaHorizontalProperty, (maxRight-minLeft) );
 			}
 
 			

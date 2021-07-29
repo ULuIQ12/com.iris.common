@@ -39,6 +39,7 @@ namespace com.iris.common
 		public float countDown = 0;
 		public float minLeft = 0;
 		public float maxRight = 0;
+		public float percent;
 
 		public override bool IsValid(VisualEffect component)
 		{
@@ -112,14 +113,19 @@ namespace com.iris.common
 						else 
 							countDown += 1;
 
-						if( i < minLeft) minLeft = i;
-						if( i > maxRight) maxRight = i;
+						if(j > 2 && j < NbSamplesHeight-3) 
+						{
+							if( i < minLeft) minLeft = i;
+							if( i > maxRight) maxRight = i;
+						}
+						
 					}
 				}
 			}
 
 			
-			float percent, countTotalActive, countTotal;
+			float countTotalActive, countTotal;
+			percent = 0.0f;
 
 			if(BindClutterHorizontal)
 			{
@@ -157,7 +163,7 @@ namespace com.iris.common
 				countTotal = NbSamplesHeight*NbSamplesWidth;
 				if(countTotalActive == 0)
 				{
-					percent = 0;
+					percent = 0.0f;
 				}
 				else
 				{
@@ -169,7 +175,16 @@ namespace com.iris.common
 
 			if(BindClutterDeltaHorizontal)
 			{
-				percent = (maxRight-minLeft)/NbSamplesWidth;
+				countTotalActive = countTop + countDown;
+				if(countTotalActive == 0)
+				{
+					percent = 0.0f;
+				}
+				else
+				{
+					percent = (maxRight-minLeft)/NbSamplesWidth;
+				}
+				
 				component.SetFloat( DeltaHorizontalProperty, percent );
 			}			
 		}

@@ -130,7 +130,7 @@ namespace com.iris.common
 				}
 				else 
 				{
-					percent = Remap(0, 1, -1, 1, countLeft / countTotalActive);            
+					percent = countLeft / countTotalActive;            
 				}
 
 				component.SetFloat(HorizontalProperty, percent);
@@ -145,7 +145,7 @@ namespace com.iris.common
 				}
 				else
 				{
-					percent = Remap(0, 1, -1, 1, countDown / countTotalActive );         
+					percent = countDown / countTotalActive;         
 				}
 
 				component.SetFloat(VerticalProperty, percent);

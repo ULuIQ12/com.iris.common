@@ -145,7 +145,7 @@ namespace com.iris.common
 				}
 				else
 				{
-					percent = Remap(0, 1, -1, 1, countDown / countTotalActive );            
+					percent = Remap(0, 1, -1, 1, countDown / countTotalActive );         
 				}
 
 				component.SetFloat(VerticalProperty, percent);
@@ -169,10 +169,9 @@ namespace com.iris.common
 
 			if(BindClutterDeltaHorizontal)
 			{
-				component.SetFloat(DeltaHorizontalProperty, (maxRight-minLeft) );
-			}
-
-			
+				percent = (maxRight-minLeft)/NbSamplesWidth;
+				component.SetFloat( DeltaHorizontalProperty, percent );
+			}			
 		}
 
 		private Texture2D depthT2D;

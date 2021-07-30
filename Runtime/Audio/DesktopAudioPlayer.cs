@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RenderHeads.Media.AVProVideo;
 using Crosstales.FB;
-using TagLib;
+//using TagLib;
 
 namespace com.iris.common
 {
@@ -59,7 +59,7 @@ namespace com.iris.common
 
 		public string GetTitle()
 		{
-			if (Player.CurrentPlayer != null && !string.IsNullOrEmpty(Player.CurrentPlayer.m_VideoPath))
+			/*if (Player.CurrentPlayer != null && !string.IsNullOrEmpty(Player.CurrentPlayer.m_VideoPath))
 			{
 				//return Player.Control.tit
 				//Player.CurrentPlayer.
@@ -68,7 +68,7 @@ namespace com.iris.common
 				
 				return title;
 			}
-			else
+			else*/
 				return "";
 		}
 

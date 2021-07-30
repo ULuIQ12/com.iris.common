@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using com.hodges.iosmusic;
-using TagLib;
+//using TagLib;
 
 namespace com.iris.common
 {
@@ -296,6 +296,7 @@ namespace com.iris.common
 				iOSMusicAudioSource.Stop();
 				Debug.Log("file://" + songPath);
 
+				/*
 				try
 				{
 					var tfile = TagLib.File.Create(@"file://" + songPath);
@@ -308,7 +309,7 @@ namespace com.iris.common
 					Debug.Log(e);
 					LastTitle = "";
 				};
-
+				*/
 
 				using (var uwr = UnityWebRequestMultimedia.GetAudioClip("file://" + songPath, AudioType.AUDIOQUEUE))
 				{

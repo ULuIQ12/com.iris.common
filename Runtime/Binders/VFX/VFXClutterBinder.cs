@@ -31,6 +31,8 @@ namespace com.iris.common
 		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
 		public int NbSamplesHeight = 64;
+		public int totalSamples;
+		public bool[] boolActive;
 		private Texture LastedDepthTexture;
 
 		public float countLeft = 0;
@@ -40,6 +42,7 @@ namespace com.iris.common
 		public float minLeft = 0;
 		public float maxRight = 0;
 		public float percent;
+
 
 		public override bool IsValid(VisualEffect component)
 		{
@@ -67,6 +70,7 @@ namespace com.iris.common
 				if (!component.HasFloat(DeltaHorizontalProperty))
 					valid = false;
 			}
+
 			
 			return valid;
 		}
@@ -84,6 +88,9 @@ namespace com.iris.common
 			countTop = countDown = countLeft = countRight = 0;
 			minLeft = NbSamplesWidth;
 			maxRight = 0;
+			totalSamples = NbSamplesWidth * NbSamplesHeight;
+			boolActive = new bool[totalSamples];
+
 			for (j = 0; j < NbSamplesHeight; j++)
 			{
 				for (i = 0; i < NbSamplesWidth; i++)
@@ -103,6 +110,7 @@ namespace com.iris.common
 					Color col = t2d.GetPixel(px, py);
 					if( col.r + col.g + col.b > 0 )
 					{
+						boolActive[index] = true;
 						if(i<(NbSamplesWidth*0.5))
 							countLeft += 1;
 						else 
@@ -117,14 +125,14 @@ namespace com.iris.common
 						{
 							if( i < minLeft) minLeft = i;
 							if( i > maxRight) maxRight = i;
-						}
-						
+						}						
+					} else {
+						boolActive[index] = false;
 					}
 				}
 			}
-
 			
-			float countTotalActive, countTotal;
+			float countTotalActive;
 			percent = 0.0f;
 
 			if(BindClutterHorizontal)
@@ -160,14 +168,13 @@ namespace com.iris.common
 			if(BindClutterTotal)
 			{
 				countTotalActive = countTop + countDown;
-				countTotal = NbSamplesHeight*NbSamplesWidth;
 				if(countTotalActive == 0)
 				{
 					percent = 0.0f;
 				}
 				else
 				{
-					percent = countTotalActive / countTotal;
+					percent = countTotalActive / totalSamples;
 				}
 
 				component.SetFloat(TotalProperty, percent);
@@ -186,7 +193,7 @@ namespace com.iris.common
 				}
 				
 				component.SetFloat( DeltaHorizontalProperty, percent );
-			}			
+			}
 		}
 
 		private Texture2D depthT2D;
@@ -214,7 +221,8 @@ namespace com.iris.common
 			value = Mathf.Lerp(OutputLow, OutputHigh, value);
 
 			return value;
-		}		
+		}
+
 
 		public override string ToString()
 		{

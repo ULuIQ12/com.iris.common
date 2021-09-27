@@ -52,6 +52,12 @@ namespace com.iris.common
 
 		IEnumerator Start()
 		{
+			while(!CVInterface.AreDatasAvailable())
+			{
+				yield return null;
+			}
+			Instance = this;
+
 			/* REDO
 			while (KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
 			{
@@ -61,12 +67,12 @@ namespace com.iris.common
 			Instance = this;
 			kinectManager = KinectManager.Instance;
 			*/
-			/*
+			
 			for (int i = 0; i < bHandRight.Length; i++)
 			{
 				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
 				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
-			}*/
+			}
 			yield return null;
 
 			listTabs.Add(tab1);

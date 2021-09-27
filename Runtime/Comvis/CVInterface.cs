@@ -552,7 +552,7 @@ namespace com.iris.common
 		private static bool CpuImgMirrorX = true;
 		private static bool CpuImgMirrorY = true;
 
-		private static float CpuTextureScale = 0.3f;
+		private static float CpuTextureScale = 0.3f; // a régler sur build
 
 		private static IEnumerator ImgUpdate()
 		{

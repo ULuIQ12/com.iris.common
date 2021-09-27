@@ -2,12 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.rfilkov.kinect;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using ARFoundationRemote.Runtime;
+using JetBrains.Annotations;
+using UnityEngine.Assertions;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace com.iris.common
 {
+	
     public class CVInterface : MonoBehaviour
     {
+		
 		public static CVInterface _Instance;
 		public static Texture2D EmptyTexture;
 
@@ -24,6 +32,18 @@ namespace com.iris.common
 
 		public static Vector3 GetJointPos3D(IRISJoints.Joints joint, int userIndex = 0)
 		{
+			if (AreDatasAvailable() && BodyManager != null )
+			{
+				if (BoneControl != null)
+				{
+					
+					return BoneControl.GetBoneWorldPosition((int)IRISJoints.getARFJoint(joint));
+				}
+				else return Vector3.zero;
+
+			}
+			// REDO - DONE
+			/*
 			if (AreDatasAvailable())
 			{
 				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
@@ -41,13 +61,29 @@ namespace com.iris.common
 				//Debug.Log(joint + "/" + userIndex);
 				return pos;
 			}
+			*/
 			return Vector3.zero;
 		}
 
 		public static Vector3 GetJointRot3D(IRISJoints.Joints joint, int userIndex = 0)
 		{
+			if (AreDatasAvailable() && BodyManager != null && _Instance.LastTrackableHumanId != TrackableId.invalidId)
+			{
+				if (BoneControl != null)
+				{
+					
+					return BoneControl.GetBoneWorldRotation((int)IRISJoints.getARFJoint(joint)).eulerAngles;
+				}
+				else return Vector3.zero;
+
+			}
+
+			// REDO - DONE
+			/*
 			if (AreDatasAvailable())
 			{
+
+				
 				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
 
 				Vector3 rot;
@@ -63,17 +99,34 @@ namespace com.iris.common
 				
 				return rot;
 			}
+			*/
+
 			return Vector3.zero;
 		}
 
 		public static bool IsJointTracked(IRISJoints.Joints joint, int userIndex = 0)
 		{
+			if (AreDatasAvailable() && BodyManager != null && BoneControl != null)
+			{
+				foreach (ARHumanBody human in BodyManager.trackables)
+				{
+					if (human.trackableId == _Instance.LastTrackableHumanId)
+					{
+						var joints = human.joints;
+						return joints[(int)IRISJoints.getARFJoint(joint)].tracked;
+					}
+				}
+			}
+			// REDO - DONE
+			/*
 			if (!AreDatasAvailable())
 			{
 				return false;
 			}
 			ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
 			return KinectManager.Instance.IsJointTracked(uid, IRISJoints.GetKinectJoint(joint));
+			*/
+			return false;
 		}
 
 		public static float GetFloat( FXDataProvider.FLOAT_DATA_TYPE type, int userIndex = 0)
@@ -82,9 +135,13 @@ namespace com.iris.common
 			{
 				return 0.0f;
 			}
-			
 
+
+			// REDO - DONE
+			/*
 			ulong userID = _Instance.KManager.GetUserIdByIndex(userIndex);
+			*/
+			ulong userID = 0; 
 
 			_Instance.UpdateUserMetaBoneData(userID);
 
@@ -133,11 +190,20 @@ namespace com.iris.common
 
 		public static Texture GetDepthMap()
 		{
+			if (AreDatasAvailable() && OccManager != null)
+			{
+				//return OccManager.environmentDepthTexture;
+				NeedDepthRefresh = true;
+				if( m_DepthTexture != null)
+					return m_DepthTexture;
+			}
+			// REDO - DONE
+			/*
 			if (AreDatasAvailable())
 			{
 				return KinectManager.Instance.GetDepthImageTex(0);
 			}
-
+			*/
 			if (EmptyTexture == null)
 				InitEmpty();
 
@@ -146,6 +212,26 @@ namespace com.iris.common
 		public static Vector2 LastUsersMapDimensions = new Vector2();
 		public static Texture GetUsersMap()
 		{
+			if( AreDatasAvailable() && OccManager !=null )
+			{
+				NeedUserRefresh = true;
+
+				if( m_UserTexture != null)
+					return m_UserTexture;
+				//Texture t = OccManager.humanStencilTexture;
+
+				//return m_UserTexture;
+				/*
+				if (t != null)
+				{
+					if (t.height > 100)
+						LastUsersMapDimensions.Set(t.width, t.height);
+					return t;
+				}
+				*/
+			}
+			// REDO -- DONE
+			/*
 			if (AreDatasAvailable())
 			{
 				Texture t = KinectManager.Instance.GetUsersImageTex(0);
@@ -159,7 +245,7 @@ namespace com.iris.common
 					LastUsersMapDimensions.Set(t.width, t.height);
 				return t;
 			}
-
+			*/
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;
@@ -167,21 +253,39 @@ namespace com.iris.common
 
 		public static Texture GetColorMap()
 		{
-			if (AreDatasAvailable())
+			if (AreDatasAvailable() && CamManager != null)
 			{
-				return KinectManager.Instance.GetColorImageTex(0);
+				NeedCamRefresh = true;
+				if (m_CameraTexture != null)
+					return m_CameraTexture;
 			}
+
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;
 		}
 
+		void OnOcclusionFrameReceived(AROcclusionFrameEventArgs eventArgs)
+		{
+			
+		}
+
+		void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
+		{
+			
+		}
+
+
+
 		public static Texture GetColorPointCloud()
 		{
+			// REDO
+			/*
 			if (AreDatasAvailable())
 			{
 				return _Instance.CurrentSensorInterface.pointCloudColorTexture;
 			}
+			*/
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;
@@ -189,10 +293,13 @@ namespace com.iris.common
 
 		public static Texture GetVertexPointCloud()
 		{
+			// REDO
+			/*
 			if (AreDatasAvailable())
 			{
 				return _Instance.CurrentSensorInterface.pointCloudVertexTexture;
 			}
+			*/
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;
@@ -208,6 +315,8 @@ namespace com.iris.common
 
 			switch (type)
 			{
+				// REDO
+				/*
 				case FXDataProvider.MAP_DATA_TYPE.ColorMap:
 					return KinectManager.Instance.GetColorImageScale(0);
 				case FXDataProvider.MAP_DATA_TYPE.DepthMap:
@@ -216,7 +325,8 @@ namespace com.iris.common
 					return KinectManager.Instance.GetDepthImageScale(0);
 				case FXDataProvider.MAP_DATA_TYPE.ColorPointCloud:
 				case FXDataProvider.MAP_DATA_TYPE.VertexPointCloud:
-				default:
+				*/
+			default:
 					return Vector2.one;
 			}
 		}
@@ -246,7 +356,10 @@ namespace com.iris.common
 		{
 			if( AreDatasAvailable() )
 			{
-				return _Instance.KManager.GetUsersCount() ;
+				if (BodyManager != null)
+					return BodyManager.trackables.count;
+				else
+					return 0;
 			}
 			else return 0;
 		}
@@ -270,7 +383,9 @@ namespace com.iris.common
 
 		public static bool AreDatasAvailable()
 		{
-			return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
+			return Session != null;
+			
+			//return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
 		}
 
 		private static bool LastDebugValue = false;
@@ -281,6 +396,8 @@ namespace com.iris.common
 			if (!AreDatasAvailable())
 				return;
 
+			// REDO
+			/*
 			if (isOn)
 			{
 				List<KinectManager.DisplayImageType> disp = new List<KinectManager.DisplayImageType>();
@@ -293,6 +410,8 @@ namespace com.iris.common
 			{
 				KinectManager.Instance.displayImages.Clear();
 			}
+			*/
+			return;
 
 		}
 
@@ -301,13 +420,18 @@ namespace com.iris.common
 		private const string K2_INTERFACE_PREFAB = "CV/K2Interface";
 		private const string ARKIT_INTERFACE_PREFAB = "CV/ARkitInterface";
 
+		private const string ARF_INTERFACE_PREFAB = "CV/ARFoundationInterface";
+
+		public ExpSettings.DATA_REQUESTED DefaultMode = ExpSettings.DATA_REQUESTED.Body;
+
 		public bool Initialized { get; private set; } = false;
 
 		private GameObject ManagerGO;
-		private KinectManager KManager;
+		//private KinectManager KManager;
 
 		private Texture2D AllBonesTexture;
-		private int NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
+		//private int NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
+			
 
 		private class UserBonesMetaData
 		{
@@ -333,185 +457,350 @@ namespace com.iris.common
 			else
 				_Instance = this;
 
-			Init();
+			Init(DefaultMode);
 		}
 
-		private DepthSensorBase CurrentSensorInterface;
+		//private DepthSensorBase CurrentSensorInterface;
+
+		private static ARSession Session;
+		private static ARCameraManager CamManager;
+		//private static ARCameraBackground CamBG;
+		private static AROcclusionManager OccManager;
+		private static ARHumanBodyManager BodyManager;
+		private static BoneController BoneControl;
+
+		private static Coroutine ImgUpdateRoutine;
+
 		private ExpSettings.DATA_REQUESTED LastResquestedData = ExpSettings.DATA_REQUESTED.Body;
-		private void Init(ExpSettings.DATA_REQUESTED dataRequest = ExpSettings.DATA_REQUESTED.Body)
+		private void Init(ExpSettings.DATA_REQUESTED dataRequest)
 		//private void Init(bool UseDepth = false, bool UseSkeleton = true)
 		{
 			Initialized = false;
 
+			//if( dataRequest == null)
+
+
+			/*
 			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
 			ManagerGO.name = "KinectManager";
-			KManager = ManagerGO.GetComponent<KinectManager>();
+			*/
+			ManagerGO = Instantiate(Resources.Load<GameObject>(ARF_INTERFACE_PREFAB), transform);
+			ManagerGO.name = "ARFInterface";
+				//KManager = ManagerGO.GetComponent<KinectManager>();
 			Debug.Log("CVInterface: Init platform " + Application.platform + "/ data req = " + dataRequest);
-
-			LastResquestedData = dataRequest;
-
-			if ( Application.platform == RuntimePlatform.WindowsEditor )
-			{
-
-				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
-				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
-			}	
-			else if( Application.platform == RuntimePlatform.WindowsPlayer)
-			{
-				GameObject igo = Instantiate(Resources.Load<GameObject>(K2_INTERFACE_PREFAB), ManagerGO.transform);
-				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
-			}
-			else if( Application.platform == RuntimePlatform.IPhonePlayer)
-			{
-				
-				GameObject igo = Instantiate(Resources.Load<GameObject>(ARKIT_INTERFACE_PREFAB), ManagerGO.transform);
-				CurrentSensorInterface = igo.GetComponent<DepthSensorBase>();
-				
-			}
-			else
-			{
-				Debug.LogWarning("What platform ?!? = " + Application.platform);
-			}
-
-			if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-			{
-				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-
-			}
-			else if( Application.platform == RuntimePlatform.IPhonePlayer)
-			{
-				ARKitInterface ark = CurrentSensorInterface as ARKitInterface;
-				if ( dataRequest == ExpSettings.DATA_REQUESTED.Body)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-				}
-				else if( dataRequest == ExpSettings.DATA_REQUESTED.Depth)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
-
-					ark.depthMode = com.rfilkov.kinect.ARKitInterface.ArKitDepthMode.EnvironmentDepth;
-				}
-				else if( dataRequest == ExpSettings.DATA_REQUESTED.Users)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
-
-					ark.depthMode = com.rfilkov.kinect.ARKitInterface.ArKitDepthMode.HumanDepth;
-				}
-				else
-				{
-					Debug.Log("Probleme avec dataRequest : " + dataRequest);
-				}
-
-				Debug.Log("arkit depth set to " + ark.depthMode);
-			}
-			/*
-			if (UseDepth && !UseSkeleton)
-			{
-				if (KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.None;
-				}
-			}
-			else if (!UseDepth && UseSkeleton)
-			{
-				if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-				}
-			}
-			else
-			{
-				if (Application.platform == RuntimePlatform.IPhonePlayer)
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.None;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-				}
-				else
-				{
-					KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-					KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-				}
-			}
-			*/
-			/*
-			if( Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-			{
-				KManager.getDepthFrames = KinectManager.DepthTextureType.DepthTexture;
-				KManager.getBodyFrames = KinectManager.BodyTextureType.UserTexture;
-			}
-			*/
-			SetDebug(LastDebugValue);
-			KManager.StartDepthSensors();
 			
+			LastResquestedData = dataRequest;
+			Session = ManagerGO.GetComponent<ARSession>();
+			Session.enabled = false;
+			CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();
+			//CamBG = ManagerGO.GetComponentInChildren<ARCameraBackground>();			
+			
+			if (dataRequest == ExpSettings.DATA_REQUESTED.Body)
+			{
+				OccManager = ManagerGO.GetComponent<AROcclusionManager>();
+				BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
+				BodyManager.humanBodiesChanged += OnHumanBodiesChanged;
+
+				
+				OccManager.enabled = false;
+				BodyManager.enabled = true;
+			}
+			else if (dataRequest == ExpSettings.DATA_REQUESTED.Depth)
+			{
+				OccManager = ManagerGO.GetComponent<AROcclusionManager>();
+				BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
+				OccManager.requestedHumanDepthMode = HumanSegmentationDepthMode.Fastest;
+				OccManager.requestedHumanStencilMode = HumanSegmentationStencilMode.Fastest;
+				OccManager.requestedOcclusionPreferenceMode = OcclusionPreferenceMode.PreferEnvironmentOcclusion;
+				//OccManager.frameReceived += OnOcclusionFrameReceived;
+				OccManager.enabled = true;
+				BodyManager.enabled = false;
+			}
+			else if (dataRequest == ExpSettings.DATA_REQUESTED.Users)
+			{
+				OccManager = ManagerGO.GetComponent<AROcclusionManager>();
+				BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
+				OccManager.requestedHumanDepthMode = HumanSegmentationDepthMode.Fastest;
+				OccManager.requestedHumanStencilMode = HumanSegmentationStencilMode.Fastest;
+				OccManager.requestedOcclusionPreferenceMode = OcclusionPreferenceMode.PreferHumanOcclusion;
+				//OccManager.frameReceived += OnOcclusionFrameReceived;
+				OccManager.enabled = true;
+				BodyManager.enabled = false;
+			}
+			else
+			{
+				Debug.Log("Probleme avec dataRequest : " + dataRequest);
+			}
+			Session.enabled = true;
+			Session.Reset();
+			//CamManager.frameReceived += OnCameraFrameReceived;
+			SetDebug(LastDebugValue);
+
+			if (ImgUpdateRoutine == null)
+				StartCoroutine(ImgUpdate());
+
 			Initialized = true;
 		}
+
+
+		private static bool NeedCamRefresh = false;
+		private static bool NeedUserRefresh = false;
+		private static bool NeedDepthRefresh = false;
+
+		private static Texture2D m_CameraTexture;
+		private static Texture2D m_UserTexture;
+		private static Texture2D m_DepthTexture;
+
+		private static bool CpuImgMirrorX = true;
+		private static bool CpuImgMirrorY = true;
+
+		private static float CpuTextureScale = 0.3f;
+
+		private static IEnumerator ImgUpdate()
+		{
+
+			while (true)
+			{
+				if (NeedCamRefresh)
+				{
+					UpdateCpuImg(CpuImgType.Camera);
+					NeedCamRefresh = false;
+				}
+
+				if( NeedUserRefresh)
+				{
+					UpdateCpuImg(CpuImgType.Users);
+					NeedUserRefresh = false;
+				}
+
+				if( NeedDepthRefresh)
+				{
+					UpdateCpuImg(CpuImgType.Depth);
+					NeedDepthRefresh = false;
+				}
+				yield return null;
+			}
+		}
+		enum CpuImgType
+		{
+			Camera, 
+			Users, 
+			Depth
+		}
+		public static TextureFormat getFormat(XRCpuImage cpuImage)
+		{
+			//#if ARFOUNDATION_4_0_2_OR_NEWER
+            var format = cpuImage.format.AsTextureFormat();
+            if ((int) format != 0) {
+                return format;
+            }
+			//#endif
+
+			return TextureFormat.ARGB32;
+		}
+
+		private static void UpdateCpuImg(CpuImgType ImgType )
+		{
+			bool imageAcquired;
+			XRCpuImage cpuImage;
+			switch (ImgType)
+			{
+				case CpuImgType.Users:
+					imageAcquired = OccManager.TryAcquireHumanStencilCpuImage(out cpuImage);
+					break;
+				case CpuImgType.Depth:
+					imageAcquired = OccManager.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
+					break;
+				case CpuImgType.Camera:
+				default:
+					imageAcquired = CamManager.TryAcquireLatestCpuImage(out cpuImage);
+					break;
+			}
+			
+			if (imageAcquired)
+			{
+				using (cpuImage)
+				{
+					var format = getFormat(cpuImage);
+					var fullWidth = cpuImage.width;
+					var fullHeight = cpuImage.height;
+					var downsizedWidth = Mathf.RoundToInt(fullWidth * CpuTextureScale);
+					var downsizedHeight = Mathf.RoundToInt(fullHeight * CpuTextureScale);
+					var conversionParams = new XRCpuImage.ConversionParams
+					{
+						transformation = ConversionParamsSerializable.GetTransformation(CpuImgMirrorX, CpuImgMirrorY),
+						inputRect = new RectInt(0, 0, fullWidth, fullHeight),
+						outputDimensions = new Vector2Int(downsizedWidth, downsizedHeight),
+						outputFormat = format
+					};
+
+					var convertedDataSize = tryGetConvertedDataSize();
+					if (convertedDataSize.HasValue)
+					{
+						using (var buffer = new NativeArray<byte>(convertedDataSize.Value, Allocator.Temp))
+						{
+							if (tryConvert())
+							{
+								loadRawTextureData(buffer);
+							}
+
+							bool tryConvert()
+							{
+								try
+								{
+									cpuImage.ConvertSync(conversionParams, buffer);
+									return true;
+								}
+								catch (Exception e)
+								{
+									processException(e);
+									return false;
+								}
+							}
+						}
+					}
+
+					int? tryGetConvertedDataSize()
+					{
+						try
+						{
+							return cpuImage.GetConvertedDataSize(conversionParams);
+						}
+						catch (Exception e)
+						{
+							processException(e);
+							return null;
+						}
+					}
+
+					void loadRawTextureData(NativeArray<byte> data)
+					{
+						switch(ImgType)
+						{
+							case CpuImgType.Camera:
+								if( m_CameraTexture == null)
+								{
+									m_CameraTexture = new Texture2D(downsizedWidth, downsizedHeight, format, false);
+								}
+								/*
+								if (m_CameraTexture != null)
+								{
+									Destroy(m_CameraTexture);
+									m_CameraTexture = null;
+								}
+								*/
+								
+								m_CameraTexture.LoadRawTextureData(data);
+								m_CameraTexture.Apply();
+								break;
+							case CpuImgType.Depth:
+								/*
+								if (m_DepthTexture != null)
+								{
+									Destroy(m_DepthTexture);
+									m_DepthTexture = null;
+								}
+								*/
+								if( m_DepthTexture == null)
+									m_DepthTexture = new Texture2D(downsizedWidth, downsizedHeight, format, false);
+
+								m_DepthTexture.LoadRawTextureData(data);
+								m_DepthTexture.Apply();
+								break;
+							case CpuImgType.Users:
+								/*
+								if (m_UserTexture != null)
+								{
+									Destroy(m_UserTexture);
+									m_UserTexture = null;
+								}
+								*/
+								if( m_UserTexture == null )
+									m_UserTexture = new Texture2D(downsizedWidth, downsizedHeight, format, false);
+
+								m_UserTexture.LoadRawTextureData(data);
+								m_UserTexture.Apply();
+								break;
+						}
+						
+						//image.texture = texture;
+					}
+
+				}
+			}
+		}
+
+		public static void processException(Exception e)
+		{
+			Debug.LogWarning(e.ToString());
+		}
+
+		
+
+		private TrackableId LastTrackableHumanId = TrackableId.invalidId;
+		void OnHumanBodiesChanged(ARHumanBodiesChangedEventArgs eventArgs)
+		{
+			Debug.Log("Added = " + eventArgs.added.Count);
+
+			foreach (var humanBody in eventArgs.added)
+			{
+				LastTrackableHumanId = humanBody.trackableId;
+				Debug.Log($"Adding a new skeleton [{humanBody.trackableId}].");
+				
+				BoneControl = GetComponentInChildren<BoneController>();
+				Debug.Log("BoneController = " + BoneControl);
+			}
+			foreach (var humanBody in eventArgs.updated)
+			{
+				//Debug.Log($"update skeleton [{humanBody.trackableId}].");
+				
+
+				//BoneControl = GetComponentInChildren<BoneController>();
+				//Debug.Log("BoneController = " + BoneControl);
+			}
+			foreach (var humanBody in eventArgs.removed)
+			{
+				Debug.Log($"Removing a skeleton [{humanBody.trackableId}].");
+			}
+
+		}
+
 
 		private IEnumerator _CheckForManagerRefresh(ExpSettings.DATA_REQUESTED dataResquested)
 		{
 			Debug.Log("_CheckForManagerRefresh : " + dataResquested + "/ platform = " + Application.platform );
-			bool shouldRefresh = false;
 
-			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-			{
-				shouldRefresh = false;
-			}
-			else if( Application.platform == RuntimePlatform.IPhonePlayer)
-			{
-				shouldRefresh = (dataResquested != LastResquestedData);				
-			}
-			else
-			{
-				shouldRefresh = false;
-			}
-			//if ( UseDepth && !UseSkeleton)
-			/*
-		if (dataResquested == ExpSettings.DATA_REQUESTED.Depth)
-		{
-			if( KManager.getDepthFrames != KinectManager.DepthTextureType.DepthTexture || KManager.getBodyFrames != KinectManager.BodyTextureType.None)
-			{
-				shouldRefresh = true;
-			}
-		}
-		//else if( !UseDepth && UseSkeleton)
-		else if (dataResquested == ExpSettings.DATA_REQUESTED.Body)
-		{
-			if( KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
-			{
-				shouldRefresh = true;
-			}
-		}
-		else if( dataResquested == ExpSettings.DATA_REQUESTED.Users)
-		{
-			if (KManager.getBodyFrames != KinectManager.BodyTextureType.UserTexture || KManager.getDepthFrames != KinectManager.DepthTextureType.None)
-			{
-				shouldRefresh = true;
-			}
-		}
-		*/
-			/*
-			else if( UseDepth && UseSkeleton)
-			{
-				shouldRefresh = true;
-			}
-			*/
-			/*
-			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
-			{
-				shouldRefresh = false;
-			}*/
+			bool shouldRefresh = (dataResquested != LastResquestedData);
+
 			Debug.Log("ShouldRefresh = " + shouldRefresh);
 			if (shouldRefresh)
 			{
+				if( ImgUpdateRoutine != null)
+				{
+					StopCoroutine(ImgUpdateRoutine);
+					ImgUpdateRoutine = null;
+				}
+				if (BodyManager != null)
+				{
+					BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
+					BodyManager = null;
+				}
+
+				if( OccManager != null )
+				{
+					//OccManager.frameReceived -= OnOcclusionFrameReceived;
+					OccManager = null;
+				}
+
+				Session = null;
+				//CamManager.frameReceived -= OnCameraFrameReceived;
+				CamManager = null;
+				BoneControl = null;
+
 				Debug.Log("We should Refresh CVInterface for " + dataResquested);
 				Destroy(ManagerGO);
 				ManagerGO = null;
-				KManager = null;
+				//KManager = null;
 				yield return null;
 				//Init(UseDepth, UseSkeleton);
 				Init(dataResquested);
@@ -525,23 +814,13 @@ namespace com.iris.common
 			{
 				UsersMetaDatas[user] = new UserBonesMetaData();
 			}
-
-			if(KManager != null && KManager.IsInitialized() && KManager.GetUsersCount() > 0 )
+			// REDO -- done
+			
+			if( AreDatasAvailable() && BoneControl != null )
 			{
 				
 				if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
 					return;
-
-				
-				/*
-				Vector3 HandRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandRight);
-				Vector3 HandLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.HandLeft);
-
-				Vector3 ElbowRightPosition = KManager.GetJointPosition(user, KinectInterop.JointType.ElbowRight);
-				Vector3 ElbowLeftPosition = KManager.GetJointPosition(user, KinectInterop.JointType.ElbowLeft);
-
-				Vector3 PelvisPosition = KManager.GetJointPosition(user, KinectInterop.JointType.Pelvis);
-				*/
 
 				Vector3 HandRightPosition = GetJointPos3D(IRISJoints.Joints.HandRight);
 				Vector3 HandLeftPosition = GetJointPos3D(IRISJoints.Joints.HandLeft);
@@ -552,7 +831,7 @@ namespace com.iris.common
 				Vector3 PelvisPosition = GetJointPos3D(IRISJoints.Joints.Pelvis);
 
 				UsersMetaDatas[user].UserHorizontalPosition = HandRightPosition.x + (HandLeftPosition.x - HandRightPosition.x) / 2f;// KManager.GetJointPosition(user, KinectInterop.JointType.SpineNaval).x;
-				UsersMetaDatas[user].HandsHorizontalSeparation = HandRightPosition.x - HandLeftPosition.x;
+				UsersMetaDatas[user].HandsHorizontalSeparation = Mathf.Abs( HandRightPosition.x - HandLeftPosition.x );
 				UsersMetaDatas[user].HandsVerticalSeparation = HandRightPosition.y - HandLeftPosition.y;
 				
 
@@ -579,9 +858,13 @@ namespace com.iris.common
 
 
 		private byte[] boneData;
+		private int NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 		private void UpdateAllBonestexture()
 		{
-			int userCount = KManager.GetUsersCount();
+			// REDO
+			
+			//int userCount = KManager.GetUsersCount();
+			int userCount = GetUserCount();
 
 			if (userCount == 0)
 			{
@@ -615,7 +898,7 @@ namespace com.iris.common
 			int u = 0;
 			for (u = 0; u < userCount; u++)
 			{
-				ulong uid = KManager.GetUserIdByIndex(u);
+				//ulong uid = KManager.GetUserIdByIndex(u);
 				int userDecal = u * lineLenght;
 				int i = 0;
 
@@ -632,7 +915,6 @@ namespace com.iris.common
 
 					Vector3 p = GetJointPos3D(j, u);
 					
-					//Vector3 p = KManager.GetJointPosition(uid, j);
 
 					float val;
 					byte[] biteval;
@@ -640,21 +922,21 @@ namespace com.iris.common
 					//int invertX = (Application.platform == RuntimePlatform.IPhonePlayer)?-1:1;
 
 					//val = p.x * KManager.GetSensorSpaceScale(0).x * invertX; 
-					val = p.x * KManager.GetSensorSpaceScale(0).x;
+					val = p.x;// * KManager.GetSensorSpaceScale(0).x;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 0] = biteval[0];
 					boneData[userDecal + i + 1] = biteval[1];
 					boneData[userDecal + i + 2] = biteval[2];
 					boneData[userDecal + i + 3] = biteval[3];
 
-					val = p.y * KManager.GetSensorSpaceScale(0).y;
+					val = p.y;// * KManager.GetSensorSpaceScale(0).y;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 4] = biteval[0];
 					boneData[userDecal + i + 5] = biteval[1];
 					boneData[userDecal + i + 6] = biteval[2];
 					boneData[userDecal + i + 7] = biteval[3];
 
-					val = p.z * KManager.GetSensorSpaceScale(0).z;
+					val = p.z;// * KManager.GetSensorSpaceScale(0).z;
 					biteval = BitConverter.GetBytes(val);
 					boneData[userDecal + i + 8] = biteval[0];
 					boneData[userDecal + i + 9] = biteval[1];
@@ -674,14 +956,17 @@ namespace com.iris.common
 
 			AllBonesTexture.SetPixelData(boneData, 0);
 			AllBonesTexture.Apply();
+			
 		}
 
 		private void TextureToScreenCoord( Vector2 position )
 		{
+			// REDO
+			/*
 			if( KManager != null)
 			{
 				KManager.MapDepthPointToColorCoords(0, position, 0);
-			}
+			}*/
 		}
 	}
 }

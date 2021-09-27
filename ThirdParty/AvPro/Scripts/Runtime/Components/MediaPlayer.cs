@@ -1222,7 +1222,7 @@ namespace RenderHeads.Media.AVProVideo
 				}
 				else
 				{
-					Debug.LogError("[AVProVideo] No file path specified", this);
+					Debug.LogWarning("[AVProVideo] No file path specified", this);
 				}
 			}
 			return result;

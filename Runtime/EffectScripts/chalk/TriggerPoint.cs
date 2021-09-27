@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.rfilkov.kinect;
 using DentedPixel;
 
 namespace com.iris.common

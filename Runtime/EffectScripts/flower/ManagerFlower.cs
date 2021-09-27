@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.rfilkov.kinect;
+//using com.rfilkov.kinect;
 using com.iris.common;
 //using DentedPixel;
 
@@ -32,7 +32,7 @@ public class ManagerFlower : MonoBehaviour
 
 	public Transform BasketTarget;
 
-	KinectManager kinectManager;
+	//KinectManager kinectManager;
 	//KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
 	//KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
 	List<ulong> allUserIds;
@@ -55,17 +55,20 @@ public class ManagerFlower : MonoBehaviour
 	private IEnumerator WaitForFrame()
 	{
 		yield return new WaitForSeconds(0.5f);
+		/* REDO
 		while (KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
 		{
 			yield return null;
 		}
-
+		*/
 		Init();
 	}
 
 	private void Init()
 	{
+		/* REDO
 		kinectManager = KinectManager.Instance;
+		*/
 		Instance = this;
 
 		for (int i = 0; i < goFlowers.transform.childCount; i++)

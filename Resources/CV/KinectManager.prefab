@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6440097061888147708}
-  - component: {fileID: 6440097061888147707}
   m_Layer: 0
   m_Name: KinectManager
   m_TagString: Untagged
@@ -31,47 +30,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6440097061888147707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6440097061888147706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b531f336dfee5f438f94ed501caefc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useMultiCamConfig: 0
-  syncMultiCamFrames: 0
-  getDepthFrames: 2
-  getColorFrames: 2
-  getInfraredFrames: 0
-  getPoseFrames: 0
-  getBodyFrames: 0
-  syncDepthAndColor: 0
-  syncBodyAndDepth: 0
-  minUserDistance: 0
-  maxUserDistance: 10
-  maxLeftRightDistance: 0
-  maxTrackedUsers: 0
-  showAllowedUsersOnly: 0
-  userDetectionOrder: 1
-  ignoreInferredJoints: 0
-  ignoreZCoordinates: 0
-  boneOrientationConstraints: 1
-  playerCalibrationPose: 0
-  userManager: {fileID: 0}
-  gestureManager: {fileID: 0}
-  displayImages: 
-  displayImageWidthPercent: 0.2
-  statusInfoText: {fileID: 0}
-  consoleLogMessages: 1
-  OnDepthSensorsStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDepthSensorsStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  AutoStartSensors: 0

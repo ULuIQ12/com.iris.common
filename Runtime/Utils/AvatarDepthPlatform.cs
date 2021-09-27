@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.rfilkov.kinect;
-using com.rfilkov.components;
+//using com.rfilkov.kinect;
+//using com.rfilkov.components;
 
 namespace com.iris.common
 {
@@ -17,8 +17,10 @@ namespace com.iris.common
 
 		void Start()
 		{
+			// REDO
+			/*
 			AvatarController c = GetComponent<AvatarController>();
-
+			
 			if (c == null)
 				return;
 
@@ -38,6 +40,8 @@ namespace com.iris.common
 				camTransform.localPosition = windowsCamPosition;
 				camTransform.localRotation = Quaternion.identity;
 			}
+			*/
+			return;
 		}
 
 		public void Update()

@@ -7,12 +7,14 @@
         "GUID:d5e49cccd48cc2e4b90b7b45b74c1188",
         "GUID:2b9b557b03fceb2439b5c3effb58dd6f",
         "GUID:26e832d260da3824080e44f31dc6dfe4",
-        "GUID:b1e8b26770b4d174a9f68245904b4984",
-        "GUID:9be7a2330924d8a409578b6991b3962c"
+        "GUID:9be7a2330924d8a409578b6991b3962c",
+        "GUID:a9420e37d7990b54abdef6688edbe313",
+        "GUID:92703082f92b41ba80f0d6912de66115",
+        "GUID:df053a1a69e8040ee88d52204e1cd5b9"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

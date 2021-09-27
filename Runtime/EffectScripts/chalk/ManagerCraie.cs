@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.rfilkov.kinect;
+//using com.rfilkov.kinect;
 using DentedPixel;
 
 namespace com.iris.common
@@ -24,7 +24,10 @@ namespace com.iris.common
 
 		Rect backgroundRect;
 
+		// REDO
+		/*
 		KinectManager kinectManager;
+		*/
 		//KinectInterop.JointType JointHandRight = KinectInterop.JointType.HandRight;
 		//KinectInterop.JointType JointHandLeft = KinectInterop.JointType.HandLeft;
 		List<ulong> allUserIds;
@@ -49,6 +52,7 @@ namespace com.iris.common
 
 		IEnumerator Start()
 		{
+			/* REDO
 			while (KinectManager.Instance == null || !KinectManager.Instance.IsInitialized())
 			{
 				yield return null;
@@ -56,12 +60,14 @@ namespace com.iris.common
 
 			Instance = this;
 			kinectManager = KinectManager.Instance;
+			*/
 			/*
 			for (int i = 0; i < bHandRight.Length; i++)
 			{
 				bHandRight[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
 				bHandLeft[i].GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", tabColor[i]);
 			}*/
+			yield return null;
 
 			listTabs.Add(tab1);
 			listTabs.Add(tab2);

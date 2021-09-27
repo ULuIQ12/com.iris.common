@@ -33,9 +33,14 @@ public class BindDepthToSprite : MonoBehaviour
 
 					if (texDepth2D == null && texDepth != null)
 					{
-						texDepth2D = new Texture2D(texDepth.width, texDepth.height, TextureFormat.ARGB32, false);
+
+						//REDO 
+						//texDepth2D = new Texture2D(texDepth.width, texDepth.height, TextureFormat.ARGB32, false);
+						Debug.Log(texDepth.width + "/" + texDepth.height + "/" +texDepth.graphicsFormat);
+						texDepth2D = new Texture2D(texDepth.width, texDepth.height, texDepth.graphicsFormat, texDepth.mipmapCount, UnityEngine.Experimental.Rendering.TextureCreationFlags.MipChain);
 
 						depthImage.sprite = Sprite.Create(texDepth2D, rectDepth, pivotSprite);
+						//depthImage.sprite = Sprite.Create((Texture2D)texDepth, rectDepth, pivotSprite);
 						Vector2 depthImageScale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.DepthMap);
 						
 						depthImage.flipX = depthImageScale.x < 0;

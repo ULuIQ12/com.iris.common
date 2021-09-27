@@ -193,10 +193,11 @@ namespace com.iris.common
 
 		public static Texture GetDepthMap()
 		{
+			NeedDepthRefresh = true;
 			if (AreDatasAvailable() && OccManager != null)
 			{
 				//return OccManager.environmentDepthTexture;
-				NeedDepthRefresh = true;
+				
 				if( m_DepthTexture != null)
 					return m_DepthTexture;
 			}
@@ -215,9 +216,10 @@ namespace com.iris.common
 		public static Vector2 LastUsersMapDimensions = new Vector2();
 		public static Texture GetUsersMap()
 		{
-			if( AreDatasAvailable() && OccManager !=null )
+			NeedUserRefresh = true;
+			if ( AreDatasAvailable() && OccManager !=null )
 			{
-				NeedUserRefresh = true;
+				
 
 				if (m_UserTexture != null)
 				{
@@ -248,9 +250,10 @@ namespace com.iris.common
 
 		public static Texture GetColorMap()
 		{
+			NeedCamRefresh = true;
 			if (AreDatasAvailable() && CamManager != null)
 			{
-				NeedCamRefresh = true;
+				
 				if (m_CameraTexture != null)
 					return m_CameraTexture;
 			}

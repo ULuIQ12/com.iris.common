@@ -616,7 +616,9 @@ namespace com.iris.common
 					imageAcquired = OccManager.TryAcquireHumanStencilCpuImage(out cpuImage);
 					break;
 				case CpuImgType.Depth:
-					imageAcquired = OccManager.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
+					//imageAcquired = OccManager.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
+					//imageAcquired = OccManager.TryAcquireRawEnvironmentDepthCpuImage(out cpuImage);
+					imageAcquired = OccManager.TryAcquireEnvironmentDepthCpuImage(out cpuImage);
 					break;
 				case CpuImgType.Camera:
 				default:

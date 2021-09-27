@@ -39,7 +39,9 @@ namespace com.iris.common
 			{
 				if (BoneControl != null)
 				{
-					return BoneControl.GetBoneWorldPosition((int)IRISJoints.getARFJoint(joint));
+					Vector3 pos = BoneControl.GetBoneWorldPosition((int)IRISJoints.getARFJoint(joint));
+					pos.x *= -1f;
+					return pos;
 				}
 				else return Vector3.zero;
 

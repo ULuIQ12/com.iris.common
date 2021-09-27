@@ -4,18 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using ARFoundationRemote.Runtime;
 using JetBrains.Annotations;
 using UnityEngine.Assertions;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using XRCameraImageConversionParams = UnityEngine.XR.ARSubsystems.XRCpuImage.ConversionParams;
+using CameraImageTransformation = UnityEngine.XR.ARSubsystems.XRCpuImage.Transformation;
 
 namespace com.iris.common
 {
 	
-    public class CVInterface : MonoBehaviour
+	public class CVInterface : MonoBehaviour
     {
 		
+
+
 		public static CVInterface _Instance;
 		public static Texture2D EmptyTexture;
 
@@ -599,6 +602,14 @@ namespace com.iris.common
 			return TextureFormat.ARGB32;
 		}
 
+		public struct ConvertedCpuImage
+		{
+			public ConversionParamsSerializable conversionParams;
+			[NotNull] public byte[] bytes;
+		}
+
+		
+
 		private static void UpdateCpuImg(CpuImgType ImgType )
 		{
 			bool imageAcquired;
@@ -967,6 +978,125 @@ namespace com.iris.common
 			{
 				KManager.MapDepthPointToColorCoords(0, position, 0);
 			}*/
+		}
+
+		//////////////////////////////////////////
+	}
+
+	[Serializable]
+	public struct ConversionParamsSerializable
+	{
+		RectIntSerializable inputRect;
+		Vector2IntSerializable outputDimensions;
+		TextureFormat format;
+		bool mirrorX, mirrorY;
+
+
+		public static ConversionParamsSerializable Create(XRCameraImageConversionParams _)
+		{
+			return new ConversionParamsSerializable
+			{
+				inputRect = RectIntSerializable.Create(_.inputRect),
+				outputDimensions = Vector2IntSerializable.Create(_.outputDimensions),
+				format = _.outputFormat,
+				mirrorX = _.transformation.HasFlag(CameraImageTransformation.MirrorX),
+				mirrorY = _.transformation.HasFlag(CameraImageTransformation.MirrorY),
+			};
+		}
+
+		public XRCameraImageConversionParams Deserialize()
+		{
+			return new XRCameraImageConversionParams
+			{
+				transformation = GetTransformation(mirrorX, mirrorY),
+				inputRect = inputRect.Deserialize(),
+				outputDimensions = outputDimensions.Deserialize(),
+				outputFormat = format
+			};
+		}
+
+		/// CameraImageTransformation enum has changed between different AR Foundation versions
+		/// This method makes CameraImageTransformation compatible between different AR Foundation versions
+		public static CameraImageTransformation GetTransformation(bool mirrorX, bool mirrorY)
+		{
+			var result = CameraImageTransformation.None;
+			if (mirrorX)
+			{
+				result |= CameraImageTransformation.MirrorX;
+			}
+
+			if (mirrorY)
+			{
+				result |= CameraImageTransformation.MirrorY;
+			}
+
+			return result;
+		}
+
+		public override string ToString()
+		{
+			//return this.AllFieldsAndPropsToString();
+			return ToString();
+		}
+	}
+
+	[Serializable]
+	public struct RectIntSerializable
+	{
+		int x, y, w, h;
+
+		public static RectIntSerializable Create(RectInt _)
+		{
+			return new RectIntSerializable
+			{
+				x = _.x,
+				y = _.y,
+				w = _.width,
+				h = _.height
+			};
+		}
+
+		public RectInt Deserialize()
+		{
+			return new RectInt(x, y, w, h);
+		}
+	}
+
+
+	[Serializable]
+	public struct Vector2IntSerializable
+	{
+		int x, y;
+
+		public static Vector2IntSerializable Create(Vector2Int _)
+		{
+			return new Vector2IntSerializable
+			{
+				x = _.x,
+				y = _.y
+			};
+		}
+
+		public Vector2Int Deserialize()
+		{
+			return new Vector2Int(x, y);
+		}
+	}
+
+	public static class CpuImageExtensions
+	{
+		public static
+#if !ARFOUNDATION_4_0_2_OR_NEWER
+						unsafe
+#endif
+						void ConvertSync(this XRCpuImage cpuImage, XRCameraImageConversionParams conversionParams, NativeArray<byte> buffer)
+		{
+			cpuImage.Convert(conversionParams,
+#if ARFOUNDATION_4_0_2_OR_NEWER
+								buffer);
+#else
+							new IntPtr(Unity.Collections.LowLevel.Unsafe.NativeArrayUnsafeUtility.GetUnsafePtr(buffer)), buffer.Length);
+#endif
 		}
 	}
 }

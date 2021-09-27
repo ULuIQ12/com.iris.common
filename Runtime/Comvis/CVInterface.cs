@@ -219,19 +219,11 @@ namespace com.iris.common
 			{
 				NeedUserRefresh = true;
 
-				if( m_UserTexture != null)
-					return m_UserTexture;
-				//Texture t = OccManager.humanStencilTexture;
-
-				//return m_UserTexture;
-				/*
-				if (t != null)
+				if (m_UserTexture != null)
 				{
-					if (t.height > 100)
-						LastUsersMapDimensions.Set(t.width, t.height);
-					return t;
+					LastUsersMapDimensions.Set(m_UserTexture.width, m_UserTexture.height);
+					return m_UserTexture;
 				}
-				*/
 			}
 			// REDO -- DONE
 			/*

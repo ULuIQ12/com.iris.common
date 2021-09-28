@@ -40,9 +40,9 @@ namespace com.iris.common
 
 			LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 			Vector2 TextureSize = new Vector2(LastedDepthTexture.width, LastedDepthTexture.height);
-			if (TextureSize.y < 100)
+			if (TextureSize.y < 10)
 			{
-				if (CVInterface.LastUsersMapDimensions.y >= 100)
+				if (CVInterface.LastUsersMapDimensions.y >= 10)
 				{
 					TextureSize.Set(CVInterface.LastUsersMapDimensions.x, CVInterface.LastUsersMapDimensions.y);
 				}

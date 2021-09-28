@@ -46,26 +46,7 @@ namespace com.iris.common
 				else return Vector3.zero;
 
 			}
-			// REDO - DONE
-			/*
-			if (AreDatasAvailable())
-			{
-				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
 
-				Vector3 pos;
-				if (Application.platform == RuntimePlatform.IPhonePlayer)
-				{
-					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetInvertedKinectJoint(joint));
-					pos.x *= -1f;
-				}
-				else
-				{
-					pos = KinectManager.Instance.GetJointPosition(uid, IRISJoints.GetKinectJoint(joint));
-				}
-				//Debug.Log(joint + "/" + userIndex);
-				return pos;
-			}
-			*/
 			return Vector3.zero;
 		}
 
@@ -82,28 +63,6 @@ namespace com.iris.common
 
 			}
 
-			// REDO - DONE
-			/*
-			if (AreDatasAvailable())
-			{
-
-				
-				ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
-
-				Vector3 rot;
-				if (Application.platform == RuntimePlatform.IPhonePlayer)
-				{
-					rot = KinectManager.Instance.GetJointOrientation(uid, IRISJoints.GetInvertedKinectJoint(joint),true).eulerAngles;
-				
-				}
-				else
-				{
-					rot = KinectManager.Instance.GetJointOrientation(uid, IRISJoints.GetInvertedKinectJoint(joint), true).eulerAngles;
-				}
-				
-				return rot;
-			}
-			*/
 
 			return Vector3.zero;
 		}
@@ -121,15 +80,7 @@ namespace com.iris.common
 					}
 				}
 			}
-			// REDO - DONE
-			/*
-			if (!AreDatasAvailable())
-			{
-				return false;
-			}
-			ulong uid = KinectManager.Instance.GetUserIdByIndex(userIndex);
-			return KinectManager.Instance.IsJointTracked(uid, IRISJoints.GetKinectJoint(joint));
-			*/
+
 			return false;
 		}
 
@@ -140,11 +91,6 @@ namespace com.iris.common
 				return 0.0f;
 			}
 
-
-			// REDO - DONE
-			/*
-			ulong userID = _Instance.KManager.GetUserIdByIndex(userIndex);
-			*/
 			ulong userID = 0; 
 
 			_Instance.UpdateUserMetaBoneData(userID);
@@ -202,13 +148,7 @@ namespace com.iris.common
 				if( m_DepthTexture != null)
 					return m_DepthTexture;
 			}
-			// REDO - DONE
-			/*
-			if (AreDatasAvailable())
-			{
-				return KinectManager.Instance.GetDepthImageTex(0);
-			}
-			*/
+
 			if (EmptyTexture == null)
 				InitEmpty();
 
@@ -228,22 +168,7 @@ namespace com.iris.common
 					return m_UserTexture;
 				}
 			}
-			// REDO -- DONE
-			/*
-			if (AreDatasAvailable())
-			{
-				Texture t = KinectManager.Instance.GetUsersImageTex(0);
-				if( t == null)
-				{
-					if (EmptyTexture == null)
-						InitEmpty();
-					return EmptyTexture;
-				}
-				if( t.height > 100)
-					LastUsersMapDimensions.Set(t.width, t.height);
-				return t;
-			}
-			*/
+
 			if (EmptyTexture == null)
 				InitEmpty();
 			return EmptyTexture;
@@ -823,8 +748,7 @@ namespace com.iris.common
 			{
 				UsersMetaDatas[user] = new UserBonesMetaData();
 			}
-			// REDO -- done
-			
+
 			if( AreDatasAvailable() && BoneControl != null )
 			{
 				
@@ -870,7 +794,7 @@ namespace com.iris.common
 		private int NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
 		private void UpdateAllBonestexture()
 		{
-			// REDO
+
 			
 			//int userCount = KManager.GetUsersCount();
 			int userCount = GetUserCount();

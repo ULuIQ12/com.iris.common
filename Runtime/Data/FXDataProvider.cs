@@ -204,9 +204,19 @@ namespace com.iris.common
 			return CVInterface.GetAllBonesTexture();
 		}
 
+		public static Texture GetAllBones2DTexture()
+		{
+			return CVInterface.GetAllBones2DTexture();
+		}
+
 		public static Vector3 GetJointPosition(IRISJoints.Joints joint, int userIndex = 0)
 		{
 			return CVInterface.GetJointPos3D(joint, userIndex);
+		}
+
+		public static Vector2 GetJoint2DPosition(IRISJoints.Joints2D joint, int userIndex = 0)
+		{
+			return CVInterface.GetJointPos2D(joint, userIndex);
 		}
 
 		public static Vector3 GetJointRotation(IRISJoints.Joints joint, int userIndex = 0)

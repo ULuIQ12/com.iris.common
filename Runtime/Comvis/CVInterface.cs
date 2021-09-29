@@ -67,6 +67,24 @@ namespace com.iris.common
 			return Vector3.zero;
 		}
 
+		public static Vector2 GetJointPos2D(IRISJoints.Joints2D joint, int userIndex = 0) 
+		{
+			if( AreDatasAvailable() && BodyManager != null )
+			{
+				_Instance.Update2DBones();
+				try
+				{
+					Vector2 pos = Bones2D[(int)joint];
+					
+
+					return pos;
+				}
+				catch (Exception e) { Debug.Log(e); };
+			}
+			
+			return Vector2.zero;
+		}
+
 		public static bool IsJointTracked(IRISJoints.Joints joint, int userIndex = 0)
 		{
 			if (AreDatasAvailable() && BodyManager != null && BoneControl != null)
@@ -261,6 +279,18 @@ namespace com.iris.common
 			{
 				_Instance.UpdateAllBonestexture();
 				return _Instance.AllBonesTexture;
+			}
+			if (EmptyTexture == null)
+				InitEmpty();
+			return EmptyTexture;
+		}
+
+		public static Texture GetAllBones2DTexture()
+		{
+			if (AreDatasAvailable())
+			{
+				if( Bones2D != null)
+					return _Instance.AllBones2DTexture;
 			}
 			if (EmptyTexture == null)
 				InitEmpty();
@@ -792,6 +822,7 @@ namespace com.iris.common
 
 		private byte[] boneData;
 		private int NbBones = Enum.GetNames(typeof(IRISJoints.Joints)).Length;
+		
 		private void UpdateAllBonestexture()
 		{
 
@@ -890,6 +921,119 @@ namespace com.iris.common
 			AllBonesTexture.SetPixelData(boneData, 0);
 			AllBonesTexture.Apply();
 			
+		}
+
+
+		private static Vector2[] Bones2D;
+		private float lastBones2DUpdate = 0;
+		private void Update2DBones()
+		{
+			if (!AreDatasAvailable() || BodyManager == null || CamManager == null)
+				return;
+
+			if (Time.time - lastBones2DUpdate < (1f / 30f))
+				return;
+
+			var joints = BodyManager.GetHumanBodyPose2DJoints(Allocator.Temp);
+			if (!joints.IsCreated)
+			{
+				return;
+			}
+			
+			if (Bones2D == null || Bones2D.Length != joints.Length)
+			{
+				Bones2D = new Vector2[joints.Length];
+			}
+			Debug.Log("B2L =" + Bones2D.Length);
+			using (joints)
+			{
+				for (int i = joints.Length - 1; i >= 0; --i)
+				{
+					if (joints[i].parentIndex != -1)
+					{
+						Vector2 pos = joints[i].position;
+						if (float.IsNaN(pos.x) || float.IsNaN(pos.y))
+							pos = Vector2.zero;
+						pos.x = (pos.x - 0.5f) * -1f + 0.5f;
+
+						Bones2D[i] =pos;
+					}
+				}
+			}
+
+			Update2DBonesTexture();
+
+			lastBones2DUpdate = Time.time;
+
+		}
+
+		private Texture2D AllBones2DTexture;
+		private byte[] bone2DData;
+		
+
+		private void Update2DBonesTexture()
+		{
+			if (Bones2D == null)
+				return;
+
+			if (Bones2D.Length == 0)
+				return;
+
+			if (AllBones2DTexture == null || AllBones2DTexture.width != Bones2D.Length)
+			{
+				//NbBones = Enum.GetNames(typeof(KinectInterop.JointType)).Length;
+				AllBones2DTexture = new Texture2D(Bones2D.Length, 1, TextureFormat.RGBAFloat, false);
+				AllBones2DTexture.filterMode = FilterMode.Point;
+			}
+
+			var lineLenght = Bones2D.Length * 4 * 4;
+			var totalbytes = lineLenght ;
+			if (bone2DData == null || bone2DData.Length != totalbytes)
+				bone2DData = new byte[totalbytes];
+
+			int i = 0;
+			int j = 0;
+			int userDecal = 0;
+			for ( j=0;j< Bones2D.Length;j++)
+			{
+				Vector2 p = Bones2D[j];
+
+				float val;
+				byte[] biteval;
+
+				val = p.x;
+				biteval = BitConverter.GetBytes(val);
+				bone2DData[userDecal + i + 0] = biteval[0];
+				bone2DData[userDecal + i + 1] = biteval[1];
+				bone2DData[userDecal + i + 2] = biteval[2];
+				bone2DData[userDecal + i + 3] = biteval[3];
+
+				val = p.y;
+				biteval = BitConverter.GetBytes(val);
+				bone2DData[userDecal + i + 4] = biteval[0];
+				bone2DData[userDecal + i + 5] = biteval[1];
+				bone2DData[userDecal + i + 6] = biteval[2];
+				bone2DData[userDecal + i + 7] = biteval[3];
+
+				val = 0f;
+				biteval = BitConverter.GetBytes(val);
+				bone2DData[userDecal + i + 8] = biteval[0];
+				bone2DData[userDecal + i + 9] = biteval[1];
+				bone2DData[userDecal + i + 10] = biteval[2];
+				bone2DData[userDecal + i + 11] = biteval[3];
+
+				val = 1f;
+				biteval = BitConverter.GetBytes(val);
+				bone2DData[userDecal + i + 12] = biteval[0];
+				bone2DData[userDecal + i + 13] = biteval[1];
+				bone2DData[userDecal + i + 14] = biteval[2];
+				bone2DData[userDecal + i + 15] = biteval[3];
+
+				i += 16;
+			}
+
+			AllBones2DTexture.SetPixelData(bone2DData, 0);
+			AllBones2DTexture.Apply();
 		}
 
 		private void TextureToScreenCoord( Vector2 position )

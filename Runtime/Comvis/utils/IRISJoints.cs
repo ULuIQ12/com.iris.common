@@ -49,6 +49,28 @@ namespace com.iris.common
 			ThumbRight = 31,
 		}
 
+		public enum Joints2D
+		{
+			Invalid = -1,
+			Head = 0, // parent: Neck1 [1]
+			Neck1 = 1, // parent: Root [16]
+			RightShoulder1 = 2, // parent: Neck1 [1]
+			RightForearm = 3, // parent: RightShoulder1 [2]
+			RightHand = 4, // parent: RightForearm [3]
+			LeftShoulder1 = 5, // parent: Neck1 [1]
+			LeftForearm = 6, // parent: LeftShoulder1 [5]
+			LeftHand = 7, // parent: LeftForearm [6]
+			RightUpLeg = 8, // parent: Root [16]
+			RightLeg = 9, // parent: RightUpLeg [8]
+			RightFoot = 10, // parent: RightLeg [9]
+			LeftUpLeg = 11, // parent: Root [16]
+			LeftLeg = 12, // parent: LeftUpLeg [11]
+			LeftFoot = 13, // parent: LeftLeg [12]
+			RightEye = 14, // parent: Head [0]
+			LeftEye = 15, // parent: Head [0]
+			Root = 16, // parent: <none> [-1]
+		}
+
 		// 3D joint skeleton
 		public enum JointIndices3D
 		{

@@ -79,7 +79,7 @@ namespace com.iris.common
 
 					return pos;
 				}
-				catch (Exception e) { Debug.Log(e); };
+				catch (Exception e) { return Vector2.zero };
 			}
 			
 			return Vector2.zero;
@@ -296,7 +296,7 @@ namespace com.iris.common
 		{
 			if (AreDatasAvailable())
 			{
-				_Instance.UpdateAllBonestexture();
+				_Instance.Update2DBones();
 				return _Instance.AllBonesTexture;
 			}
 			if (EmptyTexture == null)

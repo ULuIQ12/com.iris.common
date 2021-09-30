@@ -79,7 +79,7 @@ namespace com.iris.common
 
 					return pos;
 				}
-				catch (Exception e) { return Vector2.zero };
+				catch (Exception e) { return Vector2.zero; };
 			}
 			
 			return Vector2.zero;

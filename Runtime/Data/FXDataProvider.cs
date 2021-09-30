@@ -24,7 +24,9 @@ namespace com.iris.common
 			PelvisToLeftHand,
 			PelvisToRightHand,
 			HandsToPelvisFactor,
-			UserHorizontalPosition,
+			UserHorizontalPosition,			
+
+			AmplitudeSetting,
 
 			HandsHorizontalSeparation2D,
 			HandsVerticalSeparation2D,
@@ -32,8 +34,6 @@ namespace com.iris.common
 			PelvisToRightHand2D,
 			HandsToPelvisFactor2D,
 			UserHorizontalPosition2D,
-
-			AmplitudeSetting
 		}
 
 		public enum INT_DATA_TYPE

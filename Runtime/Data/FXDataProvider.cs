@@ -11,6 +11,7 @@ namespace com.iris.common
 		public enum BOOL_DATA_TYPE
 		{
 			HandsAboveElbows, 
+			HandsAboveElbows2D, 
 		}
 
 		public enum FLOAT_DATA_TYPE
@@ -23,7 +24,14 @@ namespace com.iris.common
 			PelvisToLeftHand,
 			PelvisToRightHand,
 			HandsToPelvisFactor,
-			UserHorizontalPosition, 
+			UserHorizontalPosition,
+
+			HandsHorizontalSeparation2D,
+			HandsVerticalSeparation2D,
+			PelvisToLeftHand2D,
+			PelvisToRightHand2D,
+			HandsToPelvisFactor2D,
+			UserHorizontalPosition2D,
 
 			AmplitudeSetting
 		}
@@ -85,6 +93,7 @@ namespace com.iris.common
 					return AudioProcessor.GetBeat();
 				case FLOAT_DATA_TYPE.AudioLevel:
 					return AudioProcessor.GetLevel();
+
 				case FLOAT_DATA_TYPE.HandsHorizontalSeparation:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsHorizontalSeparation, userIndex);
 				case FLOAT_DATA_TYPE.HandsVerticalSeparation:
@@ -97,6 +106,20 @@ namespace com.iris.common
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToLeftHand, userIndex);
 				case FLOAT_DATA_TYPE.PelvisToRightHand:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToRightHand, userIndex);
+
+				case FLOAT_DATA_TYPE.HandsHorizontalSeparation2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsHorizontalSeparation2D, userIndex);
+				case FLOAT_DATA_TYPE.HandsVerticalSeparation2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsVerticalSeparation2D);
+				case FLOAT_DATA_TYPE.HandsToPelvisFactor2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.HandsToPelvisFactor2D);
+				case FLOAT_DATA_TYPE.UserHorizontalPosition2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.UserHorizontalPosition2D);
+				case FLOAT_DATA_TYPE.PelvisToLeftHand2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToLeftHand2D, userIndex);
+				case FLOAT_DATA_TYPE.PelvisToRightHand2D:
+					return CVInterface.GetFloat(FLOAT_DATA_TYPE.PelvisToRightHand2D, userIndex);
+
 				case FLOAT_DATA_TYPE.AmplitudeSetting:
 					return CVInterface.GetFloat(FLOAT_DATA_TYPE.AmplitudeSetting);
 				default:

@@ -112,6 +112,7 @@ namespace com.iris.common
 			ulong userID = 0; 
 
 			_Instance.UpdateUserMetaBoneData(userID);
+			_Instance.UpdateUserMetaBoneData2D(userID);
 
 			switch (type)
 			{
@@ -127,6 +128,21 @@ namespace com.iris.common
 					return _Instance.UsersMetaDatas[userID].PelvisToLeftHand;
 				case FXDataProvider.FLOAT_DATA_TYPE.PelvisToRightHand:
 					return _Instance.UsersMetaDatas[userID].PelvisToRightHand;
+
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsHorizontalSeparation2D:
+					return _Instance.UsersMetaDatas2D[userID].HandsHorizontalSeparation;
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsToPelvisFactor2D:
+					return _Instance.UsersMetaDatas2D[userID].HandsToPelvisFactor;
+				case FXDataProvider.FLOAT_DATA_TYPE.HandsVerticalSeparation2D:
+					return _Instance.UsersMetaDatas2D[userID].HandsVerticalSeparation;
+				case FXDataProvider.FLOAT_DATA_TYPE.UserHorizontalPosition2D:
+					return _Instance.UsersMetaDatas2D[userID].UserHorizontalPosition;
+				case FXDataProvider.FLOAT_DATA_TYPE.PelvisToLeftHand2D:
+					return _Instance.UsersMetaDatas2D[userID].PelvisToLeftHand;
+				case FXDataProvider.FLOAT_DATA_TYPE.PelvisToRightHand2D:
+					return _Instance.UsersMetaDatas2D[userID].PelvisToRightHand;
+
+
 				case FXDataProvider.FLOAT_DATA_TYPE.AudioBeat:
 					return AudioProcessor.GetBeat();
 				case FXDataProvider.FLOAT_DATA_TYPE.AudioLevel:
@@ -145,10 +161,13 @@ namespace com.iris.common
 				return false;
 
 			_Instance.UpdateUserMetaBoneData(userID);
+			_Instance.UpdateUserMetaBoneData2D(userID);
 			switch( type)
 			{
 				case FXDataProvider.BOOL_DATA_TYPE.HandsAboveElbows:
 					return _Instance.UsersMetaDatas[userID].HandsAboveElbows;
+				case FXDataProvider.BOOL_DATA_TYPE.HandsAboveElbows2D:
+					return _Instance.UsersMetaDatas2D[userID].HandsAboveElbows;
 				default:
 					return false;
 
@@ -400,6 +419,7 @@ namespace com.iris.common
 		}
 
 		private Dictionary<ulong, UserBonesMetaData> UsersMetaDatas = new Dictionary<ulong, UserBonesMetaData>();
+		private Dictionary<ulong, UserBonesMetaData> UsersMetaDatas2D = new Dictionary<ulong, UserBonesMetaData>();
 
 		public void Awake()
 		{
@@ -816,6 +836,67 @@ namespace com.iris.common
 				}
 
 				UsersMetaDatas[user].lastUpdateTime = Time.time;
+			}
+		}
+
+		private void UpdateUserMetaBoneData2D(ulong user)
+		{
+			if (!UsersMetaDatas2D.ContainsKey(user))
+			{
+				UsersMetaDatas2D[user] = new UserBonesMetaData();
+			}
+
+			if (AreDatasAvailable() && Bones2D != null)
+			{
+
+				if ((Time.time - UsersMetaDatas2D[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
+					return;
+
+
+				/*
+				Vector3 HandRightPosition = GetJointPos3D(IRISJoints.Joints.HandRight);
+				Vector3 HandLeftPosition = GetJointPos3D(IRISJoints.Joints.HandLeft);
+
+				Vector3 ElbowRightPosition = GetJointPos3D(IRISJoints.Joints.ElbowRight);
+				Vector3 ElbowLeftPosition = GetJointPos3D(IRISJoints.Joints.ElbowLeft);
+
+				Vector3 PelvisPosition = GetJointPos3D(IRISJoints.Joints.Pelvis);
+				*/
+
+				Debug.Log("pouet");
+
+				Vector2 HandRightPosition = GetJointPos2D(IRISJoints.Joints2D.RightHand);
+				Vector2 HandLeftPosition = GetJointPos2D(IRISJoints.Joints2D.LeftHand);
+
+				Vector2 ElbowRightPosition = GetJointPos2D(IRISJoints.Joints2D.RightForearm);
+				Vector2 ElbowLeftPosition = GetJointPos2D(IRISJoints.Joints2D.LeftForearm);
+
+				Vector2 PelvisPosition = GetJointPos2D(IRISJoints.Joints2D.Root);
+				
+
+				UsersMetaDatas2D[user].UserHorizontalPosition = HandRightPosition.x + (HandLeftPosition.x - HandRightPosition.x) / 2f;// KManager.GetJointPosition(user, KinectInterop.JointType.SpineNaval).x;
+				UsersMetaDatas2D[user].HandsHorizontalSeparation = Mathf.Abs(HandRightPosition.x - HandLeftPosition.x);
+				UsersMetaDatas2D[user].HandsVerticalSeparation = HandRightPosition.y - HandLeftPosition.y;
+
+
+				float distHandTopRight = Math.Abs(HandRightPosition.y - PelvisPosition.y);
+				float distHandTopLeft = Math.Abs(HandLeftPosition.y - PelvisPosition.y);
+
+				UsersMetaDatas2D[user].PelvisToLeftHand = distHandTopLeft;
+				UsersMetaDatas2D[user].PelvisToRightHand = distHandTopRight;
+
+				UsersMetaDatas2D[user].HandsToPelvisFactor = distHandTopRight + distHandTopLeft;
+
+				if (ElbowLeftPosition.y < HandLeftPosition.y && ElbowRightPosition.y < HandRightPosition.y)
+				{
+					UsersMetaDatas2D[user].HandsAboveElbows = true;
+				}
+				else
+				{
+					UsersMetaDatas2D[user].HandsAboveElbows = false;
+				}
+
+				UsersMetaDatas2D[user].lastUpdateTime = Time.time;
 			}
 		}
 

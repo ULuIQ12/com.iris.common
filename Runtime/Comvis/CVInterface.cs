@@ -308,8 +308,11 @@ namespace com.iris.common
 		{
 			if (AreDatasAvailable())
 			{
-				if( Bones2D != null)
+				if (Bones2D != null)
+				{
+					_Instance.Update2DBones();
 					return _Instance.AllBones2DTexture;
+				}
 			}
 			if (EmptyTexture == null)
 				InitEmpty();

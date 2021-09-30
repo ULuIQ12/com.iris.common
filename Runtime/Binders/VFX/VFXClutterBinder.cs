@@ -28,11 +28,16 @@ namespace com.iris.common
 		[VFXPropertyBinding("Float"), SerializeField]
 		protected ExposedProperty DeltaHorizontalProperty = "DeltaHorizontalProperty";
 
+		public bool BindClutterActivity = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty ActivityProperty = "PercentActivityProperty";
+
 		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
 		public int NbSamplesHeight = 64;
 		public int totalSamples;
 		public bool[] boolActive;
+		public bool[] oldBoolActive;
 		private Texture LastedDepthTexture;
 
 		public float countLeft = 0;
@@ -42,6 +47,7 @@ namespace com.iris.common
 		public float minLeft = 0;
 		public float maxRight = 0;
 		public float percent;
+		public float countActivity = 0;
 
 
 		public override bool IsValid(VisualEffect component)
@@ -71,6 +77,11 @@ namespace com.iris.common
 					valid = false;
 			}
 
+			if( BindClutterActivity )
+			{
+				if (!component.HasFloat(ActivityProperty))
+					valid = false;
+			}
 			
 			return valid;
 		}
@@ -85,7 +96,7 @@ namespace com.iris.common
 			
 			int i = 0;
 			int j = 0;
-			countTop = countDown = countLeft = countRight = 0;
+			countTop = countDown = countLeft = countRight = countActivity = 0;
 			minLeft = NbSamplesWidth;
 			maxRight = 0;
 			totalSamples = NbSamplesWidth * NbSamplesHeight;
@@ -125,12 +136,27 @@ namespace com.iris.common
 						{
 							if( i < minLeft) minLeft = i;
 							if( i > maxRight) maxRight = i;
-						}						
+						}	
+						
 					} else {
 						boolActive[index] = false;
 					}
+
+					if(oldBoolActive != null && oldBoolActive.Length >0 )
+						if(oldBoolActive[index] != boolActive[index] )
+							countActivity += 1;
+						
+
 				}
 			}
+			oldBoolActive = new bool[totalSamples];
+			System.Array.Copy(boolActive, oldBoolActive, totalSamples);
+			//oldBoolActive = (bool[]) boolActive.Clone();
+			/*if(oldBoolActive != null)
+			{
+				int rand = Random.Range(0, totalSamples-1);
+				Debug.Log( "coucou " + rand + "   " + boolActive[rand] + "   " + oldBoolActive[rand]);
+			}*/
 			
 			float countTotalActive;
 			percent = 0.0f;
@@ -194,6 +220,14 @@ namespace com.iris.common
 				
 				component.SetFloat( DeltaHorizontalProperty, percent );
 			}
+
+			if(BindClutterActivity)
+			{
+				percent = countActivity/totalSamples;								
+				component.SetFloat( ActivityProperty, percent );
+			}
+
+			
 		}
 
 		private Texture2D depthT2D;

@@ -309,7 +309,7 @@ namespace com.iris.common
 			if (AreDatasAvailable())
 			{
 				_Instance.Update2DBones();
-				if (Bones2D != null)
+				if (Bones2D != null && _Instance.AllBones2DTexture != null)
 				{
 					
 					return _Instance.AllBones2DTexture;
@@ -867,7 +867,6 @@ namespace com.iris.common
 				Vector3 PelvisPosition = GetJointPos3D(IRISJoints.Joints.Pelvis);
 				*/
 
-				Debug.Log("pouet");
 
 				Vector2 HandRightPosition = GetJointPos2D(IRISJoints.Joints2D.RightHand);
 				Vector2 HandLeftPosition = GetJointPos2D(IRISJoints.Joints2D.LeftHand);

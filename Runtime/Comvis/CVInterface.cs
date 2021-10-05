@@ -266,7 +266,7 @@ namespace com.iris.common
 			return EmptyTexture;
 		}
 
-		private static Vector2 DefaultTextureMirrorScale = new Vector2(-1f, -1f);
+		private static Vector2 DefaultTextureMirrorScale = new Vector2(1f, 1f);
 		public static Vector2 GetTextureScale(FXDataProvider.MAP_DATA_TYPE type)
 		{
 
@@ -599,19 +599,19 @@ namespace com.iris.common
 		{
 			bool imageAcquired;
 			XRCpuImage cpuImage;
-
+			
 			switch(currentOrientation)
 			{
 				case DeviceOrientation.LandscapeLeft:
-					CpuImgMirrorY = true;
+					CpuImgMirrorY = false;
 					break;
 				case DeviceOrientation.LandscapeRight:
 				default:
-					CpuImgMirrorY = false;
+					CpuImgMirrorY = true;
 					break;
 
 			}
-
+			
 			switch (ImgType)
 			{
 				case CpuImgType.Users:

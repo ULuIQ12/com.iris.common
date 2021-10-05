@@ -457,23 +457,19 @@ namespace com.iris.common
 		{
 			Initialized = false;
 
-			//if( dataRequest == null)
+			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+				CpuTextureScale = 0.3f;
+			else
+				CpuTextureScale = 1f;
 
-
-			/*
-			ManagerGO = Instantiate(Resources.Load<GameObject>(KINECT_PREFAB), transform);
-			ManagerGO.name = "KinectManager";
-			*/
 			ManagerGO = Instantiate(Resources.Load<GameObject>(ARF_INTERFACE_PREFAB), transform);
 			ManagerGO.name = "ARFInterface";
-				//KManager = ManagerGO.GetComponent<KinectManager>();
 			Debug.Log("CVInterface: Init platform " + Application.platform + "/ data req = " + dataRequest);
 			
 			LastResquestedData = dataRequest;
 			Session = ManagerGO.GetComponent<ARSession>();
 			Session.enabled = false;
-			CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();
-			//CamBG = ManagerGO.GetComponentInChildren<ARCameraBackground>();			
+			CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();		
 			
 			if (dataRequest == ExpSettings.DATA_REQUESTED.Body)
 			{
@@ -534,7 +530,7 @@ namespace com.iris.common
 		private static bool CpuImgMirrorX = true;
 		private static bool CpuImgMirrorY = true;
 
-		private static float CpuTextureScale = 0.3f; // a régler sur build
+		private static float CpuTextureScale = 0.3f;
 
 		private static IEnumerator ImgUpdate()
 		{
@@ -591,14 +587,15 @@ namespace com.iris.common
 		{
 			bool imageAcquired;
 			XRCpuImage cpuImage;
+
+			
+
 			switch (ImgType)
 			{
 				case CpuImgType.Users:
 					imageAcquired = OccManager.TryAcquireHumanStencilCpuImage(out cpuImage);
 					break;
 				case CpuImgType.Depth:
-					//imageAcquired = OccManager.TryAcquireEnvironmentDepthConfidenceCpuImage(out cpuImage);
-					//imageAcquired = OccManager.TryAcquireRawEnvironmentDepthCpuImage(out cpuImage);
 					imageAcquired = OccManager.TryAcquireEnvironmentDepthCpuImage(out cpuImage);
 					break;
 				case CpuImgType.Camera:

@@ -5,7 +5,7 @@ using com.iris.common;
 
 namespace com.iris.common
 {
-	
+
 	public class ColliderFromUser : MonoBehaviour
 	{
 		public Camera ExperienceCamera;
@@ -20,7 +20,7 @@ namespace com.iris.common
 		public bool visualDebugOn = true;
 		public bool Stretch = false;
 		private bool IsStarted = false;
-		private bool CollidersCreated = false;
+		public bool CollidersCreated = false;
 
 		public IEnumerator Start()
 		{
@@ -37,12 +37,12 @@ namespace com.iris.common
 			if (!IsStarted)
 				return;
 
-
 			LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 			Vector2 TextureSize = new Vector2(LastedDepthTexture.width, LastedDepthTexture.height);
-			if( TextureSize.y < 100)
+
+			if (TextureSize.y < 10)
 			{
-				if( CVInterface.LastUsersMapDimensions.y >=100)
+				if (CVInterface.LastUsersMapDimensions.y >= 10)
 				{
 					TextureSize.Set(CVInterface.LastUsersMapDimensions.x, CVInterface.LastUsersMapDimensions.y);
 				}
@@ -55,9 +55,9 @@ namespace com.iris.common
 
 
 			float worldScreenHeight;
-			if( ExperienceCamera == null )
+			if (ExperienceCamera == null)
 				worldScreenHeight = 10f;
-			else 
+			else
 				worldScreenHeight = ExperienceCamera.orthographicSize * 2f;
 
 			float textHeight = TextureSize.y;
@@ -75,7 +75,7 @@ namespace com.iris.common
 				scaleY = worldScreenHeight / textHeight;
 				scaleX = scaleY * (TextureSize.x / TextureSize.y);
 			}
-			
+
 			SpawnZone = new Rect(-TextureSize.x / 2 * scaleX, -TextureSize.y / 2 * scaleY, TextureSize.x * scaleX, TextureSize.y * scaleY);
 
 			int totalSamples = NbSamplesWidth * NbSamplesHeight;
@@ -86,9 +86,9 @@ namespace com.iris.common
 			//Vector3 lowerRight = new Vector3(Screen.width, Screen.height, ExperienceCamera.transform.position.z);
 			int i = 0;
 			int j = 0;
-			for ( j=0;j<NbSamplesHeight;j++)
+			for (j = 0; j < NbSamplesHeight; j++)
 			{
-				for( i=0;i<NbSamplesWidth;i++)
+				for (i = 0; i < NbSamplesWidth; i++)
 				{
 					int index = i * NbSamplesWidth + j;
 					GameObject go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
@@ -101,19 +101,19 @@ namespace com.iris.common
 					gameObjectsRigidBody.isKinematic = true;
 
 
-					if( !visualDebugOn)
+					if (!visualDebugOn)
 					{
 						go.GetComponent<MeshRenderer>().enabled = false;
 					}
 					go.SetActive(false);
 
-					
+
 					go.transform.parent = transform;
 					float posx = SpawnZone.x + (float)i / (float)NbSamplesWidth * (float)SpawnZone.width;
 					float posy = SpawnZone.y + (float)j / (float)NbSamplesHeight * (float)SpawnZone.height;
 
 					go.transform.localPosition = new Vector3(posx, posy, 0f);
-					ColliderGOs[index] = go;				
+					ColliderGOs[index] = go;
 				}
 			}
 			CollidersCreated = true;
@@ -133,7 +133,7 @@ namespace com.iris.common
 					return;
 				Texture2D t2d = (Texture2D)LastedDepthTexture;// TextureToTexture2D(LastedDepthTexture);
 				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.UserMap);
-				
+
 				int i = 0;
 				int j = 0;
 				for (j = 0; j < NbSamplesHeight; j++)
@@ -142,18 +142,19 @@ namespace com.iris.common
 					{
 						int index = i * NbSamplesWidth + j;
 						int px;
-						if( tscale.x > 0 )
+						if (tscale.x > 0)
 							px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 						else
 							px = (LastedDepthTexture.width - 1) - Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 						int py = 0;
-						if( tscale.y > 0)
+						if (tscale.y > 0)
 							py = Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
 						else
 							py = (LastedDepthTexture.height - 1) - Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
 
 						Color col = t2d.GetPixel(px, py);
-						if( col.r + col.g + col.b > 0 )
+						//if( col.r + col.g + col.b > 0 )
+						if (col.r > 0)
 						{
 							ColliderGOs[index].SetActive(true);
 						}
@@ -173,9 +174,9 @@ namespace com.iris.common
 		private Texture2D depthT2D;
 		private Texture2D TextureToTexture2D(Texture texture)
 		{
-			if( depthT2D == null || depthT2D.width != texture.width || depthT2D.height != texture.height)
+			if (depthT2D == null || depthT2D.width != texture.width || depthT2D.height != texture.height)
 				depthT2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
-			
+
 			RenderTexture currentRT = RenderTexture.active;
 			RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
 			Graphics.Blit(texture, renderTexture);
@@ -191,12 +192,12 @@ namespace com.iris.common
 
 		private IEnumerator WaitForDepthImage()
 		{
-			
+
 			bool isReady = false;
 			while (!isReady)
 			{
 				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
-				if (LastedDepthTexture == CVInterface.EmptyTexture || LastedDepthTexture.width < 100f)
+				if (LastedDepthTexture == CVInterface.EmptyTexture || LastedDepthTexture.width < 10f)
 					yield return null;
 				else
 					isReady = true;

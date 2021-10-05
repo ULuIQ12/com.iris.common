@@ -5,10 +5,10 @@ using com.iris.common;
 
 namespace com.iris.common
 {
-		
+
 	public class ManageFlowerUser : MonoBehaviour
 	{
-		
+
 		public static ManageFlowerUser Instance;
 
 		public GameObject GOColliderGOs;
@@ -22,7 +22,7 @@ namespace com.iris.common
 
 		public Transform BasketTarget;
 
-		
+
 
 		Vector3[] stockPos;
 		List<GameObject> ListFlower = new List<GameObject>();
@@ -40,17 +40,25 @@ namespace com.iris.common
 		private IEnumerator WaitForFrame()
 		{
 			yield return new WaitForSeconds(0.5f);
-			while ( !CVInterface.AreDatasAvailable() )
+			while (!CVInterface.AreDatasAvailable())
+			{
+
+				yield return null;
+			}
+
+			while (!GOColliderGOs.GetComponent<ColliderFromUser>().CollidersCreated)
 			{
 				yield return null;
 			}
+
+
 
 			Init();
 		}
 
 		private void Init()
 		{
-			
+
 			Instance = this;
 
 			for (int i = 0; i < goFlowers.transform.childCount; i++)
@@ -65,8 +73,10 @@ namespace com.iris.common
 			htLeft.OnHandCollide += OnHandCollide;
 			HandTrigger htRight = RightHand.gameObject.GetComponent<HandTrigger>();
 			htRight.OnHandCollide += OnHandCollide;
-			
-			foreach(GameObject ColliderGO in GOColliderGOs.GetComponent<ColliderFromUser>().ColliderGOs)
+
+
+
+			foreach (GameObject ColliderGO in GOColliderGOs.GetComponent<ColliderFromUser>().ColliderGOs)
 			{
 				HandTrigger htCollider = ColliderGO.gameObject.GetComponent<HandTrigger>();
 				htCollider.OnHandCollide += OnHandCollide;
@@ -78,7 +88,7 @@ namespace com.iris.common
 		{
 			try
 			{
-				foreach(GameObject ColliderGO in GOColliderGOs.GetComponent<ColliderFromUser>().ColliderGOs)
+				foreach (GameObject ColliderGO in GOColliderGOs.GetComponent<ColliderFromUser>().ColliderGOs)
 				{
 					HandTrigger htCollider = ColliderGO.gameObject.GetComponent<HandTrigger>();
 					htCollider.OnHandCollide -= OnHandCollide;
@@ -192,7 +202,7 @@ namespace com.iris.common
 		Vector3 GetNewRandValueNotInsideTab(int i)
 		{
 			bool bAlreadyIn = false;
-			float amp = Remap(0f, 1f, 0.5f, 1.0f, FXDataProvider.GetFloat(FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting) );
+			float amp = Remap(0f, 1f, 0.5f, 1.0f, FXDataProvider.GetFloat(FXDataProvider.FLOAT_DATA_TYPE.AmplitudeSetting));
 
 			float randX = Random.Range(-5.5f * amp, 5.5f * amp);
 			float randY = Random.Range(-2f * amp, 4f * amp);
@@ -219,7 +229,7 @@ namespace com.iris.common
 			return stockPos[i];
 		}
 
-		private float Remap(float InputLow, float InputHigh, float OutputLow, float OutputHigh, float value )
+		private float Remap(float InputLow, float InputHigh, float OutputLow, float OutputHigh, float value)
 		{
 			value = Mathf.InverseLerp(InputLow, InputHigh, value);
 			value = Mathf.Lerp(OutputLow, OutputHigh, value);

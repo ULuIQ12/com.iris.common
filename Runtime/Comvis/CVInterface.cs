@@ -603,11 +603,11 @@ namespace com.iris.common
 			switch(currentOrientation)
 			{
 				case DeviceOrientation.LandscapeLeft:
-					CpuImgMirrorY = false;
+					CpuImgMirrorY = true;
 					break;
 				case DeviceOrientation.LandscapeRight:
 				default:
-					CpuImgMirrorY = true;
+					CpuImgMirrorY = false;
 					break;
 
 			}

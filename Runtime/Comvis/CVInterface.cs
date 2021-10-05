@@ -534,11 +534,18 @@ namespace com.iris.common
 
 		private static float CpuTextureScale = 0.3f;
 
+		private static DeviceOrientation currentOrientation = DeviceOrientation.Unknown;
+
 		private static IEnumerator ImgUpdate()
 		{
 
 			while (true)
 			{
+				if (Screen.deviceOrientation != currentOrientation)
+					currentOrientation = Input.deviceOrientation;
+
+				Debug.Log(currentOrientation);
+
 				if (NeedCamRefresh)
 				{
 					UpdateCpuImg(CpuImgType.Camera);
@@ -556,6 +563,9 @@ namespace com.iris.common
 					UpdateCpuImg(CpuImgType.Depth);
 					NeedDepthRefresh = false;
 				}
+
+				
+
 				yield return null;
 			}
 		}
@@ -590,7 +600,17 @@ namespace com.iris.common
 			bool imageAcquired;
 			XRCpuImage cpuImage;
 
-			
+			switch(currentOrientation)
+			{
+				case DeviceOrientation.LandscapeLeft:
+					CpuImgMirrorY = false;
+					break;
+				case DeviceOrientation.LandscapeRight:
+				default:
+					CpuImgMirrorY = true;
+					break;
+
+			}
 
 			switch (ImgType)
 			{

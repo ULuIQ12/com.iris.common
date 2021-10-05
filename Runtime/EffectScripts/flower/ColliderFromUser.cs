@@ -131,7 +131,7 @@ namespace com.iris.common
 				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				if (LastedDepthTexture == CVInterface.EmptyTexture)
 					return;
-				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
+				Texture2D t2d = (Texture2D)LastedDepthTexture;// TextureToTexture2D(LastedDepthTexture);
 				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				
 				int i = 0;
@@ -196,7 +196,7 @@ namespace com.iris.common
 			while (!isReady)
 			{
 				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
-				if (LastedDepthTexture == CVInterface.EmptyTexture)
+				if (LastedDepthTexture == CVInterface.EmptyTexture || LastedDepthTexture.width < 100f)
 					yield return null;
 				else
 					isReady = true;

@@ -541,7 +541,7 @@ namespace com.iris.common
 
 			while (true)
 			{
-				if (Screen.deviceOrientation != currentOrientation)
+				if (Input.deviceOrientation != currentOrientation)
 					currentOrientation = Input.deviceOrientation;
 
 				Debug.Log(currentOrientation);

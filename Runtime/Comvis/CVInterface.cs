@@ -266,6 +266,7 @@ namespace com.iris.common
 			return EmptyTexture;
 		}
 
+		private static Vector2 DefaultTextureMirrorScale = new Vector2(1f, -1f);
 		public static Vector2 GetTextureScale(FXDataProvider.MAP_DATA_TYPE type)
 		{
 
@@ -274,6 +275,7 @@ namespace com.iris.common
 				return Vector2.one; 
 			}
 
+			
 			switch (type)
 			{
 				// REDO
@@ -288,7 +290,7 @@ namespace com.iris.common
 				case FXDataProvider.MAP_DATA_TYPE.VertexPointCloud:
 				*/
 			default:
-					return Vector2.one;
+					return DefaultTextureMirrorScale;
 			}
 		}
 

@@ -1051,7 +1051,7 @@ namespace com.iris.common
 			{
 				Bones2D = new Vector2[joints.Length];
 			}
-			Debug.Log("B2L =" + Bones2D.Length);
+			//Debug.Log("B2L =" + Bones2D.Length);
 			using (joints)
 			{
 				for (int i = joints.Length - 1; i >= 0; --i)

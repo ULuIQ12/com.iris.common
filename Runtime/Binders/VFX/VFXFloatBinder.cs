@@ -17,6 +17,9 @@ namespace com.iris.common
 
 		public FXDataProvider.FLOAT_DATA_TYPE FloatToBind = FXDataProvider.FLOAT_DATA_TYPE.AudioBeat;
 
+		public float Smoothing = 1f;
+		private float PreviousValue = 0f;
+
 		public override bool IsValid(VisualEffect component)
 		{
 			return component.HasFloat(FloatProperty);
@@ -24,7 +27,11 @@ namespace com.iris.common
 
 		public override void UpdateBinding(VisualEffect component)
 		{
-			component.SetFloat(FloatProperty, FXDataProvider.GetFloat(FloatToBind));
+			float Val = FXDataProvider.GetFloat(FloatToBind);
+			Val = Mathf.Lerp(PreviousValue, Val, Smoothing);
+			component.SetFloat(FloatProperty, Val );
+
+			PreviousValue = Val;
 		}			
 
 		public override string ToString()

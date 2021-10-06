@@ -95,6 +95,17 @@ namespace com.iris.common
 
 		void Update()
 		{
+			if (!CVInterface.AreDatasAvailable())
+				return;
+
+			Vector3 leftpos = FXDataProvider.GetJoint2DPosition(IRISJoints.Joints2D.LeftHand);
+			leftpos.z = 2f;
+			bHandLeft[0].transform.position = foregroundCamera.ViewportToWorldPoint(leftpos);
+
+			Vector3 rightpos = FXDataProvider.GetJoint2DPosition(IRISJoints.Joints2D.LeftHand);
+			rightpos.z = 2f;
+			bHandRight[0].transform.position = foregroundCamera.ViewportToWorldPoint(rightpos);
+
 			/*
 			if (kinectManager && kinectManager.IsInitialized() && kinectManager.GetUsersCount() > 0)
 			{

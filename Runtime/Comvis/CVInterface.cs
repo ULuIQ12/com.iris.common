@@ -79,7 +79,7 @@ namespace com.iris.common
 
 					return pos;
 				}
-				catch (Exception e) { return Vector2.zero; };
+				catch (Exception e) { Debug.Log(e); return Vector2.zero; };
 			}
 			
 			return Vector2.zero;
@@ -1060,7 +1060,10 @@ namespace com.iris.common
 					{
 						Vector2 pos = joints[i].position;
 						if (float.IsNaN(pos.x) || float.IsNaN(pos.y))
+						{
 							pos = Vector2.zero;
+							continue;
+						}
 						pos.x = (pos.x - 0.5f) * -1f + 0.5f;
 
 						Bones2D[i] =pos;

@@ -9,7 +9,8 @@ namespace com.iris.common
 	{
 
 		public bool FlipLR = false;
-
+		public Camera ProjectionCamera;
+		public float ProjectionDistance = 2f;
 		public MeshFilter MiddleMF;
 		private Mesh MiddleMesh;
 
@@ -87,18 +88,25 @@ namespace com.iris.common
 			{
 				//if (CVInterface.IsJointTracked(couples.Key))
 				//{
-					Vector3 p = CVInterface.GetJointPos2D(couples.Key);
+				Vector3 p = CVInterface.GetJointPos2D(couples.Key);
 
-					couples.Value.position = Vector3.Lerp(couples.Value.position, p, .5f);
+				if (p == Vector3.zero)
+					continue;
+
+				p.z = ProjectionDistance;
+				p = ProjectionCamera.ViewportToWorldPoint(p);
+				couples.Value.position = Vector3.Lerp(couples.Value.position, p, .5f);
 				//}
 			}
 
 			Vector3 ol = LeftShoulderT.position;
 			Vector3 or = RightShoulderT.position;
 			// shoulders positions hack to straighten the middle mesh x-->  <--x
+			/*
 			LeftShoulderT.position = Vector3.Lerp(ol, or, .15f);
 			RightShoulderT.position = Vector3.Lerp(ol, or, .85f);
-
+			*/
+			
 			foreach (Link l in links)
 			{
 				Vector3 delta = l.j2.position - l.j1.position;
@@ -108,12 +116,14 @@ namespace com.iris.common
 				if (l.tr == null)
 					continue;
 
+				
+
 				l.tr.position = l.j1.position + (delta) / 2f;
 				l.tr.rotation = Quaternion.LookRotation(delta) * Quaternion.LookRotation(Vector3.up);
 				Vector3 s = l.tr.localScale;
 				l.tr.localScale = new Vector3(s.x, (l.j2.position - l.j1.position).magnitude / 2f, s.z);
 			}
-
+			
 			DrawMiddle();
 
 		}
@@ -122,26 +132,26 @@ namespace com.iris.common
 		{
 			JointsToTransforms[IRISJoints.Joints2D.Head] = HeadT;
 			JointsToTransforms[IRISJoints.Joints2D.Neck1] = NeckT;
-			JointsToTransforms[IRISJoints.Joints2D.Neck1] = ThoraxT;
-			JointsToTransforms[IRISJoints.Joints2D.Root] = NavalT;
+			//JointsToTransforms[IRISJoints.Joints2D.Neck1] = ThoraxT;
+			//JointsToTransforms[IRISJoints.Joints2D.Root] = NavalT;
 			JointsToTransforms[IRISJoints.Joints2D.Root] = PelvisT;
 			JointsToTransforms[IRISJoints.Joints2D.LeftShoulder1] = LeftShoulderT;
 			//JointsToTransforms[IRISJoints.Joints.ClavicleLeft] = LeftClavT;
 			JointsToTransforms[IRISJoints.Joints2D.LeftForearm] = LeftElbowT;
-			JointsToTransforms[IRISJoints.Joints2D.LeftHand] = LeftWristT;
+			//JointsToTransforms[IRISJoints.Joints2D.LeftHand] = LeftWristT;
 			JointsToTransforms[IRISJoints.Joints2D.LeftHand] = LeftHandT;
 			JointsToTransforms[IRISJoints.Joints2D.RightShoulder1] = RightShoulderT;
 			//JointsToTransforms[IRISJoints.Joints.ClavicleRight] = RightClavT;
 			JointsToTransforms[IRISJoints.Joints2D.RightForearm] = RightElbowT;
-			JointsToTransforms[IRISJoints.Joints2D.RightHand] = RightWristT;
+			//JointsToTransforms[IRISJoints.Joints2D.RightHand] = RightWristT;
 			JointsToTransforms[IRISJoints.Joints2D.RightHand] = RightHandT;
-			JointsToTransforms[IRISJoints.Joints2D.LeftLeg] = LeftHipT;
-			JointsToTransforms[IRISJoints.Joints2D.LeftUpLeg] = LeftKneeT;
+			JointsToTransforms[IRISJoints.Joints2D.LeftUpLeg] = LeftHipT;
+			JointsToTransforms[IRISJoints.Joints2D.LeftLeg] = LeftKneeT;
 			JointsToTransforms[IRISJoints.Joints2D.LeftFoot] = LeftAnkleT;
 			//JointsToTransforms[IRISJoints.Joints.FootLeft] = LeftFootT;
-			JointsToTransforms[IRISJoints.Joints2D.RightLeg] = RightHipT;
-			JointsToTransforms[IRISJoints.Joints2D.RightUpLeg] = RightKneeT;
-			JointsToTransforms[IRISJoints.Joints2D.RightForearm] = RightAnkleT;
+			JointsToTransforms[IRISJoints.Joints2D.RightUpLeg] = RightHipT;
+			JointsToTransforms[IRISJoints.Joints2D.RightLeg] = RightKneeT;
+			JointsToTransforms[IRISJoints.Joints2D.RightFoot] = RightAnkleT;
 			//JointsToTransforms[IRISJoints.Joints.FootRight] = RightFootT;
 
 		}
@@ -149,31 +159,31 @@ namespace com.iris.common
 		private void InitLinks()
 		{
 			Link l0 = new Link();
-			l0.j1 = LeftWristT;
+			l0.j1 = LeftHandT;
 			l0.j2 = LeftElbowT;
 			l0.tr = LeftWristToLeftElbow;
 			links.Add(l0);
-
+			/*
 			Link l02 = new Link();
 			l02.j1 = LeftHandT;
 			l02.j2 = LeftWristT;
 			l02.tr = LeftHandToLeftWrist;
 			links.Add(l02);
-
+			*/
 			Link l1 = new Link();
 			l1.j1 = LeftElbowT;
 			l1.j2 = LeftShoulderT;
 			l1.tr = LeftElbowToLeftShoulder;
 			links.Add(l1);
-
+			/*
 			Link l22 = new Link();
 			l22.j1 = RightHandT;
 			l22.j2 = RightWristT;
 			l22.tr = RightHandToRightWrist;
 			links.Add(l22);
-
+			*/
 			Link l2 = new Link();
-			l2.j1 = RightWristT;
+			l2.j1 = RightHandT;
 			l2.j2 = RightElbowT;
 			l2.tr = RightWristToRightElbow;
 			links.Add(l2);
@@ -225,13 +235,13 @@ namespace com.iris.common
 			l10.j2 = NeckT;
 			l10.tr = HeadToNeck;
 			links.Add(l10);
-
+			/*
 			Link l11 = new Link();
 			l11.j1 = NeckT;
 			l11.j2 = ThoraxT;
 			l11.tr = NeckToThorax;
 			links.Add(l11);
-
+			*/
 			Link l16 = new Link();
 			l16.j1 = LeftShoulderT;
 			l16.j2 = LeftHipT;

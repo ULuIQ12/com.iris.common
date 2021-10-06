@@ -871,6 +871,8 @@ namespace com.iris.common
 				UsersMetaDatas2D[user] = new UserBonesMetaData();
 			}
 
+			Update2DBones();
+
 			if (AreDatasAvailable() && Bones2D != null)
 			{
 

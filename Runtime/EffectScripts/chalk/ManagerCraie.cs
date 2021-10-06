@@ -15,6 +15,7 @@ namespace com.iris.common
 		public float width = 1600f;
 		public float height = 1200f;
 		public Camera foregroundCamera;
+		public float HandProjectionPlaneDist = 5.0f;
 		public GameObject[] bHandRight;
 		public GameObject[] bHandLeft;
 		public Color[] tabColor;
@@ -99,11 +100,11 @@ namespace com.iris.common
 				return;
 
 			Vector3 leftpos = FXDataProvider.GetJoint2DPosition(IRISJoints.Joints2D.LeftHand);
-			leftpos.z = 2f;
+			leftpos.z = HandProjectionPlaneDist;
 			bHandLeft[0].transform.position = foregroundCamera.ViewportToWorldPoint(leftpos);
 
-			Vector3 rightpos = FXDataProvider.GetJoint2DPosition(IRISJoints.Joints2D.LeftHand);
-			rightpos.z = 2f;
+			Vector3 rightpos = FXDataProvider.GetJoint2DPosition(IRISJoints.Joints2D.RightHand);
+			rightpos.z = HandProjectionPlaneDist;
 			bHandRight[0].transform.position = foregroundCamera.ViewportToWorldPoint(rightpos);
 
 			/*

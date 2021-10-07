@@ -176,10 +176,10 @@ namespace com.iris.common
 		public static Vector2 GetMapScale(MAP_DATA_TYPE type)
 		{
 			Vector2 scale = CVInterface.GetTextureScale(type);
-
+			/*
 			if (Application.platform == RuntimePlatform.IPhonePlayer)
 				scale.x *= -1f;
-
+			*/
 			return scale;
 		}
 

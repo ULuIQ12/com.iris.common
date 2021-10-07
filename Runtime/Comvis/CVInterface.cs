@@ -544,7 +544,7 @@ namespace com.iris.common
 				if (Input.deviceOrientation != currentOrientation)
 					currentOrientation = Input.deviceOrientation;
 
-				Debug.Log(currentOrientation);
+				
 
 				if (NeedCamRefresh)
 				{
@@ -565,7 +565,7 @@ namespace com.iris.common
 				}
 
 				
-
+				
 				yield return null;
 			}
 		}
@@ -610,6 +610,16 @@ namespace com.iris.common
 					CpuImgMirrorY = true;
 					break;
 
+			}
+
+			switch(Application.platform)
+			{
+				case RuntimePlatform.IPhonePlayer:
+					CpuImgMirrorX = false;
+					break;
+				default:
+					CpuImgMirrorX = true;
+					break;
 			}
 			
 			switch (ImgType)

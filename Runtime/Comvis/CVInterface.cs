@@ -603,11 +603,11 @@ namespace com.iris.common
 			switch(currentOrientation)
 			{
 				case DeviceOrientation.LandscapeLeft:
-					CpuImgMirrorY = false;
+					CpuImgMirrorY = true;
 					break;
 				case DeviceOrientation.LandscapeRight:
 				default:
-					CpuImgMirrorY = true;
+					CpuImgMirrorY = false;
 					break;
 
 			}
@@ -615,7 +615,7 @@ namespace com.iris.common
 			switch(Application.platform)
 			{
 				case RuntimePlatform.IPhonePlayer:
-					CpuImgMirrorX = false;
+					CpuImgMirrorX = true;
 					break;
 				default:
 					CpuImgMirrorX = true;

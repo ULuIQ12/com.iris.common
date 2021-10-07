@@ -72,14 +72,19 @@ namespace com.iris.common
 			if( AreDatasAvailable() && BodyManager != null )
 			{
 				_Instance.Update2DBones();
-				try
+				if (Bones2D != null & Bones2D.Length > (int)joint)
 				{
-					Vector2 pos = Bones2D[(int)joint];
-					
+					try
+					{
+						Vector2 pos = Bones2D[(int)joint];
 
-					return pos;
+
+						return pos;
+					}
+					catch (Exception e) { e.GetType(); return Vector2.zero; };
 				}
-				catch (Exception e) { Debug.Log(e); return Vector2.zero; };
+				else
+					return Vector2.zero;
 			}
 			
 			return Vector2.zero;

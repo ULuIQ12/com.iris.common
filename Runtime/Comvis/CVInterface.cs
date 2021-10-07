@@ -618,7 +618,7 @@ namespace com.iris.common
 					CpuImgMirrorX = true;
 					break;
 				default:
-					CpuImgMirrorX = true;
+					CpuImgMirrorX = false;
 					break;
 			}
 			

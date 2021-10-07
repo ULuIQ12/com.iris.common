@@ -134,7 +134,7 @@ namespace com.iris.common
 				LastedDepthTexture = FXDataProvider.GetMap(FXDataProvider.MAP_DATA_TYPE.UserMap);
 				if (LastedDepthTexture == CVInterface.EmptyTexture)
 					return;
-				Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
+				Texture2D t2d = (Texture2D)LastedDepthTexture; //TextureToTexture2D(LastedDepthTexture);
 				Vector2 tscale = FXDataProvider.GetMapScale(FXDataProvider.MAP_DATA_TYPE.UserMap);
 
 				int i = 0;
@@ -172,7 +172,7 @@ namespace com.iris.common
 				InitColliders();
 			}
 		}
-
+		/*
 		private Texture2D depthT2D;
 		private Texture2D TextureToTexture2D(Texture texture)
 		{
@@ -191,7 +191,7 @@ namespace com.iris.common
 			RenderTexture.ReleaseTemporary(renderTexture);
 			return depthT2D;
 		}
-
+		*/
 		private IEnumerator WaitForDepthImage()
 		{
 

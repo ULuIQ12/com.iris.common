@@ -607,7 +607,7 @@ namespace com.iris.common
 					break;
 				case DeviceOrientation.LandscapeRight:
 				default:
-					CpuImgMirrorY = false;
+					CpuImgMirrorY = true;
 					break;
 
 			}
@@ -618,7 +618,7 @@ namespace com.iris.common
 					CpuImgMirrorX = true;
 					break;
 				default:
-					CpuImgMirrorX = false;
+					CpuImgMirrorX = true;
 					break;
 			}
 			

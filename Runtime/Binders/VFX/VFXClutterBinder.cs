@@ -6,7 +6,7 @@ using UnityEngine.VFX.Utility;
 
 namespace com.iris.common
 {
-
+			
 	[AddComponentMenu("IRIS/Clutter Binder")]
 	[VFXBinder("IRIS/Clutter")]
 	public class VFXClutterBinder : VFXBinderBase
@@ -28,11 +28,16 @@ namespace com.iris.common
 		[VFXPropertyBinding("Float"), SerializeField]
 		protected ExposedProperty DeltaHorizontalProperty = "DeltaHorizontalProperty";
 
+		public bool BindClutterActivity = false;
+		[VFXPropertyBinding("Float"), SerializeField]
+		protected ExposedProperty ActivityProperty = "PercentActivityProperty";
+
 		private FXDataProvider.MAP_DATA_TYPE TextureToBind = FXDataProvider.MAP_DATA_TYPE.UserMap;
 		public int NbSamplesWidth = 64;
 		public int NbSamplesHeight = 64;
 		public int totalSamples;
 		public bool[] boolActive;
+		public bool[] oldBoolActive;
 		private Texture LastedDepthTexture;
 
 		public float countLeft = 0;
@@ -42,18 +47,19 @@ namespace com.iris.common
 		public float minLeft = 0;
 		public float maxRight = 0;
 		public float percent;
+		public float countActivity = 0;
 
 
 		public override bool IsValid(VisualEffect component)
 		{
 			bool valid = true;
-			if (BindClutterHorizontal)
+			if( BindClutterHorizontal )
 			{
 				if (!component.HasFloat(HorizontalProperty))
 					valid = false;
 			}
 
-			if (BindClutterVertical)
+			if( BindClutterVertical )
 			{
 				if (!component.HasFloat(VerticalProperty))
 					valid = false;
@@ -64,14 +70,19 @@ namespace com.iris.common
 				if (!component.HasFloat(TotalProperty))
 					valid = false;
 			}
-
+			
 			if (BindClutterDeltaHorizontal)
 			{
 				if (!component.HasFloat(DeltaHorizontalProperty))
 					valid = false;
 			}
 
-
+			if( BindClutterActivity )
+			{
+				if (!component.HasFloat(ActivityProperty))
+					valid = false;
+			}
+			
 			return valid;
 		}
 
@@ -82,10 +93,10 @@ namespace com.iris.common
 				return;
 			Texture2D t2d = TextureToTexture2D(LastedDepthTexture);
 			Vector2 tscale = FXDataProvider.GetMapScale(TextureToBind);
-
+			
 			int i = 0;
 			int j = 0;
-			countTop = countDown = countLeft = countRight = 0;
+			countTop = countDown = countLeft = countRight = countActivity = 0;
 			minLeft = NbSamplesWidth;
 			maxRight = 0;
 			totalSamples = NbSamplesWidth * NbSamplesHeight;
@@ -97,80 +108,93 @@ namespace com.iris.common
 				{
 					int index = i * NbSamplesWidth + j;
 					int px;
-					if (tscale.x > 0)
+					if( tscale.x > 0 )
 						px = Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 					else
 						px = (LastedDepthTexture.width - 1) - Mathf.FloorToInt((float)i / (float)NbSamplesWidth * (float)LastedDepthTexture.width);
 					int py = 0;
-					if (tscale.y > 0)
+					if( tscale.y > 0)
 						py = Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
 					else
 						py = (LastedDepthTexture.height - 1) - Mathf.FloorToInt((float)j / (float)NbSamplesHeight * (float)LastedDepthTexture.height);
 
 					Color col = t2d.GetPixel(px, py);
-					if (col.r + col.g + col.b > 0)
+					if( col.r + col.g + col.b > 0 )
 					{
 						boolActive[index] = true;
-						if (i < (NbSamplesWidth * 0.5))
+						if(i<(NbSamplesWidth*0.5))
 							countLeft += 1;
-						else
+						else 
 							countRight += 1;
 
-						if (j < (NbSamplesHeight * 0.5))
+						if(j<(NbSamplesHeight*0.5))
 							countTop += 1;
-						else
+						else 
 							countDown += 1;
 
-						if (j > 2 && j < NbSamplesHeight - 3)
+						if(j > 2 && j < NbSamplesHeight-3) 
 						{
-							if (i < minLeft) minLeft = i;
-							if (i > maxRight) maxRight = i;
-						}
-					}
-					else
-					{
+							if( i < minLeft) minLeft = i;
+							if( i > maxRight) maxRight = i;
+						}	
+						
+					} else {
 						boolActive[index] = false;
 					}
+
+					if(oldBoolActive != null && oldBoolActive.Length >0 )
+						if(oldBoolActive[index] != boolActive[index] )
+							countActivity += 1;
+						
+
 				}
 			}
-
+			oldBoolActive = new bool[totalSamples];
+			System.Array.Copy(boolActive, oldBoolActive, totalSamples);
+			//oldBoolActive = (bool[]) boolActive.Clone();
+			/*if(oldBoolActive != null)
+			{
+				int rand = Random.Range(0, totalSamples-1);
+				Debug.Log( "coucou " + rand + "   " + boolActive[rand] + "   " + oldBoolActive[rand]);
+			}*/
+			
 			float countTotalActive;
 			percent = 0.0f;
 
-			if (BindClutterHorizontal)
+			if(BindClutterHorizontal)
 			{
 				countTotalActive = countLeft + countRight;
-				if (countTotalActive == 0)
+				if( countTotalActive == 0 )
 				{
 					percent = 0.0f;
 				}
-				else
+				else 
 				{
-					percent = countLeft / countTotalActive;
+					percent = countLeft / countTotalActive;            
 				}
 
 				component.SetFloat(HorizontalProperty, percent);
 			}
 
-			if (BindClutterVertical)
+			if(BindClutterVertical)
 			{
 				countTotalActive = countTop + countDown;
-				if (countTotalActive == 0)
+				if( countTotalActive == 0 )
 				{
 					percent = 0.0f;
 				}
 				else
 				{
-					percent = countDown / countTotalActive;
+					percent = countDown / countTotalActive;         
 				}
 
 				component.SetFloat(VerticalProperty, percent);
 			}
 
-			if (BindClutterTotal)
+			if(BindClutterTotal)
 			{
 				countTotalActive = countTop + countDown;
-				if (countTotalActive == 0)
+				if(countTotalActive == 0)
 				{
 					percent = 0.0f;
 				}
@@ -182,28 +206,36 @@ namespace com.iris.common
 				component.SetFloat(TotalProperty, percent);
 			}
 
-			if (BindClutterDeltaHorizontal)
+			if(BindClutterDeltaHorizontal)
 			{
 				countTotalActive = countTop + countDown;
-				if (countTotalActive == 0)
+				if(countTotalActive == 0)
 				{
 					percent = 0.0f;
 				}
 				else
 				{
-					percent = (maxRight - minLeft) / NbSamplesWidth;
+					percent = (maxRight-minLeft)/NbSamplesWidth;
 				}
-
-				component.SetFloat(DeltaHorizontalProperty, percent);
+				
+				component.SetFloat( DeltaHorizontalProperty, percent );
 			}
+
+			if(BindClutterActivity)
+			{
+				percent = countActivity/totalSamples;								
+				component.SetFloat( ActivityProperty, percent );
+			}
+
+			
 		}
 
 		private Texture2D depthT2D;
 		private Texture2D TextureToTexture2D(Texture texture)
 		{
-			if (depthT2D == null || depthT2D.width != texture.width || depthT2D.height != texture.height)
+			if( depthT2D == null || depthT2D.width != texture.width || depthT2D.height != texture.height)
 				depthT2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
-
+			
 			RenderTexture currentRT = RenderTexture.active;
 			RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
 			Graphics.Blit(texture, renderTexture);
@@ -217,7 +249,7 @@ namespace com.iris.common
 			return depthT2D;
 		}
 
-		private float Remap(float InputLow, float InputHigh, float OutputLow, float OutputHigh, float value)
+		private float Remap(float InputLow, float InputHigh, float OutputLow, float OutputHigh, float value )
 		{
 			value = Mathf.InverseLerp(InputLow, InputHigh, value);
 			value = Mathf.Lerp(OutputLow, OutputHigh, value);

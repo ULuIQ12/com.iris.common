@@ -469,6 +469,61 @@ namespace com.iris.common
 			else
 				CpuTextureScale = 1f;
 
+			LastResquestedData = dataRequest;
+
+			Debug.Log("CVInterface: Init platform " + Application.platform + "/ data req = " + dataRequest);
+			if (ManagerGO == null)
+			{
+				ManagerGO = Instantiate(Resources.Load<GameObject>(ARF_INTERFACE_PREFAB), transform);
+				ManagerGO.name = "ARFInterface";
+			}
+
+
+			Session = ManagerGO.GetComponent<ARSession>();
+			CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();
+			OccManager = ManagerGO.GetComponent<AROcclusionManager>();
+			OccManager.requestedHumanDepthMode = HumanSegmentationDepthMode.Fastest;
+			OccManager.requestedHumanStencilMode = HumanSegmentationStencilMode.Fastest;
+			BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
+
+			Session.enabled = false;
+
+			switch(dataRequest)
+			{
+				default:
+				case ExpSettings.DATA_REQUESTED.Body:
+					BodyManager.humanBodiesChanged += OnHumanBodiesChanged;
+					OccManager.enabled = false;
+					BodyManager.enabled = true;
+					break;
+				case ExpSettings.DATA_REQUESTED.Depth:
+					OccManager.requestedOcclusionPreferenceMode = OcclusionPreferenceMode.PreferEnvironmentOcclusion;
+					OccManager.enabled = true;
+					BodyManager.enabled = false;
+					break;
+				case ExpSettings.DATA_REQUESTED.Users:
+					OccManager.requestedOcclusionPreferenceMode = OcclusionPreferenceMode.PreferHumanOcclusion;
+					OccManager.enabled = true;
+					BodyManager.enabled = false;
+					break;
+				
+			}
+			
+			Session.enabled = true;
+			Session.Reset();
+
+			SetDebug(LastDebugValue);
+
+			if (ImgUpdateRoutine == null)
+				StartCoroutine(ImgUpdate());
+
+			Initialized = true;
+
+
+			/**
+			 *  OLD METHOD
+			 * 
+
 			ManagerGO = Instantiate(Resources.Load<GameObject>(ARF_INTERFACE_PREFAB), transform);
 			ManagerGO.name = "ARFInterface";
 			Debug.Log("CVInterface: Init platform " + Application.platform + "/ data req = " + dataRequest);
@@ -523,6 +578,10 @@ namespace com.iris.common
 				StartCoroutine(ImgUpdate());
 
 			Initialized = true;
+
+			*/
+
+
 		}
 
 
@@ -538,6 +597,8 @@ namespace com.iris.common
 		private static bool CpuImgMirrorY = true;
 
 		private static float CpuTextureScale = 0.3f;
+
+		
 
 		private static DeviceOrientation currentOrientation = DeviceOrientation.Unknown;
 
@@ -796,40 +857,55 @@ namespace com.iris.common
 
 			bool shouldRefresh = (dataResquested != LastResquestedData);
 
-			Debug.Log("ShouldRefresh = " + shouldRefresh);
+			Debug.Log("We should Refresh CVInterface for " + dataResquested + " = " + shouldRefresh);
 			if (shouldRefresh)
 			{
-				if( ImgUpdateRoutine != null)
-				{
-					StopCoroutine(ImgUpdateRoutine);
-					ImgUpdateRoutine = null;
-				}
-				if (BodyManager != null)
-				{
-					BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
-					BodyManager = null;
-				}
 
-				if( OccManager != null )
-				{
-					//OccManager.frameReceived -= OnOcclusionFrameReceived;
-					OccManager = null;
-				}
+				RefreshCleanup();
 
-				Session = null;
-				//CamManager.frameReceived -= OnCameraFrameReceived;
-				CamManager = null;
-				BoneControl = null;
-
-				Debug.Log("We should Refresh CVInterface for " + dataResquested);
-				Destroy(ManagerGO);
-				ManagerGO = null;
-				//KManager = null;
+				
+				
 				yield return null;
-				//Init(UseDepth, UseSkeleton);
+				
 				Init(dataResquested);
 			}
 			yield return null;
+		}
+
+		private void RefreshCleanup()
+		{
+			if (LastResquestedData == ExpSettings.DATA_REQUESTED.Body)
+			{
+				BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
+				BoneControl = null;
+			}
+			/*
+			if (ImgUpdateRoutine != null)
+			{
+				StopCoroutine(ImgUpdateRoutine);
+				ImgUpdateRoutine = null;
+			}
+			if (BodyManager != null)
+			{
+				BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
+				BodyManager = null;
+			}
+
+			if (OccManager != null)
+			{
+				//OccManager.frameReceived -= OnOcclusionFrameReceived;
+				OccManager = null;
+			}
+
+			Session = null;
+			//CamManager.frameReceived -= OnCameraFrameReceived;
+			CamManager = null;
+			BoneControl = null;
+
+			
+			Destroy(ManagerGO);
+			ManagerGO = null;
+			*/
 		}
 
 		private void UpdateUserMetaBoneData( ulong user )
@@ -841,8 +917,9 @@ namespace com.iris.common
 
 			if( AreDatasAvailable() && BoneControl != null )
 			{
-				
-				if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
+
+				//if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
+				if ((Time.time - UsersMetaDatas[user].lastUpdateTime) <= (1f / 30f))
 					return;
 
 				Vector3 HandRightPosition = GetJointPos3D(IRISJoints.Joints.HandRight);
@@ -891,7 +968,8 @@ namespace com.iris.common
 			if (AreDatasAvailable() && Bones2D != null)
 			{
 
-				if ((Time.time - UsersMetaDatas2D[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
+				//if ((Time.time - UsersMetaDatas2D[user].lastUpdateTime) <= (1f / (float)Application.targetFrameRate))
+				if ((Time.time - UsersMetaDatas2D[user].lastUpdateTime) <= (1f /30f ) )
 					return;
 
 

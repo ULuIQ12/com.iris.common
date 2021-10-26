@@ -66,7 +66,7 @@ namespace com.iris.common
 			serializedObject.Update();
 			
 			EditorGUILayout.PropertyField(_tint);
-			
+			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindHueShift.boolValue);
 			EditorGUILayout.Slider(_hueShift, 0f, 0.1f);
 			EditorGUI.EndDisabledGroup();
@@ -78,7 +78,7 @@ namespace com.iris.common
 				EditorGUILayout.PropertyField(HueShiftData);
 				HueShiftRemap.vector2Value = EditorGUILayout.Vector2Field("In min/max", HueShiftRemap.vector2Value);
 			}
-
+			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindOffsetX.boolValue);
 			EditorGUILayout.Slider(_offsetX, -0.1f, 0.1f);
 			EditorGUI.EndDisabledGroup();
@@ -90,7 +90,7 @@ namespace com.iris.common
 				EditorGUILayout.PropertyField(OffsetXData);
 				OffsetXRemap.vector2Value = EditorGUILayout.Vector2Field("In min/max", OffsetXRemap.vector2Value);
 			}
-
+			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindOffsetY.boolValue);
 			EditorGUILayout.Slider(_offsetY, -0.1f, 0.1f);
 			EditorGUI.EndDisabledGroup();
@@ -102,24 +102,24 @@ namespace com.iris.common
 				EditorGUILayout.PropertyField(OffsetYData);
 				OffsetYRemap.vector2Value = EditorGUILayout.Vector2Field("In min/max", OffsetYRemap.vector2Value);
 			}
-
+			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindRotation.boolValue);
-			EditorGUILayout.Slider(_offsetY, -1f, 1f);
+			EditorGUILayout.Slider(_rotation, -1f, 1f);
 			EditorGUI.EndDisabledGroup();
 
-			BindRotation.boolValue = EditorGUILayout.ToggleLeft("Bind OffsetY", BindRotation.boolValue);
+			BindRotation.boolValue = EditorGUILayout.ToggleLeft("Bind Rotation", BindRotation.boolValue);
 
 			if (BindRotation.boolValue)
 			{
 				EditorGUILayout.PropertyField(RotationData);
 				RotationRemap.vector2Value = EditorGUILayout.Vector2Field("In min/max", RotationRemap.vector2Value);
 			}
-
+			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindScale.boolValue);
-			EditorGUILayout.Slider(_offsetY, -1f, 1f);
+			EditorGUILayout.Slider(_scale, -1f, 1f);
 			EditorGUI.EndDisabledGroup();
 
-			BindScale.boolValue = EditorGUILayout.ToggleLeft("Bind OffsetY", BindScale.boolValue);
+			BindScale.boolValue = EditorGUILayout.ToggleLeft("Bind Scale", BindScale.boolValue);
 
 			if (BindScale.boolValue)
 			{

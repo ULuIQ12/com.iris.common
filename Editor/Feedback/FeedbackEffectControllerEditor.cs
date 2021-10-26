@@ -116,7 +116,7 @@ namespace com.iris.common
 			}
 			////////////////////////////////////////////////////////////////////////////////////////////////////
 			EditorGUI.BeginDisabledGroup(BindScale.boolValue);
-			EditorGUILayout.Slider(_scale, -1f, 1f);
+			EditorGUILayout.Slider(_scale, -0.9f, 1.1f);
 			EditorGUI.EndDisabledGroup();
 
 			BindScale.boolValue = EditorGUILayout.ToggleLeft("Bind Scale", BindScale.boolValue);

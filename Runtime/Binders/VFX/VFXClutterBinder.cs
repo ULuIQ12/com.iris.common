@@ -172,7 +172,7 @@ namespace com.iris.common
 				{
 					percent = countLeft / countTotalActive;            
 				}
-
+				percent = (percent*2f)-1f;
 				component.SetFloat(HorizontalProperty, percent);
 			}
 

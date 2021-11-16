@@ -515,7 +515,9 @@ namespace com.iris.common
 			SetDebug(LastDebugValue);
 
 			if (ImgUpdateRoutine == null)
-				StartCoroutine(ImgUpdate());
+			{
+				ImgUpdateRoutine = StartCoroutine(ImgUpdate());
+			}
 
 			Initialized = true;
 

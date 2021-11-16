@@ -83,4 +83,9 @@ public class BindDepthToSprite : MonoBehaviour
 			}
 		}
 	}
+
+	public void OnDestroy()
+	{
+		texDepth2D = null;
+	}
 }

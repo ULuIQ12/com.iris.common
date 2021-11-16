@@ -369,7 +369,7 @@ namespace com.iris.common
 
 		public static bool AreDatasAvailable()
 		{
-			return Session != null;
+			return ( Session != null && _Instance.Initialized );
 			
 			//return (_Instance != null && _Instance.Initialized && KinectManager.Instance != null && KinectManager.Instance.IsInitialized() && _Instance.CurrentSensorInterface !=null );
 		}
@@ -478,13 +478,18 @@ namespace com.iris.common
 				ManagerGO.name = "ARFInterface";
 			}
 
-
-			Session = ManagerGO.GetComponent<ARSession>();
-			CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();
-			OccManager = ManagerGO.GetComponent<AROcclusionManager>();
-			OccManager.requestedHumanDepthMode = HumanSegmentationDepthMode.Fastest;
-			OccManager.requestedHumanStencilMode = HumanSegmentationStencilMode.Fastest;
-			BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
+			if( Session == null )
+				Session = ManagerGO.GetComponent<ARSession>();
+			if( CamManager == null )
+				CamManager = ManagerGO.GetComponentInChildren<ARCameraManager>();
+			if (OccManager == null)
+			{
+				OccManager = ManagerGO.GetComponent<AROcclusionManager>();
+				OccManager.requestedHumanDepthMode = HumanSegmentationDepthMode.Fastest;
+				OccManager.requestedHumanStencilMode = HumanSegmentationStencilMode.Fastest;
+			}
+			if( BodyManager == null )
+				BodyManager = ManagerGO.GetComponent<ARHumanBodyManager>();
 
 			Session.enabled = false;
 
@@ -508,9 +513,11 @@ namespace com.iris.common
 					break;
 				
 			}
+
 			
+			
+			//Session.Reset();
 			Session.enabled = true;
-			Session.Reset();
 
 			SetDebug(LastDebugValue);
 
@@ -520,7 +527,7 @@ namespace com.iris.common
 			}
 
 			Initialized = true;
-
+			
 
 			/**
 			 *  OLD METHOD
@@ -881,12 +888,13 @@ namespace com.iris.common
 				BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
 				BoneControl = null;
 			}
-			/*
+			
 			if (ImgUpdateRoutine != null)
 			{
 				StopCoroutine(ImgUpdateRoutine);
 				ImgUpdateRoutine = null;
 			}
+			/*
 			if (BodyManager != null)
 			{
 				BodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
